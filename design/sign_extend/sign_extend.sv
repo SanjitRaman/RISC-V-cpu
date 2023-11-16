@@ -3,8 +3,8 @@ module sign_extend #(
     IMM_SRC_WIDTH = 2
 ) (
     input logic [DATA_WIDTH-1:0] instr,
-    input logic [1:0] imm_src,
-    output logic [DATA_WIDTH-1:0] imm_op
+    input logic [1:0] immSrc,
+    output logic [DATA_WIDTH-1:0] immOp
 
 );
     
