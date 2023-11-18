@@ -32,7 +32,7 @@ runtest: all $(TARGETS)
 	@for test in $(TARGETS); do ./$$test || exit 1; done
 
 coverage: runtest
-	verilator_coverage $(VLCOVFLAGS) -write-info logs/merged.info logs/coverage1.dat logs/coverage2.dat logs/coverage3.dat
+	verilator_coverage $(VLCOVFLAGS) -write-info logs/merged.info logs/coverage1.dat
 
 genhtml: coverage
 	genhtml logs/merged.info --output-directory logs/html
