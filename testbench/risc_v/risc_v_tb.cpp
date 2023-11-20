@@ -28,5 +28,9 @@ int main(int argc, char **argv, char **env) {
       top->clk = !top->clk;
       top->eval ();
     }
+    if (Verilated::gotFinish())  exit(0);
   }
+
+  tfp->close(); 
+  exit(0);
 }
