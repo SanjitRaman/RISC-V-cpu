@@ -82,7 +82,6 @@ pc riscPC (
 )
 
 rom riscInstrMem (
-  .CLK        (CLK),
   .A          (PC),
   .RD         (Instr)
 );
