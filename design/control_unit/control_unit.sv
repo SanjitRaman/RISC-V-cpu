@@ -52,6 +52,6 @@ module control_unit #(
     );
 
     assign op_5  = op[5];
-    assign PCSrc = Branch & Zero; // Branching logic
+    assign PCSrc = Branch & ¬Zero; // Branching logic
     
 endmodule
