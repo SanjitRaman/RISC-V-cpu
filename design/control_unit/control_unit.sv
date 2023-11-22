@@ -11,5 +11,13 @@ module control_unit #(
     output logic [1:0]                ImmSrc,
     output logic                      RegWrite
 );
+
+    logic [6:0]                       op;
+    logic [2:0]                       funct3;
+    logic                             funct7_5;
+    logic                             branch;
+    logic [1:0]                       alu_op;
+
+    main_decoder
     
 endmodule
