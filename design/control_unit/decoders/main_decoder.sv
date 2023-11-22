@@ -1,6 +1,6 @@
 module main_decoder #(
-    parameter IMM_SRC_WIDTH = 2,
-    parameter ALU_OP_WIDTH = 2
+    parameter                         IMM_SRC_WIDTH = 2,
+    parameter                         ALU_OP_WIDTH = 2
 ) (
     input logic                       op_5,
 
