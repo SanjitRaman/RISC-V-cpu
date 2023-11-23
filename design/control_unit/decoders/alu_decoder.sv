@@ -9,9 +9,9 @@ module alu_decoder #(
     input logic [OP_WIDTH-1:0]        op,
     input logic [FUNCT3_WIDTH-1:0]    funct3,
     input logic                       funct7_5,
-    input logic [ALU_OP_WIDTH-1:0]    ALUOp
+    input logic [ALU_OP_WIDTH-1:0]    ALUOp,
 
-    output logic [ALU_CTRL_WIDTH-1:0] ALUControl;
+    output logic [ALU_CTRL_WIDTH-1:0] ALUControl
 );
 
     logic [1:0]                       op_5_funct_5_5;
@@ -35,7 +35,7 @@ module alu_decoder #(
                     3'b010:
                         ALUControl = 3'b010;            // slt
                     3'b110:
-                        ALUControl = 3'b011             // or
+                        ALUControl = 3'b011;            // or
                     3'b111:
                         ALUControl = 3'b010;            // and
                     default:

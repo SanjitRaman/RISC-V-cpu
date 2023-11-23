@@ -20,6 +20,7 @@ module control_unit #(
 );
 
     logic [ALU_OP_WIDTH-1:0]          ALUOp;
+    logic                             Branch;
 
     main_decoder  #(
         .IMM_SRC_WIDTH  (IMM_SRC_WIDTH),

@@ -32,15 +32,15 @@ module main_decoder #(
                     ImmSrc    = 2'b01;
                     ALUSrc    = 1;
                     MemWrite  = 1;
-                 // ResultSrc = ;
+                    ResultSrc = 0; // X
                     Branch    = 0;
                     ALUOp     = 2'b00;
                 end
             7'b0110011: // R-Type 
                 begin
                     RegWrite  = 1;
-                 // ImmSrc    = ;
-                    ALUSrc    = 0;
+                    ImmSrc    = 0;
+                    ALUSrc    = 0; // X
                     MemWrite  = 0;
                     ResultSrc = 0;
                     Branch    = 0;
@@ -52,7 +52,7 @@ module main_decoder #(
                     ImmSrc    = 2'b10;
                     ALUSrc    = 0;
                     MemWrite  = 0;
-                 // ResultSrc = ;
+                    ResultSrc = 0; // X
                     Branch    = 1;
                     ALUOp     = 2'b01;
                 end
