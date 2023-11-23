@@ -1,8 +1,9 @@
 module main_decoder #(
     parameter                         IMM_SRC_WIDTH = 2,
-    parameter                         ALU_OP_WIDTH = 2
+    parameter                         ALU_OP_WIDTH = 2,
+    parameter                         OP_WIDTH = 7
 ) (
-    input logic                       op_5,
+    input logic [OP_WIDTH-1:0]        op,
 
     output logic                      Branch,
     output logic                      ResultSrc,
@@ -54,6 +55,16 @@ module main_decoder #(
                  // ResultSrc = ;
                     Branch    = 1;
                     ALUOp     = 2'b01;
+                end
+            default:
+                begin
+                    RegWrite  = 0;
+                    ImmSrc    = 2'b00;
+                    ALUSrc    = 0;
+                    MemWrite  = 0;
+                    ResultSrc = 0;
+                    Branch    = 0;
+                    ALUOp     = 2'b00;
                 end
         endcase
     end

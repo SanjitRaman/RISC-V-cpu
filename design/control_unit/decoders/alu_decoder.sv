@@ -38,7 +38,11 @@ module alu_decoder #(
                         ALUControl = 3'b011             // or
                     3'b111:
                         ALUControl = 3'b010;            // and
+                    default:
+                        ALUControl = 3'b000;            // add
                 endcase
+            default:
+                ALUControl = 3'b000;                    // add
 
         endcase
     

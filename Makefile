@@ -3,10 +3,11 @@ include Makefile.macros
 VLCOVFLAGS = --annotate logs/annotate --annotate-all --annotate-min 1
 
 # User only needs to edit below
-MODULES =  sign_extend
-# UNITS = risc_v
+#MODULES =  control_unit
+UNITS = control_unit
 # dependencies of unit
-# UNITS.risc_v = design/sign_extend/sign_extend.sv # add more dependencies with a space
+UNITS.control_unit = design/control_unit/decoders/alu_decoder.sv # add more dependencies with a space
+UNITS.control_unit = design/control_unit/decoders/main_decoder.sv 
 # User only needs to edit above
 
 TARGETS = $(addsuffix Test, $(addprefix bin/, $(MODULES))) $(addsuffix Test, $(addprefix bin/, $(UNITS)))

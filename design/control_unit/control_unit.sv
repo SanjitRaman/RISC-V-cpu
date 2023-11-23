@@ -12,7 +12,7 @@ module control_unit #(
 
     output logic                      PCSrc,
     output logic                      ResultSrc,
-    output logic                      MemWrite
+    output logic                      MemWrite,
     output logic [ALU_CTRL_WIDTH-1:0] ALUControl,
     output logic                      ALUSrc,
     output logic [IMM_SRC_WIDTH-1:0]  ImmSrc,
@@ -20,8 +20,6 @@ module control_unit #(
 );
 
     logic [ALU_OP_WIDTH-1:0]          ALUOp;
-    logic                             op_5;
-
 
     main_decoder  #(
         .IMM_SRC_WIDTH  (IMM_SRC_WIDTH),
@@ -44,14 +42,13 @@ module control_unit #(
         .ALU_OP_WIDTH   (ALU_OP_WIDTH),
         .ALU_CTRL_WIDTH (ALU_CTRL_WIDTH)
     ) alu_decoder (
-        .op_5           (op_5),
+        .op             (op),
         .funct3         (funct3),
         .funct7_5       (funct7_5),
         .ALUOp          (ALUOp),
         .ALUControl     (ALUControl)
     );
 
-    assign op_5  = op[5];
-    assign PCSrc = Branch & ¬Zero; // Branching logic
+    assign PCSrc = Branch & ~Zero; // Branching logic
     
 endmodule
