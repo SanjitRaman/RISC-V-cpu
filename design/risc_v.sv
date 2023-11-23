@@ -1,77 +1,156 @@
-module sinegen #(
-  parameter WIDTH = 32
+module risc_v #(
+  parameter                      DATA_WIDTH = 32,
+  parameter                      OP_WIDTH   = 7,
+  parameter                      FUNCT3_WIDTH = 3,
+  parameter                      REG_ADDR_WIDTH = 5,
+  parameter                      IMM_SRC_WIDTH = 2,
+  parameter                      ALU_CTRL_WIDTH = 3
 )(
   // interface signals
-  input  logic             clk,      // clock 
-  input  logic             rst,      // reset 
-  output logic [WIDTH-1:0] a0       // sine output
+  input  logic                   CLK,      // clock 
+  input  logic                   rst,      // reset 
 );
 
-  logic PC;
-  logic  PCsrc;    
-  logic  [WIDTH-1:0]       ImmOp;
-  logic  [WIDTH-1:0]       instr;
-  logic EQ;
-  logic [1:0] ImmSrc;
-  logic [WIDTH-1:0] regOp2;
-  logic RegWrite;
-  logic [WIDTH-1:0] ALUop1;
-  logic [WIDTH-1:0] ALUop2;
-  logic [2:0] ALUctrl;
-  logic ALUsrc;
-  logic [WIDTH-1:0] ALUout;
+// PC
+  logic                          PC;
+  logic [DATA_WIDTH-1:0]         PCNext;
+  logic [DATA_WIDTH-1:0]         PCPlus4;
+
+// Instruction Memory
+  //logic                        PC;
+  logic [DATA_WIDTH-1:0]         Instr;
+  
+// Sign Extend
+  logic [24:0]                   Instr_31_7;
+  //logic [1:0]                  ImmSrc;
+  logic [DATA_WIDTH-1:0]         ImmExt;
+
+// Control Unit
+  logic [OP_WIDTH-1:0]           op;
+  logic [FUNCT3_WIDTH-1:0]       funct3;
+  logic                          funct7_5;
+  logic                          PCSrc;
+  logic                          ResultSrc;
+  logic                          MemWrite;
+  logic [ALU_CTRL_WIDTH-1:0]     ALUControl;
+  logic                          ALUSrc;
+  logic [IMM_SRC_WIDTH-1:0]      ImmSrc;
+  logic                          RegWrite;
+  logic                          WE3;
+
+// ALU
+  logic [DATA_WIDTH-1:0]         SrcA;
+  logic [DATA_WIDTH-1:0]         SrcB;
+  logic [DATA_WIDTH-1:0]         ALUResult;
+  logic                          Zero;
+
+// Data Memory
+  //CLK
+  //logic [DATA_WIDTH-1:0]       ALUResult;
+  //logic [2:0]                  ALUControl;
+  logic [DATA_WIDTH-1:0]         WriteData;
+  logic [DATA_WIDTH-1:0]         ReadData
+
+// Register File
+  //CLK
+  logic [REG_ADDR_WIDTH-1:0]     A1;
+  logic [REG_ADDR_WIDTH-1:0]     A2;
+  logic [REG_ADDR_WIDTH-1:0]     A3;
+  logic [DATA_WIDTH-1:0]         Result;
+  //logic [DATA_WIDTH-1:0]       SrcA;
+  //logic [DATA_WIDTH-1:0]       WriteData; RD2 output.
+
+// linking wires
+  logic [DATA_WIDTH-1:0]         PCTarget;
 
 
-pc myPC (
-  .clk (clk),
-  .rst (rst),
-  .ImmOp (ImmOp),
-  .PCsrc (PCsrc), 
-  .PC (PC),
-);  
+// extractions from Instruction
+  assign op         = Instr[6:0];
+  assign funct3     = Instr[14:12];
+  assign funct7_5   = Instr[30];
+  assign Instr_31_7 = Instr[31:7];
+  assign A1         = Instr[19:15];
+  assign A2         = Instr[24:20];
+  assign A3         = Instr[11:7];
 
-rom myRom (
-  .clk (clk),
-  .A (PC),
-  .RD (instr),
-);
 
-control_unit myControlUnit (
-  .instr (instr),
-  .EQ (EQ),
-  .PCsrc (PCsrc),
-  .Immsrc (ImmSrc),
-  .ALUsrc (ALUsrc),
-  .ALUctrl (ALUctrl),
-  .RegWrite (RegWrite), 
-);
-
-sign_extend mySignExtend (
-  .instr (instr),
-  .immSrc (ImmSrc),
-  .immOp (ImmOp),
+pc riscPC (
+  .CLK        (CLK),
+  .RST        (RST),
+  .PCNext     (PCNext),
+  .PC         (PC)
 )
 
-reg_file myRegFile (
-  .clk (clk),
-  .AD1 (instr[19:15]),
-  .AD2 (instr[24:20]),
-  .AD3 (instr[11:7]),
-  .WE3 (RegWrite),
-  .WD3 (ALUout),
-  .RD1 (ALUop1),
-  .RD2 (regOp2),
-  .a0 (a0),
+rom riscInstrMem (
+  .A          (PC),
+  .RD         (Instr)
 );
 
-assign ALUop2 = ALUsrc ? ImmOp : regOp2;
-
-alu myALU (
-  ALUop1 (ALUop1),
-  ALUop2 (ALUop2),
-  ALUctrl (ALUctrl),
-  ALUout (ALUout),
-  EQ (EQ),
+control_unit #(
+  .OP_WIDTH (OP_WIDTH),
+  .FUNCT3_WIDTH (FUNCT3_WIDTH),
+  .ALU_CTRL_WIDTH (ALU_CTRL_WIDTH),
+  .IMM_SRC_WIDTH (IMM_SRC_WIDTH),
+  .ALU_OP_WIDTH (ALU_OP_WIDTH),
+)
+riscControlUnit (
+  .op         (op),
+  .funct3     (funct3),
+  .funct7_5   (funct7_5),
+  .Zero       (Zero),
+  .PCSrc      (PCSrc),
+  .ResultSrc  (ResultSrc),
+  .MemWrite   (MemWrite),
+  .ALUControl (ALUControl),
+  .ALUSrc     (ALUSrc),
+  .ImmSrc     (ImmSrc),
+  .RegWrite   (RegWrite)
 );
+
+sign_extend # (
+  .DATA_WIDTH (DATA_WIDTH),
+  .IMM_SRC_WIDTH (IMM_SRC_WIDTH)
+)
+riscSignExtend (
+  .Instr_31_7 (Instr_31_7),
+  .ImmSrc     (ImmSrc),
+  .ImmOp      (ImmExt)
+)
+
+reg_file riscRegFile (
+  .CLK        (CLK),
+  .A1         (A1),
+  .A2         (A2),
+  .A3         (A3),
+  .WE3        (RegWrite),
+  .RD1        (SrcA),
+  .RD2        (WriteData),
+  .WD3        (Result)
+);
+
+alu riscALU (
+  .SrcA        (SrcA),
+  .SrcB        (SrcB),
+  .ALUControl  (ALUControl),
+  .ALUResult   (ALUResult),
+  .Zero        (Zero)
+);
+
+data_mem riscDataMem (
+  .CLK         (CLK),
+  .A           (ALUResult),
+  .WD          (WriteData),
+  .WE          (MemWrite),
+  .RD          (ReadData)
+);
+
+// MUXs
+assign SrcB     = ALUSrc    ? ImmExt   : ReadData;
+assign Result   = ResultSrc ? ReadData : ALUResult;
+assign PCNext   = PCSrc     ? PCTarget : PCPlus4;
+
+// Adders
+assign PCTarget = PC + ImmExt;
+assign PCPlus4  = PC + 4;
 
 endmodule
