@@ -22,7 +22,6 @@ protected:
     top = new control_unit;
     top->clk = 1;
     top->rst = 0;
-    top->instr = 0x00158593;
     top->eval();
   }
 
@@ -33,13 +32,17 @@ protected:
 };
 
 //
-TEST_F(ControlUnitTest, value) {
-  clock_ticks(simcyc);
+TEST_F(ControlAddiUnitTest, value) {
+  //clock_ticks(simcyc);
+  top->instr = 0x00158593; //addi a1 a1 1
+  top->eval();
   ASSERT_EQ(top->PCsrc, 0);
   ASSERT_EQ(top->ALUctrl, 0b000);
   ASSERT_EQ(top->ALUsrc, 0);
   ASSERT_EQ(top->ImmSrc, 0b00);
   ASSERT_EQ(top->RegWrite, 1);
+  ASSERT_EQ(top->ResultSrc, 0);
+  ASSERT_EQ(top->MemWrite, 0);
 }
 
 int main(int argc, char **argv) {
