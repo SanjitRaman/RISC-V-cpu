@@ -56,6 +56,6 @@ int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   auto res = RUN_ALL_TESTS();
   Verilated::mkdir("logs");
-  VerilatedCov::write("logs/coverage3.dat");
+  VerilatedCov::write("logs/coverage_control_unit.dat");
   return res;
 }

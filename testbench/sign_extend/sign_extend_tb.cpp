@@ -105,6 +105,6 @@ int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   auto res = RUN_ALL_TESTS();
   Verilated::mkdir("logs");
-  VerilatedCov::write("logs/coverage1.dat");
+  VerilatedCov::write("logs/coverage_sign_extend.dat");
   return res;
 }
