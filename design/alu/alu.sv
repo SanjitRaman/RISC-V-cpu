@@ -19,12 +19,12 @@ always_comb begin
     case(ALUctrl)
         3'b000: ALUout = ALUop1 + ALUop2;
         3'b001: ALUout = ALUop1 - ALUop2;
-        3'b101: ALUout = ALUop1 < ALUop2;
+        3'b101: ALUout = (ALUop1 < ALUop2) ? {DATA_WIDTH{1'b1}} : {DATA_WIDTH{1'b0}};
         3'b011: ALUout = ALUop1 | ALUop2;
-        3'b101: ALUout = ALUop1 & ALUop2;
+        3'b010: ALUout = ALUop1 & ALUop2;
         default: ALUout = ALUop1 + ALUop2;
     endcase
-    EQ = {[DATA_WIDTH]{1'b0}} || (ALUop1 ^ ALUop2);
+    EQ = ({DATA_WIDTH{1'b0}} == (ALUop1 ^ ALUop2)) ? {DATA_WIDTH{1'b1}} : {DATA_WIDTH{1'b0}};
 end
 
 endmodule
