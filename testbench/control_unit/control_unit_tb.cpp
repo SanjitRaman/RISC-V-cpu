@@ -37,14 +37,15 @@ protected:
 //
 TEST_F(ControlUnitTest, ADDI) {
   //clock_ticks(simcyc);
-  //top->Instr = 0b000000000001010110; //addi a1 a1 1
+  //top->Instr = 0x00158513; //addi a1 a1 1
   top->op = 0b0010011;
   top->funct3 = 0b000;
   top->funct7_5 = 0b0;
+  top->Zero = 0b0;
   top->eval();
   ASSERT_EQ(top->PCSrc, 0);
   ASSERT_EQ(top->ALUControl, 0b000);
-  ASSERT_EQ(top->ALUSrc, 0);
+  ASSERT_EQ(top->ALUSrc, 1);
   ASSERT_EQ(top->ImmSrc, 0b00);
   ASSERT_EQ(top->RegWrite, 1);
   ASSERT_EQ(top->ResultSrc, 0);

@@ -1,6 +1,6 @@
 # Makefile
-NAME = sign_extend
-INCLUDE_DIRS = design/$(NAME)/
+NAME = control_unit
+INCLUDE_DIRS = design/$(NAME)/decoders
 
 
 # Set the Verilator executable
