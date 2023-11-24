@@ -3,3 +3,4 @@ googletest/
 .vscode/
 build/
 bin/
+logs/
