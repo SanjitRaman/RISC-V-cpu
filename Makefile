@@ -34,8 +34,8 @@ GTEST_LIB_DIR = ../../googletest/build/lib
 GTEST_INCLUDE_DIR = ../../googletest/googletest/include
 
 # Set Google Test flags
-#GTEST_FLAGS = ""
-GTEST_FLAGS = -LDFLAGS "-L$(GTEST_LIB_DIR) -lgtest -lpthread" \
+GTEST_FLAGS = ""
+#GTEST_FLAGS = -LDFLAGS "-L$(GTEST_LIB_DIR) -lgtest -lpthread" \
 			  -CFLAGS "$(CXX_FLAGS)" \
 			  -CFLAGS "-I$(GTEST_INCLUDE_DIR)"
 

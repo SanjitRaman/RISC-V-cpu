@@ -7,7 +7,7 @@ module pc #(
     output logic [PC_WIDTH-1:0] PC
 );
 
-    always_ff @ (negedge CLK)
+    always_ff @ (posedge CLK)
         if (RST) PC <= {PC_WIDTH{1'b0}};
         else PC <= PCNext;
 
