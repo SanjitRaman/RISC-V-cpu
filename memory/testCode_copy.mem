@@ -1,7 +1,0 @@
-0FF00313 // addi t1 zero 0xff
-00000513 // addi a0 zero 0x0
-00000593 // addi a1 zero 0x0
-00058513 // addi a0 a1 0x0
-00158593 // addi a1 a1 0x1
-FE659CE3 // bne a1 t1 8
-FE0318E3 // bne t1 zero 1
