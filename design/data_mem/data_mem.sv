@@ -18,13 +18,12 @@ initial begin
   $readmemh("sineram.mem", ram_array);
 end;
 
-always_ff @(posedge CLK) begin
+always_ff @(posedge CLK)
     if (WE == 1'b1) begin
         ram_array[A] <= WD[BYTE_WIDTH-1:0];
         ram_array[A+1] <= WD[2*BYTE_WIDTH-1:BYTE_WIDTH];
         ram_array[A+2] <= WD[3*BYTE_WIDTH-1:2*BYTE_WIDTH];
         ram_array[A+3] <= WD[4*BYTE_WIDTH-1:3*BYTE_WIDTH]; // this will be a problem for sw: individual bytes are not written to.
     end
-    RD <= {ram_array[A+3], ram_array[A+2], ram_array[A+1], ram_array[A]};
-end
+assign RD = {{24{1'b0}}, ram_array[A]};
 endmodule
