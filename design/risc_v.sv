@@ -84,7 +84,6 @@ pc riscPC (
 );
 
 instr_mem riscInstrMem (
-  .CLK        (CLK),
   .A          (PC[4:0]),
   .RD         (Instr)
 );
