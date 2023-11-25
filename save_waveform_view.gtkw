@@ -1,0 +1,34 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Sat Nov 25 12:43:31 2023
+[*]
+[dumpfile] "/home/sanjit/Documents/iac/Team-10-Reduced-RISC-V/logs/risc_v.vcd"
+[dumpfile_mtime] "Sat Nov 25 12:37:41 2023"
+[dumpfile_size] 558016
+[savefile] "/home/sanjit/Documents/iac/Team-10-Reduced-RISC-V/save_waveform_view.gtkw"
+[timestart] 7
+[size] 1000 600
+[pos] -1 -1
+*-2.000000 13 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[treeopen] TOP.risc_v.
+[sst_width] 192
+[signals_width] 144
+[sst_expanded] 1
+[sst_vpaned_height] 157
+@29
+TOP.risc_v.CLK
+TOP.risc_v.RST
+@23
+TOP.risc_v.PC[31:0]
+TOP.risc_v.Instr[31:0]
+TOP.risc_v.op[6:0]
+TOP.risc_v.riscRegFile.registers[6][31:0]
+TOP.risc_v.riscRegFile.registers[10][31:0]
+TOP.risc_v.riscRegFile.registers[11][31:0]
+@421
+TOP.risc_v.riscSignExtend.ImmOp[31:0]
+@29
+TOP.risc_v.riscSignExtend.ImmSrc[1:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -2,10 +2,10 @@ module reg_file #(
     parameter ADDRESS_WIDTH = 5,
     parameter DATA_WIDTH = 32
 )(
-    input logic clk,
-    input logic [ADDRESS_WIDTH-1:0] AD1, // read adr 1
-    input logic [ADDRESS_WIDTH-1:0] AD2, // read adr 2
-    input logic [ADDRESS_WIDTH-1:0] AD3, // write adr 
+    input logic CLK,
+    input logic [ADDRESS_WIDTH-1:0] A1, // read adr 1
+    input logic [ADDRESS_WIDTH-1:0] A2, // read adr 2
+    input logic [ADDRESS_WIDTH-1:0] A3, // write adr 
     input logic WE3, // write enable 
     input logic [DATA_WIDTH-1:0] WD3, // write data 
     output logic [DATA_WIDTH-1:0] RD1, // read out 1
@@ -15,13 +15,13 @@ module reg_file #(
 
 logic [DATA_WIDTH-1:0] registers [2**ADDRESS_WIDTH-1:0];
 
-always_ff @(posedge clk) begin
-    if(WE3 == 1'b1) registers[AD3] <= WD3;
+always_ff @(posedge CLK) begin
+    if(WE3 == 1'b1) registers[A3] <= WD3;
 end
 
 always_comb begin
-    RD1 = registers[AD1];
-    RD2 = registers[AD2];
+    RD1 = registers[A1];
+    RD2 = registers[A2];
     a0 = registers[5'b01010];
 end
 
