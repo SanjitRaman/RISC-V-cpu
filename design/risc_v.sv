@@ -148,7 +148,7 @@ data_mem riscDataMem (
 );
 
 // MUXs
-assign SrcB     = ALUSrc    ? ImmExt   : ReadData;
+assign SrcB     = ALUSrc    ? ImmExt   : WriteData;
 assign Result   = ResultSrc ? ReadData : ALUResult;
 assign PCNext   = PCSrc     ? PCTarget : PCPlus4;
 
