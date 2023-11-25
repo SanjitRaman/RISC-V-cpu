@@ -1,14 +1,14 @@
 module pc #(
     parameter PC_WIDTH = 32
 ) (
-    input logic clk,
-    input logic rst,
-    input logic [PC_WIDTH-1:0] next_PC,
+    input logic CLK,
+    input logic RST,
+    input logic [PC_WIDTH-1:0] PCNext,
     output logic [PC_WIDTH-1:0] PC
 );
 
-    always_ff @ (posedge clk)
-        if (rst) PC <= {PC_WIDTH{1'b0}};
-        else PC <= next_PC;
+    always_ff @ (posedge CLK)
+        if (RST) PC <= {PC_WIDTH{1'b0}};
+        else PC <= PCNext;
 
 endmodule
