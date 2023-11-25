@@ -11,7 +11,7 @@ module instr_mem #(
 
 initial begin
     $display("Loading rom.");
-    $readmemh("testCode.mem", rom_array);
+    $readmemh("sinetestcode.mem", rom_array);
 end;
 
 assign RD = rom_array[{{2{1'b0}},A[ADDRESS_WIDTH-1:2]}]; // read from address A
