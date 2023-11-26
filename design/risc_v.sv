@@ -44,6 +44,9 @@ module risc_v #(
     logic [DATA_WIDTH-1:0]         SrcB;
     logic [DATA_WIDTH-1:0]         ALUResult;
     logic                          Zero;
+    logic                          N;
+    logic                          C;
+    logic                          V;
 
 // Data Memory
     //CLK
@@ -105,6 +108,9 @@ module risc_v #(
         .funct3     (funct3),
         .funct7_5   (funct7_5),
         .Zero       (Zero),
+        .N          (N),
+        .C          (C),
+        .V          (V),
         .PCSrc      (PCSrc),
         .ResultSrc  (ResultSrc),
         .MemWrite   (MemWrite),
@@ -149,7 +155,10 @@ module risc_v #(
         .SrcB        (SrcB),
         .ALUControl  (ALUControl),
         .ALUResult   (ALUResult),
-        .Zero        (Zero)
+        .Zero        (Zero),
+        .N           (N),
+        .C           (C),
+        .V           (V)
     );
 
     data_mem #(
