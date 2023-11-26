@@ -1,6 +1,14 @@
 # Makefile
-NAME = risc_v
-INCLUDE_DIRS =  -y design/alu                   \
+
+RUN = module
+GTEST = 1
+
+MODULE = control_unit
+MODULE.INCLUDE_DIRS = -y design/control_unit/decoders
+
+UNIT = risc_v
+UNIT.INCLUDE_DIRS =  -y design/ \
+				-y design/alu                   \
 				-y design/control_unit          \
 				-y design/control_unit/decoders \
 				-y design/data_mem              \
@@ -10,6 +18,22 @@ INCLUDE_DIRS =  -y design/alu                   \
 				-y design/sign_extend           \
 
 
+NAME=""
+INCLUDE_DIRS=""
+SOURCES=""
+
+ifeq ($(RUN), module)
+	NAME = $(MODULE)
+	INCLUDE_DIRS = $(MODULE.INCLUDE_DIRS)
+	SOURCES = design/$(NAME)/$(NAME).sv
+
+else
+	NAME = $(UNIT)
+	INCLUDE_DIRS = $(UNIT.INCLUDE_DIRS)
+	SOURCES = design/$(NAME).sv
+
+endif
+
 # Set the Verilator executable
 VERILATOR = verilator
 
@@ -17,10 +41,6 @@ VERILATOR = verilator
 VERILATOR_FLAGS = -Wall --coverage --cc --trace
 VERILATOR_COVERAGE_FLAGS = --annotate logs/annotate --annotate-all --annotate-min 1
 
-
-
-# Set source files and include directories
-SOURCES = design/$(NAME).sv
 
 # Set testbench source and testbench executable
 TB_SOURCE = testbench/$(NAME)/$(NAME)_tb.cpp
@@ -34,12 +54,16 @@ GTEST_LIB_DIR = ../../googletest/build/lib
 GTEST_INCLUDE_DIR = ../../googletest/googletest/include
 
 # Set Google Test flags
-GTEST_FLAGS = ""
-#GTEST_FLAGS = -LDFLAGS "-L$(GTEST_LIB_DIR) -lgtest -lpthread" \
-			  -CFLAGS "$(CXX_FLAGS)" \
-			  -CFLAGS "-I$(GTEST_INCLUDE_DIR)"
+ifeq ($(GTEST), 1)
+	GTEST_FLAGS = -LDFLAGS "-L$(GTEST_LIB_DIR) -lgtest -lpthread" \
+				  -CFLAGS "$(CXX_FLAGS)" \
+				  -CFLAGS "-I$(GTEST_INCLUDE_DIR)"
+else
+	GTEST_FLAGS = ""
+endif
 
 # Set makefile directories
+TOP_DIR = .
 BUILD_DIR = build/$(NAME)
 BIN_DIR = bin
 MEM_DIR = memory
@@ -78,9 +102,16 @@ create_symlinks:
 		ln -s $(realpath $(file)) $(BIN_DIR)/$(notdir $(file));)
 
 
+ifeq ($(GTEST), 1)
 runtest: all $(TARGET)
 	@echo "Running testbench..."
 	cd $(BIN_DIR) && ./$(patsubst $(BIN_DIR)/%,%,$(TARGET))
+	mv $(BIN_DIR)/logs/ $(realpath .)
+else
+runtest: all $(TARGET)
+	@echo "Running testbench..."
+	cd $(BIN_DIR) && ./$(patsubst $(BIN_DIR)/%,%,$(TARGET))
+endif
 
 gtkwave: runtest
 	@echo "Running GTKWave..."
@@ -103,5 +134,6 @@ clean:
 	@echo "Cleaning up..."
 	rm -rf $(BUILD_DIR)
 	rm -rf $(BIN_DIR)
+	rm -rf $(LOGS_DIR)
 
 .PHONY: all clean create_symlinks coverage genhtml gtest runtest gtkwave
