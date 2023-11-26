@@ -1,11 +1,11 @@
 module risc_v #(
-    parameter                      DATA_WIDTH = 32,
-    parameter                      OP_WIDTH   = 7,
-    parameter                      FUNCT3_WIDTH = 3,
+    parameter                      DATA_WIDTH     = 32,
+    parameter                      OP_WIDTH       = 7,
+    parameter                      FUNCT3_WIDTH   = 3,
     parameter                      REG_ADDR_WIDTH = 5,
-    parameter                      IMM_SRC_WIDTH = 2,
+    parameter                      IMM_SRC_WIDTH  = 2,
     parameter                      ALU_CTRL_WIDTH = 3,
-    parameter                      ALU_OP_WIDTH = 2
+    parameter                      ALU_OP_WIDTH   = 2
 )(
 // interface signals
     input  logic                   CLK,      // clock 
