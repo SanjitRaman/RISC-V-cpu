@@ -2,15 +2,15 @@ module reg_file #(
     parameter ADDRESS_WIDTH = 5,
     parameter DATA_WIDTH = 32
 )(
-    input logic CLK,
-    input logic [ADDRESS_WIDTH-1:0] A1, // read adr 1
-    input logic [ADDRESS_WIDTH-1:0] A2, // read adr 2
-    input logic [ADDRESS_WIDTH-1:0] A3, // write adr 
-    input logic WE3, // write enable 
-    input logic [DATA_WIDTH-1:0] WD3, // write data 
-    output logic [DATA_WIDTH-1:0] RD1, // read out 1
-    output logic [DATA_WIDTH-1:0] RD2, // read out 2
-    output logic [DATA_WIDTH-1:0] a0 // register 10 for some reason 
+    input  logic                     CLK,
+    input  logic [ADDRESS_WIDTH-1:0] A1,  // read adr 1
+    input  logic [ADDRESS_WIDTH-1:0] A2,  // read adr 2
+    input  logic [ADDRESS_WIDTH-1:0] A3,  // write adr 
+    input  logic                     WE3, // write enable 
+    input  logic [DATA_WIDTH-1:0]    WD3, // write data 
+    output logic [DATA_WIDTH-1:0]    RD1, // read out 1
+    output logic [DATA_WIDTH-1:0]    RD2, // read out 2
+    output logic [DATA_WIDTH-1:0]    a0   // register 10
 );
 
 logic [DATA_WIDTH-1:0] registers [2**ADDRESS_WIDTH-1:0];

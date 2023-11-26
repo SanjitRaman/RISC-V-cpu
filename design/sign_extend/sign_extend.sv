@@ -1,10 +1,10 @@
 module sign_extend #(
-    DATA_WIDTH = 32,
-    IMM_SRC_WIDTH = 2
+    parameter DATA_WIDTH = 32,
+    parameter IMM_SRC_WIDTH = 2
 ) (
-    input logic [DATA_WIDTH-1:0] Instr,
-    input logic [IMM_SRC_WIDTH-1:0] ImmSrc,
-    output logic [DATA_WIDTH-1:0] ImmOp
+    input  logic [DATA_WIDTH-1:0]    Instr,
+    input  logic [IMM_SRC_WIDTH-1:0] ImmSrc,
+    output logic [DATA_WIDTH-1:0]    ImmOp
 
 );
 
