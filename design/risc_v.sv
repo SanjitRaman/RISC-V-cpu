@@ -4,8 +4,7 @@ module risc_v #(
     parameter                      FUNCT3_WIDTH   = 3,
     parameter                      REG_ADDR_WIDTH = 5,
     parameter                      IMM_SRC_WIDTH  = 2,
-    parameter                      ALU_CTRL_WIDTH = 3,
-    parameter                      ALU_OP_WIDTH   = 2
+    parameter                      ALU_CTRL_WIDTH = 3
 )(
 // interface signals
     input  logic                   CLK,      // clock 
@@ -88,6 +87,7 @@ module risc_v #(
     instr_mem #(
         .DATA_WIDTH    (32),
         .ADDRESS_WIDTH (5)
+    )
     riscInstrMem (
         .A          (PC[4:0]),
         .RD         (Instr)
