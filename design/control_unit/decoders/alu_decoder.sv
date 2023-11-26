@@ -6,10 +6,10 @@ module alu_decoder #(
 
 
 ) (
-    input logic [OP_WIDTH-1:0]        op,
-    input logic [FUNCT3_WIDTH-1:0]    funct3,
+    input logic  [OP_WIDTH-1:0]       op,
+    input logic  [FUNCT3_WIDTH-1:0]   funct3,
     input logic                       funct7_5,
-    input logic [ALU_OP_WIDTH-1:0]    ALUOp,
+    input logic  [ALU_OP_WIDTH-1:0]   ALUOp,
 
     output logic [ALU_CTRL_WIDTH-1:0] ALUControl
 );

@@ -4,18 +4,18 @@ module data_mem #(
     parameter DATA_WIDTH    = 32
 
 )(
-    input logic CLK,
-    input logic WE,
-    input logic [ADDRESS_WIDTH-1:0] A,
-    input logic [DATA_WIDTH-1:0] WD,
-    output logic [DATA_WIDTH-1:0] RD
+    input  logic                     CLK,
+    input  logic                     WE,
+    input  logic [ADDRESS_WIDTH-1:0] A,
+    input  logic [DATA_WIDTH-1:0]    WD,
+    output logic [DATA_WIDTH-1:0]    RD
 );
 
 logic [BYTE_WIDTH-1:0] ram_array [2**ADDRESS_WIDTH-1:0];
 
 initial begin
     $display("Loading ram.");
-  $readmemh("sineram.mem", ram_array);
+    $readmemh("sineram.mem", ram_array);
 end;
 
 always_ff @(posedge CLK)
