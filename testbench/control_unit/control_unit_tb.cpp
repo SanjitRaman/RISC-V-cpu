@@ -23,16 +23,12 @@ class ControlUnitTest: public ::testing::Test {
         }
 
         std::tuple<uint32_t, uint32_t, uint32_t> processInstruction(uint32_t Instr) {
-            // TODO: Implement the logic to process the instruction
-
-
-
-            // Placeholder return values
+            // return values
             uint32_t op = Instr & 0b1111111;
             uint32_t funct3 = 0;
             uint32_t funct7 = 0;
 
-            if(op == 0b011011) { // R-type
+            if(op == 0b0110011) { // R-type
                 funct7 = (Instr >> 25) & 0b1111111;
                 funct3 = (Instr >> 12) & 0b111;
             }
@@ -54,7 +50,7 @@ class ControlUnitTest: public ::testing::Test {
         void setInputs(std::tuple<uint32_t, uint32_t, uint32_t> Instr) {
             top->op = std::get<0>(Instr);
             top->funct3 = std::get<1>(Instr);
-            top->funct7_5 = std::get<2>(Instr);
+            top->funct7_5 = (std::get<2>(Instr) >> 5) & 0b1;
         }
         void setFlags(uint32_t Zero, uint32_t C=0, uint32_t V=0, uint32_t N=0) {
             top->Zero = Zero;
@@ -79,39 +75,113 @@ class ControlUnitTest: public ::testing::Test {
 
 // R-type
 // add
+TEST_F(ControlUnitTest, ADD) {
+    setInputsAndEvaluate(0x006284b3, 0b0); // add x9, x5, x6
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b0000);
+}
 // sub
+TEST_F(ControlUnitTest, SUB) {
+    setInputsAndEvaluate(0x40218233, 0b0); // sub x4, x3, x2
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b0001);
+}
 // sll
+TEST_F(ControlUnitTest, SLL) {
+    setInputsAndEvaluate(0x00a29033, 0b0); // sll x0, x5, x10
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b0010);
+}
 // slt
+TEST_F(ControlUnitTest, SLT) {
+    setInputsAndEvaluate(0x003120b3, 0b0); // slt x1, x2, x3
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b0011);
+}
 // sltu
+TEST_F(ControlUnitTest, SLTU) {
+    setInputsAndEvaluate(0x011837b3, 0b0); // sltu x15, x16, x17
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b0100);
+}
 // xor
+TEST_F(ControlUnitTest, XOR) {
+    setInputsAndEvaluate(0x00c2a033, 0b0); // xor x18, x19, x20
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b0101);
+}
 // srl
+TEST_F(ControlUnitTest, SRL) {
+    setInputsAndEvaluate(0x01bbda33, 0b0); // srl x20, x23, x27
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b0110);
+}
 // sra
+TEST_F(ControlUnitTest, SRA) {
+    setInputsAndEvaluate(0x416e5ab3, 0b0); // sra x21, x28, x22
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b0111);
+}
 // or
+TEST_F(ControlUnitTest, OR) {
+    setInputsAndEvaluate(0x01acec33, 0b0); // or x24, x25, x26
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b1000);
+}
 // and
+TEST_F(ControlUnitTest, AND) {
+    setInputsAndEvaluate(0x00d2a033, 0b0); // and x26, x27, x28
+    assertControlSignals(1, -1, 0, 0, 0, 0, 0b1001);
+}
 
-// I-type
+
+// I-type -- ImmOp = 0b00
 // lb
 // lh
 // lw
 TEST_F(ControlUnitTest, LW) {
     setInputsAndEvaluate(0x0005A503, 0b0);
-    assertControlSignals(1, 0b00, 1, 0, 1, 0, 0b000);
+    assertControlSignals(1, 0b00, 1, 0, 1, 0, 0b0000);
 }
 // lbu
 // lhu
+
 // addi
 TEST_F(ControlUnitTest, ADDI) {
     setInputsAndEvaluate(0x00530213, 0b0);
-    assertControlSignals(1,-1, 0, 0, 0, 0, 0b000);
+    assertControlSignals(1,0b00, 1, 0, 0, 0, 0b0000);
 }
 // slli
+TEST_F(ControlUnitTest, SLLI) {
+    setInputsAndEvaluate(0x01009013, 0b0); // slli x0, x1, 0x10
+    assertControlSignals(1, 0, 1, 0, 0, 0, 0b0010);
+}
 // slti
+TEST_F(ControlUnitTest, SLTI) {
+    setInputsAndEvaluate(0x00312013, 0b0); // slti x0, x1, 0xFFF
+    assertControlSignals(1, 0, 1, 0, 0, 0, 0b0011);
+}
 // sltiu
+TEST_F(ControlUnitTest, SLTIU) {
+    setInputsAndEvaluate(0x0001b113, 0b0); // sltiu x2, x3, 0x000
+    assertControlSignals(1, 0, 1, 0, 0, 0, 0b0100);
+}
 // xori
+TEST_F(ControlUnitTest, XORI) {
+    setInputsAndEvaluate(0x1232c213, 0b0); // xori x4, x5, 0x123
+    assertControlSignals(1, 0, 1, 0, 0, 0, 0b0101);
+}
 // srli
+TEST_F(ControlUnitTest, SRLI) {
+    setInputsAndEvaluate(0x01f3d313, 0b0); // srli x6, x7, 0x1f
+    assertControlSignals(1, 0, 1, 0, 0, 0, 0b0110);
+}
 // srai
+TEST_F(ControlUnitTest, SRAI) {
+    setInputsAndEvaluate(0x4074d413, 0b0); // srai x8, x9, 0x07
+    assertControlSignals(1, 0, 1, 0, 0, 0, 0b0111);
+}
 // ori
+TEST_F(ControlUnitTest, ORI) {
+    setInputsAndEvaluate(0x1235e513, 0b0); // ori x10, x11, 0x123
+    assertControlSignals(1, 0, 1, 0, 0, 0, 0b1000);
+}
 // andi
+TEST_F(ControlUnitTest, ANDI) {
+    setInputsAndEvaluate(0x00f6f613, 0b0); // andi x12, x13, 0xf
+    assertControlSignals(1, 0, 1, 0, 0, 0, 0b1001);
+}
 
 // S-type
 // sb
@@ -141,6 +211,8 @@ TEST_F(ControlUnitTest, BNE1) {
 // J-type
 // jalr
 // jal
+
+
 
 
 int main(int argc, char **argv) {
