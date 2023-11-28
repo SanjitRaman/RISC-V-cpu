@@ -3,8 +3,8 @@
 RUN = module
 GTEST = 1
 
-MODULE = reg_file
-MODULE.INCLUDE_DIRS = "" #-y design/control_unit/decoders
+MODULE = control_unit
+MODULE.INCLUDE_DIRS = -y design/control_unit/decoders
 
 UNIT = risc_v
 UNIT.INCLUDE_DIRS =  -y design/ \
@@ -47,7 +47,7 @@ TB_SOURCE = testbench/$(NAME)/$(NAME)_tb.cpp
 TB_EXECUTABLE = $(NAME)_tb
 
 # Set additional flags for compiling C++ files
-CXX_FLAGS = -std=c++11
+CXX_FLAGS = -std=c++17
 
 # Set Google Test library paths
 GTEST_LIB_DIR = ../../googletest/build/lib

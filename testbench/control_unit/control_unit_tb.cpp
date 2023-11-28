@@ -3,108 +3,151 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <vector>
+#include <tuple>
 
 class ControlUnitTest: public ::testing::Test {
-protected:
-  control_unit * top;
-  const uint32_t simcyc = 10'000'000;
+    protected:
+        control_unit * top;
+        const uint32_t simcyc = 10'000'000;
 
-  /*
-  void clock_ticks(int N) {
-    for (int i = 1; i <= N; i++) {
-      top->clk = 1;
-      top->eval();
-      top->clk = 0;
-      top->eval();
-    }
-  }
+        void SetUp( ) {
+            top = new control_unit;
+            //top->clk = 1;
+            //top->rst = 0;
+            top->eval();
+        }
 
-  */
+        void TearDown( ) {
+            top->final();
+            delete top;
+        }
 
-  void SetUp( ) {
-    top = new control_unit;
-    //top->clk = 1;
-    //top->rst = 0;
-    top->eval();
-  }
+        std::tuple<uint32_t, uint32_t, uint32_t> processInstruction(uint32_t Instr) {
+            // TODO: Implement the logic to process the instruction
 
-  void TearDown( ) {
-    top->final();
-    delete top;
-  }
+
+
+            // Placeholder return values
+            uint32_t op = Instr & 0b1111111;
+            uint32_t funct3 = 0;
+            uint32_t funct7 = 0;
+
+            if(op == 0b011011) { // R-type
+                funct7 = (Instr >> 25) & 0b1111111;
+                funct3 = (Instr >> 12) & 0b111;
+            }
+            else if(op == 0b11 || op == 0b10011) { // I-type
+                funct3 = (Instr >> 12) & 0b111;
+            }
+            else if (op == 0b0100011) { // S-type
+                funct3 = (Instr >> 12) & 0b111;
+            }
+            else if (op == 0b1100011) { // B-type
+                funct3 = (Instr >> 12) & 0b111;
+            }
+
+            return std::make_tuple(op, funct3, funct7);
+        }
+
+
+
+        void setInputs(std::tuple<uint32_t, uint32_t, uint32_t> Instr) {
+            top->op = std::get<0>(Instr);
+            top->funct3 = std::get<1>(Instr);
+            top->funct7_5 = std::get<2>(Instr);
+        }
+        void setFlags(uint32_t Zero, uint32_t C=0, uint32_t V=0, uint32_t N=0) {
+            top->Zero = Zero;
+        }
+
+        void setInputsAndEvaluate(uint32_t Instr, uint32_t Zero) {
+            setInputs(processInstruction(Instr));
+            setFlags(Zero);
+            top->eval();
+        }
+
+        void assertControlSignals(int RegWrite=-1, int ImmSrc=-1, int ALUSrc=-1, int MemWrite=-1, int ResultSrc=-1, int PCSrc=-1, int ALUControl=-1) {
+            if (RegWrite   != -1)    ASSERT_EQ(top->RegWrite,   RegWrite  );
+            if (ImmSrc     != -1)    ASSERT_EQ(top->ImmSrc,     ImmSrc    );
+            if (MemWrite   != -1)    ASSERT_EQ(top->MemWrite,   MemWrite  );
+            if (ResultSrc  != -1)    ASSERT_EQ(top->ResultSrc,  ResultSrc );
+            if (PCSrc      != -1)    ASSERT_EQ(top->PCSrc,      PCSrc     );
+            if (ALUControl != -1)    ASSERT_EQ(top->ALUControl, ALUControl);
+        }
 };
 
-//
-TEST_F(ControlUnitTest, ADDI) {
-  //clock_ticks(simcyc);
-  //top->Instr = 0x00158513; //addi a1 a1 1
-  top->op = 0b0010011;
-  top->funct3 = 0b000;
-  top->funct7_5 = 0b0;
-  top->Zero = 0b0;
-  top->eval();
-  ASSERT_EQ(top->PCSrc, 0);
-  ASSERT_EQ(top->ALUControl, 0b000);
-  ASSERT_EQ(top->ALUSrc, 1);
-  ASSERT_EQ(top->ImmSrc, 0b00);
-  ASSERT_EQ(top->RegWrite, 1);
-  ASSERT_EQ(top->ResultSrc, 0);
-  ASSERT_EQ(top->MemWrite, 0);
-}
 
+// R-type
+// add
+// sub
+// sll
+// slt
+// sltu
+// xor
+// srl
+// sra
+// or
+// and
+
+// I-type
+// lb
+// lh
+// lw
+TEST_F(ControlUnitTest, LW) {
+    setInputsAndEvaluate(0x0005A503, 0b0);
+    assertControlSignals(1, 0b00, 1, 0, 1, 0, 0b000);
+}
+// lbu
+// lhu
+// addi
+TEST_F(ControlUnitTest, ADDI) {
+    setInputsAndEvaluate(0x00530213, 0b0);
+    assertControlSignals(1,-1, 0, 0, 0, 0, 0b000);
+}
+// slli
+// slti
+// sltiu
+// xori
+// srli
+// srai
+// ori
+// andi
+
+// S-type
+// sb
+// sh
+// sw
+
+// beq
+// bne
 TEST_F(ControlUnitTest, BNE0) {
-  //clock_ticks(simcyc);
-  top->op = 0b1100011;
-  top->funct3 = 0b001;
-  top->funct7_5 = 0b0;
-  top->Zero = 0b0;
-  top->eval();
-  ASSERT_EQ(top->RegWrite, 0);
-  ASSERT_EQ(top->ImmSrc, 0b10);
-  ASSERT_EQ(top->ALUSrc, 0);
-  ASSERT_EQ(top->MemWrite, 0);
-  ASSERT_EQ(top->ResultSrc, 0);
-  ASSERT_EQ(top->PCSrc, 1);
-  ASSERT_EQ(top->ALUControl, 0b001);
+    setInputsAndEvaluate(0x00063663, 0b0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001);
 }
 
 TEST_F(ControlUnitTest, BNE1) {
-  //clock_ticks(simcyc);
-  top->op = 0b1100011;
-  top->funct3 = 0b001;
-  top->funct7_5 = 0b0;
-  top->Zero = 0b1;
-  top->eval();
-  ASSERT_EQ(top->RegWrite, 0);
-  ASSERT_EQ(top->ImmSrc, 0b10);
-  ASSERT_EQ(top->ALUSrc, 0);
-  ASSERT_EQ(top->MemWrite, 0);
-  ASSERT_EQ(top->ResultSrc, 0);
-  ASSERT_EQ(top->PCSrc, 0);
-  ASSERT_EQ(top->ALUControl, 0b001);
+    setInputsAndEvaluate(0x00063663, 0b1);
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001);
 }
+// blt
+// bge
+// bltu
+// bgeu
 
-TEST_F(ControlUnitTest, LW) {
-  //clock_ticks(simcyc);
-  top->op = 0b0000011;
-  top->funct3 = 0b010;
-  top->funct7_5 = 0b0;
-  top->Zero = 0b0;
-  top->eval();
-  ASSERT_EQ(top->PCSrc, 0);
-  ASSERT_EQ(top->ALUControl, 0b000);
-  ASSERT_EQ(top->ALUSrc, 1);
-  ASSERT_EQ(top->ImmSrc, 0b00);
-  ASSERT_EQ(top->RegWrite, 1);
-  ASSERT_EQ(top->ResultSrc, 1);
-  ASSERT_EQ(top->MemWrite, 0);
-}
+// U-type
+// auipc
+// lui
+
+// J-type
+// jalr
+// jal
+
 
 int main(int argc, char **argv) {
-  Verilated::commandArgs(argc, argv);
-  testing::InitGoogleTest(&argc, argv);
-  auto res = RUN_ALL_TESTS();
-  Verilated::mkdir("logs");
-  VerilatedCov::write("logs/coverage_control_unit.dat");
-  return res;
+    Verilated::commandArgs(argc, argv);
+    testing::InitGoogleTest(&argc, argv);
+    auto res = RUN_ALL_TESTS();
+    Verilated::mkdir("logs");
+    VerilatedCov::write("logs/coverage_control_unit.dat");
+    return res;
 }
