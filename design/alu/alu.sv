@@ -23,6 +23,7 @@ module alu #(
 // 1001 - and
 // 1010 - load upper + pc
 // 1011 - load upper
+// 1100 - jal (store pc+4 to register)
 
 logic signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]} ;
 
@@ -44,8 +45,9 @@ always_comb begin
         4'b0111:  ALUResult = (SrcA>>>SrcB[SHIFT_WIDTH-1:0]);
         4'b1000:  ALUResult = SrcA | SrcB;
         4'b1001:  ALUResult = SrcA & SrcB;
-        4'b1010:  ALUResult = SrcB + PC;
-        4'b1011:  ALUResult = SrcB; 
+        4'b1010:  ALUResult = (SrcB<<12) + PC;
+        4'b1011:  ALUResult = SrcB<<12; 
+        4'b1100:  ALUResult = PC + 4;
         default:  ALUResult = SrcA + SrcB;
     endcase
     Zero = ({DATA_WIDTH{1'b0}} == (SrcA ^ SrcB)) ? 1'b1 : 1'b0;

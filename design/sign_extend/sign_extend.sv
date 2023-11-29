@@ -13,8 +13,7 @@ module sign_extend #(
             2'b00:   ImmOp = {{20{Instr[31]}}, Instr[31:20]};
             2'b01:   ImmOp = {{20{Instr[31]}}, Instr[31:25], Instr[11:7]};
             2'b10:   ImmOp = {{20{Instr[31]}}, Instr[7], Instr[30:25], Instr[11:8], 1'b0};
-            2'b11:   ImmOp = {Instr[31:12], 12'b0}; // you can also use this for the jump instruction 
-            //but whatever is decoding it will have to reorder the signal
+            2'b11:   ImmOp = {{12{Instr[31]}}, Instr[31:12]}; 
             default: ImmOp = {{20{Instr[31]}}, Instr[31:20]};
         endcase
     

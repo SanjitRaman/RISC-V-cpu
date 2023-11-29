@@ -173,7 +173,8 @@ module risc_v #(
     assign PCNext   = PCSrc     ? PCTarget : PCPlus4;
 
 // Adders
-    assign PCTarget = PC + ImmExt;
+
+    assign PCTarget = PC + {ImmExt[31:19], ImmExt[7:0], ImmExt[8], ImmExt[18:9]};
     assign PCPlus4  = PC + 4;
 
 endmodule

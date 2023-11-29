@@ -28,6 +28,9 @@ module alu_decoder #(
                 ALUControl = 4'b1010;                    // U-type + PC
             3'b100:
                 ALUControl = 4'b1011;                    //U-Type 
+
+            3'b110:
+                ALUControl = 4'b1100;                    //J-Type
                 
             3'b010:                                      // R-Type
                 case (funct3)

@@ -86,6 +86,16 @@ module main_decoder #(
                     Branch    = 1'b0;
                     ALUOp     = 3'b100;
                 end
+            7'b1101111: // J-Type 
+                begin
+                    RegWrite  = 1'b1;
+                    ImmSrc    = 2'b11;
+                    ALUSrc    = 1'b0;
+                    MemWrite  = 1'b0;
+                    ResultSrc = 1'b0;
+                    Branch    = 1'b1;
+                    ALUOp     = 3'b110;
+                end
             default:
                 begin
                     RegWrite  = 0;
