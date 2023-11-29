@@ -21,10 +21,26 @@ end;
 
 always_ff @(posedge CLK)
     if (WE == 1'b1) begin
-        ram_array[A] <= WD[BYTE_WIDTH-1:0];
-        ram_array[A+1] <= WD[2*BYTE_WIDTH-1:BYTE_WIDTH];
-        ram_array[A+2] <= WD[3*BYTE_WIDTH-1:2*BYTE_WIDTH];
-        ram_array[A+3] <= WD[4*BYTE_WIDTH-1:3*BYTE_WIDTH]; // this will be a problem for sw: individual bytes are not written to.
+        always_comb
+            case (funct3)
+                3'b000 begin
+                    ram_array[A] <= WD[BYTE_WIDTH-1:0];
+                    ram_array[A+1] <= 8'b00000000;
+                    ram_array[A+2] <= 8'b00000000;
+                    ram_array[A+3] <= 8'b00000000; 
+                end
+                3'b001 begin
+                    ram_array[A] <= WD[BYTE_WIDTH-1:0];
+                    ram_array[A+1] <= WD[2*BYTE_WIDTH-1:BYTE_WIDTH];
+                    ram_array[A+2] <= 8'b00000000;
+                    ram_array[A+3] <= 8'b00000000; 
+                end
+                3'b010 begin
+                    ram_array[A] <= WD[BYTE_WIDTH-1:0];
+                    ram_array[A+1] <= WD[2*BYTE_WIDTH-1:BYTE_WIDTH];
+                    ram_array[A+2] <= WD[3*BYTE_WIDTH-1:2*BYTE_WIDTH];
+                    ram_array[A+3] <= WD[4*BYTE_WIDTH-1:3*BYTE_WIDTH]; 
+                end
     end
 
 always_comb begin
