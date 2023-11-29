@@ -54,11 +54,14 @@ class ControlUnitTest: public ::testing::Test {
         }
         void setFlags(uint32_t Zero, uint32_t C=0, uint32_t V=0, uint32_t N=0) {
             top->Zero = Zero;
+            top->C = C;
+            top->V = V;
+            top->N = N;
         }
 
-        void setInputsAndEvaluate(uint32_t Instr, uint32_t Zero) {
+        void setInputsAndEvaluate(uint32_t Instr, uint32_t Zero, uint32_t C=0, uint32_t V=0, uint32_t N=0) {
             setInputs(processInstruction(Instr));
-            setFlags(Zero);
+            setFlags(Zero, C, V, N);
             top->eval();
         }
 
@@ -189,20 +192,59 @@ TEST_F(ControlUnitTest, ANDI) {
 // sw
 
 // beq
-// bne
-TEST_F(ControlUnitTest, BNE0) {
-    setInputsAndEvaluate(0x00063663, 0b0);
+TEST_F(ControlUnitTest, BEQ0) {
+    setInputsAndEvaluate(0x00108463, 0b0); // beq r1 r1 8
     assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001);
 }
-
+TEST_F(ControlUnitTest, BEQ1) {
+    setInputsAndEvaluate(0x00108463, 0b1); // beq r1 r1 8
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001);
+}
+// bne
+TEST_F(ControlUnitTest, BNE0) {
+    setInputsAndEvaluate(0x00109463, 0b0); // bne r1 r1 8
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001);
+}
 TEST_F(ControlUnitTest, BNE1) {
-    setInputsAndEvaluate(0x00063663, 0b1);
+    setInputsAndEvaluate(0x00109463, 0b1); // bne r1 r1 8
     assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001);
 }
 // blt
+TEST_F(ControlUnitTest, BLT0) {
+    setInputsAndEvaluate(0x0010C463, 0b0, 0b0, 0b1, 0b1); 
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001);
+}
+TEST_F(ControlUnitTest, BLT1) {
+    setInputsAndEvaluate(0x0010C463, 0b0, 0b0, 0b0, 0b1);
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001);
+}
 // bge
+TEST_F(ControlUnitTest, BGE0) {
+    setInputsAndEvaluate(0x0010D463, 0b0, 0b0, 0b0, 0b1);
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001);
+}
+TEST_F(ControlUnitTest, BGE1) {
+    setInputsAndEvaluate(0x0010D463, 0b0, 0b0, 0b1, 0b1);
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001);
+}
 // bltu
+TEST_F(ControlUnitTest, BLTU0) {
+    setInputsAndEvaluate(0x0010E463, 0b0, 0b0); 
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001);
+}
+TEST_F(ControlUnitTest, BLTU1) {
+    setInputsAndEvaluate(0x0010E463, 0b0, 0b1);
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001);
+}
 // bgeu
+TEST_F(ControlUnitTest, BGEU0) {
+    setInputsAndEvaluate(0x0010F463, 0b0, 0b1); 
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001);
+}
+TEST_F(ControlUnitTest, BGEU1) {
+    setInputsAndEvaluate(0x0010F463, 0b0, 0b0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001);
+}
 
 // U-type
 // auipc
