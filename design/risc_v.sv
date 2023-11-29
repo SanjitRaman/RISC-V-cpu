@@ -88,6 +88,7 @@ module risc_v #(
     instr_mem #(
         .DATA_WIDTH    (32),
         .ADDRESS_WIDTH (5)
+    )
     riscInstrMem (
         .A          (PC[4:0]),
         .RD         (Instr)
@@ -148,6 +149,7 @@ module risc_v #(
         .SrcA        (SrcA),
         .SrcB        (SrcB),
         .ALUControl  (ALUControl),
+        .PC     (PC),
         .ALUResult   (ALUResult),
         .Zero        (Zero)
     );
