@@ -31,11 +31,11 @@ always_comb begin
         case (funct3)
             3'b000: // Load byte (lb)
                 begin
-                    RD = {{24{1'bA[31]}}, ram_array[A]};
+                    RD = {{24{A[31]}}, ram_array[A]};
                 end
             3'b001: // Load Half (lh)
                 begin
-                    RD = {{16{1'bA[31]}}, ram_array[A+1], ram_array[A]};
+                    RD = {{16{A[31]}}, ram_array[A+1], ram_array[A]};
                 end
             3'b010: // Load word (lw) 
                 begin
