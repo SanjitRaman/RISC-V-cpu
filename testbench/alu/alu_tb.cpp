@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <vector>
+#include <iostream>
 
 class ALUTest: public ::testing::Test {
 protected:
@@ -33,10 +34,10 @@ TEST_F(ALUTest, ADDZ0) {
 TEST_F(ALUTest, ADDZ1) {
   top->ALUControl = 0b0000;
   top->SrcA = 0xFFFFFFFF;
-  top->SrcB = 0x39E8F390;
+  top->SrcB = 0xFFFFFFFF;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x39E8F38F);
-  ASSERT_EQ(top->Zero, 0b1);
+  ASSERT_EQ(top->ALUResult, 0xFFFFFFFE);
+  ASSERT_EQ(top->Zero, 0b0);
 }
 
 TEST_F(ALUTest, SUBZ0) {
@@ -50,10 +51,10 @@ TEST_F(ALUTest, SUBZ0) {
 
 TEST_F(ALUTest, SUBZ1) {
   top->ALUControl = 0b0001;
-  top->SrcA = 0x29AB0E38;
+  top->SrcA = 0xFFFFF021;
   top->SrcB = 0xFFFFF021;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x29AB1E17);
+  ASSERT_EQ(top->ALUResult, 0x00000000);
   ASSERT_EQ(top->Zero, 0b1);
 }
 
@@ -77,16 +78,17 @@ TEST_F(ALUTest, SLTGPN) {
   top->ALUControl = 0b0011;
   top->SrcA = 0x29AB0E38;
   top->SrcB = 0xE010F021;
-  top->eval();
+  top->eval();  
   ASSERT_EQ(top->ALUResult, 0x00000000);
+  //ASSERT_EQ(top->signs, 0b01);
 }
 
 TEST_F(ALUTest, SLTGNN) {
   top->ALUControl = 0b0011;
-  top->SrcA = 0xA0AB0E38;
+  top->SrcA = 0xFFFFFFFF;
   top->SrcB = 0xF01FF021;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x00000001);
+  ASSERT_EQ(top->ALUResult, 0x00000000);
 }
 
 TEST_F(ALUTest, SLTLPP) {
@@ -107,8 +109,8 @@ TEST_F(ALUTest, SLTLNP) {
 
 TEST_F(ALUTest, SLTLNN) {
   top->ALUControl = 0b0011;
-  top->SrcA = 0xF01FF021;
-  top->SrcB = 0xA0AB0E38;
+  top->SrcA = 0xA0AB0E38; 
+  top->SrcB = 0xF01FF021;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000001);
 }
@@ -155,10 +157,10 @@ TEST_F(ALUTest, SRA0) {
 
 TEST_F(ALUTest, SRA1) {
   top->ALUControl = 0b0111;
-  top->SrcA = 0x830D37D8;
-  top->SrcB = 5;
+  top->SrcA = 0xF0000000;
+  top->SrcB = 4;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0xFC1869BE);
+  ASSERT_EQ(top->ALUResult, 0xFF000000);
 }
 
 TEST_F(ALUTest, OR) {
@@ -177,11 +179,32 @@ TEST_F(ALUTest, AND) {
   ASSERT_EQ(top->ALUResult, 0x20000020);
 }
 
+TEST_F(ALUTest, LUPC) {
+  top->ALUControl = 0b1010;
+  top->PC = 0x000042C4;
+  top->SrcB = 0x000FFFFFF;
+  top->eval();
+  ASSERT_EQ(top->ALUResult, 0x000032C4);
+}
+
+TEST_F(ALUTest, LU) {
+  top->ALUControl = 0b1011;
+  top->SrcB = 0x000FFFFF;
+  top->eval();
+  ASSERT_EQ(top->ALUResult, 0xFFFFF000);
+}
+
+TEST_F(ALUTest, JAL) {
+  top->ALUControl = 0b1100;
+  top->PC = 0x0000F400;
+  top->eval();
+  ASSERT_EQ(top->ALUResult, 0x0000F404);
+}
 int main(int argc, char **argv) {
   Verilated::commandArgs(argc, argv);
   testing::InitGoogleTest(&argc, argv);
   auto res = RUN_ALL_TESTS();
   Verilated::mkdir("logs");
-  VerilatedCov::write("logs/coverage_control_unit.dat");
+  VerilatedCov::write("logs/coverage_alu.dat");
   return res;
 }
