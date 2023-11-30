@@ -2,6 +2,7 @@ module sign_extend #(
     parameter DATA_WIDTH = 32,
     parameter IMM_SRC_WIDTH = 2
 ) (
+    /* verilator lint_off UNUSEDSIGNAL */
     input  logic [DATA_WIDTH-1:0]    Instr,
     input  logic [IMM_SRC_WIDTH-1:0] ImmSrc,
     output logic [DATA_WIDTH-1:0]    ImmOp
