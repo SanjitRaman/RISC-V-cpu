@@ -19,10 +19,11 @@ jobs:
       run: make gtest
 
     - name: Build and Run Control Unit
-      run: make runtest MODULE=control_unit MODULE.INCLUDE_DIRS="-y design/control_unit/decoders"
+      run: make runtest MODULE=control_unit MODULE.INCLUDE_DIRS="-y design/control_unit/decoders" && make clean
+      
 
     - name: Build and Run Sign Extend
-      run: make runtest MODULE=sign_extend MODULE.INCLUDE_DIRS=""
+      run: make runtest MODULE=sign_extend MODULE.INCLUDE_DIRS="" && make clean
 
     - name: Build and Run Reg File
-      run: make runtest MODULE=reg_file MODULE.INCLUDE_DIRS=""
+      run: make runtest MODULE=reg_file MODULE.INCLUDE_DIRS="" && make clean
