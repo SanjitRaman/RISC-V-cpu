@@ -50,7 +50,7 @@ always_comb begin
         4'b1100:  ALUResult = PC + 4;
         default:  ALUResult = SrcA + SrcB;
     endcase
-    Zero = ({DATA_WIDTH{1'b0}} == (SrcA ^ SrcB)) ? 1'b1 : 1'b0;
+    Zero = ({DATA_WIDTH{1'b0}} == ALUResult) ? 1'b1 : 1'b0;
 end
 
 endmodule
