@@ -8,7 +8,8 @@ module alu #(
     input  logic [ALU_CTRL_WIDTH-1:0] ALUControl,
     input  logic [DATA_WIDTH-1:0]     PC,
     output logic [DATA_WIDTH-1:0]     ALUResult,
-    output logic                      Zero
+    output logic                      Zero,
+    output logic [SHIFT_WIDTH-1:0] shiftstuff
 );
 
 // 0000 - add
@@ -27,6 +28,7 @@ module alu #(
 
 logic signs;
 assign signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]};
+assign shiftstuff = SrcB[SHIFT_WIDTH-1:0];
 
 always_comb begin
     case(ALUControl)
