@@ -8,8 +8,7 @@ module alu #(
     input  logic [ALU_CTRL_WIDTH-1:0] ALUControl,
     input  logic [DATA_WIDTH-1:0]     PC,
     output logic [DATA_WIDTH-1:0]     ALUResult,
-    output logic                      Zero,
-    output logic [1:0] signsout
+    output logic                      Zero
 );
 
 // 0000 - add
@@ -26,7 +25,7 @@ module alu #(
 // 1011 - load upper
 // 1100 - jal (store pc+4 to register)
 
-logic signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]} ;
+logic signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]};
 
 always_comb begin
     case(ALUControl)
@@ -52,7 +51,6 @@ always_comb begin
         default:  ALUResult = SrcA + SrcB;
     endcase
     Zero = ({DATA_WIDTH{1'b0}} == ALUResult) ? 1'b1 : 1'b0;
-    signsout = signs;
 end
 
 endmodule
