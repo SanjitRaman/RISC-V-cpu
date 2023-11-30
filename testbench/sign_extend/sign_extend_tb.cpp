@@ -107,6 +107,17 @@ TEST_F(SignExtendTest, immSrc01) {
   sgn_ext->eval();
   ASSERT_EQ(sgn_ext->immOp, expected_value(Instr, ImmSrc));
 }
+// test sign extension for ImmSrc = 2'b11
+TEST_F(SignExtendTest, immSrc01) {
+  ASSERT_EQ(sgn_ext->immOp, 0);
+  const uint32_t Clocks10M = 10'000'000;
+  uint32_t Instr = gen_random_instr();
+  uint32_t ImmSrc = 0b11;
+  sgn_ext->Instr = Instr;
+  sgn_ext->ImmSrc = ImmSrc;
+  sgn_ext->eval();
+  ASSERT_EQ(sgn_ext->immOp, expected_value(Instr, ImmSrc));
+}
 // test default case
 TEST_F(SignExtendTest, immSrc10) {
   ASSERT_EQ(sgn_ext->immOp, 0);
