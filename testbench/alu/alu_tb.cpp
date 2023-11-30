@@ -86,7 +86,7 @@ TEST_F(ALUTest, SLTGNN) {
   top->SrcA = 0xA0AB0E38;
   top->SrcB = 0xF01FF021;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x11111111);
+  ASSERT_EQ(top->ALUResult, 0x00000001);
 }
 
 TEST_F(ALUTest, SLTLPP) {
@@ -94,7 +94,7 @@ TEST_F(ALUTest, SLTLPP) {
   top->SrcA = 0x0000025B;
   top->SrcB = 0x00007901;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x11111111);
+  ASSERT_EQ(top->ALUResult, 0x00000001);
 }
 
 TEST_F(ALUTest, SLTLNP) {
@@ -102,7 +102,7 @@ TEST_F(ALUTest, SLTLNP) {
   top->SrcA = 0xF01FF021;
   top->SrcB = 0x00AB0E38;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x11111111);
+  ASSERT_EQ(top->ALUResult, 0x00000001);
 }
 
 TEST_F(ALUTest, SLTLNN) {
@@ -110,7 +110,7 @@ TEST_F(ALUTest, SLTLNN) {
   top->SrcA = 0xF01FF021;
   top->SrcB = 0xA0AB0E38;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x11111111);
+  ASSERT_EQ(top->ALUResult, 0x00000001);
 }
 
 TEST_F(ALUTest, SLTU0) {
@@ -126,7 +126,7 @@ TEST_F(ALUTest, SLTU1) {
   top->SrcA = 0x30d2f191;
   top->SrcB = 0x735a1099;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x11111111);
+  ASSERT_EQ(top->ALUResult, 0x00000001);
 }
 
 TEST_F(ALUTest, XOR) {
