@@ -25,7 +25,8 @@ module alu #(
 // 1011 - load upper
 // 1100 - jal (store pc+4 to register)
 
-logic signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]};
+logic signs;
+assign signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]};
 
 always_comb begin
     case(ALUControl)
