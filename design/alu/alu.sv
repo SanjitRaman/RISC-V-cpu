@@ -33,7 +33,7 @@ always_comb begin
                     2'b01: ALUResult = {DATA_WIDTH{1'b0}};
                     2'b10: ALUResult = {{DATA_WIDTH-1{1'b0}}, {1'b1}};
                     2'b11: ALUResult = (SrcA[DATA_WIDTH-2:0] < SrcB[DATA_WIDTH-2:0]) ? {{DATA_WIDTH-1{1'b0}}, {1'b1}} : {DATA_WIDTH{1'b0}};
-            default: ALUResult = (SrcA < SrcB) ? {{DATA_WIDTH-1{1'b0}}, {1'b1}} : {DATA_WIDTH{1'b0}};
+                    default: ALUResult = (SrcA < SrcB) ? {{DATA_WIDTH-1{1'b0}}, {1'b1}} : {DATA_WIDTH{1'b0}};
                 endcase
         4'b0100:  ALUResult = (SrcA < SrcB) ? {{DATA_WIDTH-1{1'b0}}, {1'b1}} : {DATA_WIDTH{1'b0}};
         4'b0101:  ALUResult = SrcA ^ SrcB;
