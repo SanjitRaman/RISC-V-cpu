@@ -28,7 +28,7 @@ always_comb begin
         4'b0000:  ALUResult = SrcA + SrcB;
         4'b0001:  ALUResult = SrcA - SrcB;
         4'b0010:  ALUResult = (SrcA<<SrcB[SHIFT_WIDTH-1:0]);
-        4'b0011:  case(signs):
+        4'b0011:  case(signs)
                     2'b00: ALUResult = (SrcA < SrcB) ? {{DATA_WIDTH-1{1'b0}}, {1'b1}} : {DATA_WIDTH{1'b0}};
                     2'b01: ALUResult = {DATA_WIDTH{1'b0}};
                     2'b10: ALUResult = {{DATA_WIDTH-1{1'b0}}, {1'b1}};
