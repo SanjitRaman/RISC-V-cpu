@@ -38,7 +38,6 @@ module risc_v #(
     logic                          ALUSrc;
     logic [IMM_SRC_WIDTH-1:0]      ImmSrc;
     logic                          RegWrite;
-    logic                          WE;
     logic                          Jump;
 
 // ALU
@@ -179,20 +178,24 @@ module risc_v #(
         .CLK         (CLK),
         .A           (ALUResult[8:0]),
         .WD          (WriteData),
-        .WE          (MemWrite),
+        .WE0          (WE0),
+        .WE1          (WE1),
+        .WE2          (WE2),
+        .WE3          (WE3),
         .RD          (ReadData)
     );
     riscWe_decoder (
-        .funct3(funct3);
-        .WE0 (WE0);
-        .WE1 (WE1);
-        .WE2 (WE2);
-        .WE3 (WE3);
+        .funct3(funct3),
+        .MemWrite (MemWrite),
+        .WE0 (WE0),
+        .WE1 (WE1),
+        .WE2 (WE2),
+        .WE3 (WE3)
     );
     riscLd_decoder(
-        .RD (ReadData);
-        .funct3 (funct3);
-        .RDOut (RDOut);
+        .RD (ReadData),
+        .funct3 (funct3),
+        .RDOut (RDOut),
     );
 
 // MUXs
