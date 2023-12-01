@@ -58,21 +58,23 @@ module control_unit #(
 
     always_comb begin
         signed_less_than = (N ^ V) || (~N ^ Zero);
-        case (funct3)
-            3'b000: // beq
-                PCSrc = Branch & Zero;
-            3'b001: // bne
-                PCSrc = Branch & ~Zero;
-            3'b100: // blt
-                PCSrc = Branch &  signed_less_than;
-            3'b101: // bge
-                PCSrc = Branch & ~signed_less_than;
-            3'b110: // bltu
-                PCSrc = Branch & C;
-            3'b111: // bgeu
-                PCSrc = Branch & ~C;
-            default: PCSrc = 0;
-        endcase
+        if({op[6:5], op[2:0]} == 5'b11111)
+            PCSrc = 1;
+        else
+            case (funct3)
+                3'b000: // beq
+                    PCSrc = Branch & Zero;
+                3'b001: // bne
+                    PCSrc = Branch & ~Zero;
+                3'b100: // blt
+                    PCSrc = Branch &  signed_less_than;
+                3'b101: // bge
+                    PCSrc = Branch & ~signed_less_than;
+                3'b110: // bltu
+                    PCSrc = Branch & C;
+                3'b111: // bgeu
+                    PCSrc = Branch & ~C;
+                default: PCSrc = 0;
+            endcase
     end    
-    
 endmodule
