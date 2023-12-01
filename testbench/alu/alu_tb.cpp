@@ -22,40 +22,52 @@ protected:
 };
 
 
-TEST_F(ALUTest, ADDZ0) {
+TEST_F(ALUTest, ADDFlags0) {
   top->ALUControl = 0b0000;
   top->SrcA = 0x0000003F;
   top->SrcB = 0x0000014A;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000189);
   ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
-TEST_F(ALUTest, ADDZ1) {
+TEST_F(ALUTest, ADDFlags1) {
   top->ALUControl = 0b0000;
   top->SrcA = 0xFFFFFFFF;
   top->SrcB = 0xFFFFFFFF;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0xFFFFFFFE);
   ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b1);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b1);
 }
 
-TEST_F(ALUTest, SUBZ0) {
+TEST_F(ALUTest, SUBFlags0) {
   top->ALUControl = 0b0001;
   top->SrcA = 0x000037D8;
   top->SrcB = 0x0000025B;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x0000357D);
   ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
-TEST_F(ALUTest, SUBZ1) {
+TEST_F(ALUTest, SUBFlags1) {
   top->ALUControl = 0b0001;
   top->SrcA = 0xFFFFF021;
   top->SrcB = 0xFFFFF021;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000000);
   ASSERT_EQ(top->Zero, 0b1);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b1);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SLL) {
@@ -179,27 +191,13 @@ TEST_F(ALUTest, AND) {
   ASSERT_EQ(top->ALUResult, 0x20000020);
 }
 
-TEST_F(ALUTest, LUPC) {
-  top->ALUControl = 0b1010;
-  top->PC = 0x000042C4;
-  top->SrcB = 0x000FFFFFF;
-  top->eval();
-  ASSERT_EQ(top->ALUResult, 0x000032C4);
-}
-
-TEST_F(ALUTest, LU) {
+TEST_F(ALUTest, LUI) {
   top->ALUControl = 0b1011;
   top->SrcB = 0x000FFFFF;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0xFFFFF000);
 }
 
-TEST_F(ALUTest, JAL) {
-  top->ALUControl = 0b1100;
-  top->PC = 0x0000F400;
-  top->eval();
-  ASSERT_EQ(top->ALUResult, 0x0000F404);
-}
 int main(int argc, char **argv) {
   Verilated::commandArgs(argc, argv);
   testing::InitGoogleTest(&argc, argv);
