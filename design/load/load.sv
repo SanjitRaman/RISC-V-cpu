@@ -47,10 +47,10 @@ always_comb begin
         end
 
         default: begin
-            RDout[BYTE_WIDTH-1:0] = RD[BYTE_WIDTH-1:0];
-            RDout[2*BYTE_WIDTH-1:BYTE_WIDTH] = RD[2*BYTE_WIDTH-1:BYTE_WIDTH];
-            RDout[3*BYTE_WIDTH-1:2*BYTE_WIDTH] = RD[3*BYTE_WIDTH-1:2*BYTE_WIDTH];
-            RDout[4*BYTE_WIDTH-1:3*BYTE_WIDTH] = RD[4*BYTE_WIDTH-1:3*BYTE_WIDTH];
+            RDout[BYTE_WIDTH-1:0] = {8{1'b0}};
+            RDout[2*BYTE_WIDTH-1:BYTE_WIDTH] = {8{1'b0}};
+            RDout[3*BYTE_WIDTH-1:2*BYTE_WIDTH] = {8{1'b0}};
+            RDout[4*BYTE_WIDTH-1:3*BYTE_WIDTH] = {8{1'b0}};
             end
     endcase
 end
