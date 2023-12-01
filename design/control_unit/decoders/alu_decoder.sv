@@ -43,16 +43,15 @@ module alu_decoder #(
                         ALUControl = 4'b0100;               // sltu
                     3'b100:
                         ALUControl = 4'b0101;               // xor
-                    3'b101:
-                        if (op_5_funct_5_5 == 2'b10)
-                            ALUControl = 4'b0110;            // srl
-                        else if (op_5_funct_5_5 == 2'b11)
+                    3'b101: 
+                        if (funct7_5)
                             ALUControl = 4'b0111;            // sra
-
+                        else
+                            ALUControl = 4'b0110;            // srl
                     3'b110:
-                        ALUControl = 4'b011;                // or
+                        ALUControl = 4'b1000;                // or
                     3'b111:
-                        ALUControl = 4'b010;                // and
+                        ALUControl = 4'b1001;                // and
                     default:
                         ALUControl = 4'b000;                // add
                 endcase
