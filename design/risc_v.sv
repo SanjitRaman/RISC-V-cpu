@@ -32,13 +32,14 @@ module risc_v #(
     logic [FUNCT3_WIDTH-1:0]       funct3;
     logic                          funct7_5;
     logic                          PCSrc;
-    logic                          ResultSrc;
+    logic [1:0]                    ResultSrc;
     logic                          MemWrite;
     logic [ALU_CTRL_WIDTH-1:0]     ALUControl;
     logic                          ALUSrc;
     logic [IMM_SRC_WIDTH-1:0]      ImmSrc;
     logic                          RegWrite;
-    logic                          WE3;
+    logic                          WE;
+    logic                          Jump;
 
 // ALU
     logic [DATA_WIDTH-1:0]         SrcA;
@@ -48,10 +49,13 @@ module risc_v #(
 
 // Data Memory
     //CLK
-    //logic [DATA_WIDTH-1:0]       ALUResult;
-    //logic [2:0]                  ALUControl;
-    logic [DATA_WIDTH-1:0]         WriteData;
-    logic [DATA_WIDTH-1:0]         ReadData;
+    logic WE0;
+    logic WE1;
+    logic WE2;
+    logic WE3;
+    //logic [ADDRESS_WIDTH-1:0] ALUResult;
+    logic [DATA_WIDTH-1:0]   WriteData;
+    logic [DATA_WIDTH-1:0]   ReadData;
 
 // Register File
     //CLK
@@ -62,8 +66,21 @@ module risc_v #(
     //logic [DATA_WIDTH-1:0]       SrcA;
     //logic [DATA_WIDTH-1:0]       WriteData; RD2 output.
 
+// WE decoder
+    //logic[FUNCT3_WIDTH-1:0] funct3;
+    //logic WE0;
+    //logic WE1;
+    //logic WE2;
+    //logic WE3;
+
+//LD decoder
+    //logic ReadData;
+    //logic funct3;
+    logic RDOut;
+
 // linking wires
     logic [DATA_WIDTH-1:0]         PCTarget;
+    logic [DATA_WIDTH-1:0]         JumpMux;
 
 
 // extractions from Instruction
@@ -88,8 +105,9 @@ module risc_v #(
     instr_mem #(
         .DATA_WIDTH    (32),
         .ADDRESS_WIDTH (5)
+    )
     riscInstrMem (
-        .A          ({PC[4:2], 2'b00}),
+        .A          (PC[4:0]),
         .RD         (Instr)
     );
 
@@ -164,14 +182,33 @@ module risc_v #(
         .WE          (MemWrite),
         .RD          (ReadData)
     );
+    riscWe_decoder (
+        .funct3(funct3);
+        .WE0 (WE0);
+        .WE1 (WE1);
+        .WE2 (WE2);
+        .WE3 (WE3);
+    );
+    riscLd_decoder(
+        .RD (ReadData);
+        .funct3 (funct3);
+        .RDOut (RDOut);
+    );
 
 // MUXs
     assign SrcB     = ALUSrc    ? ImmExt   : WriteData;
-    assign Result   = ResultSrc ? ReadData : ALUResult;
-    assign PCNext   = PCSrc     ? PCTarget : PCPlus4;
+    case(ResultSrc)
+        2'b00: Result = ALUResult;
+        2'b01: Result = RDOut;
+        2'b10: Result = PCTarget;
+        2'b11: Result = PCPlus4;
+    endcase
+    assign Result   = ResultSrc ? ReadData  : ALUResult;
+    assign PCNext   = PCSrc     ? PCTarget  : PCPlus4;
+    assign JumpMux  = Jump      ? WriteData : PC;
 
 // Adders
-    assign PCTarget = PC + ImmExt;
+    assign PCTarget = JumpMux + ImmExt;
     assign PCPlus4  = PC + 4;
 
 endmodule
