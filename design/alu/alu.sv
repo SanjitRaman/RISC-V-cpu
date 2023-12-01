@@ -46,8 +46,8 @@ always_comb begin
         4'b0111:  ALUResult = SrcA[31] ? ~({32{1'b1}}>>SrcB[SHIFT_WIDTH-1:0])| SrcA>>SrcB[SHIFT_WIDTH-1:0]: SrcA>>SrcB[SHIFT_WIDTH-1:0];
         4'b1000:  ALUResult = SrcA | SrcB;
         4'b1001:  ALUResult = SrcA & SrcB;
-        4'b1010:  ALUResult = (SrcB<<12) + PC;
-        4'b1011:  ALUResult = SrcB<<12; 
+        4'b1010:  ALUResult = SrcB + PC;
+        4'b1011:  ALUResult = SrcB; 
         4'b1100:  ALUResult = PC + 4;
         default:  ALUResult = SrcA + SrcB;
     endcase
