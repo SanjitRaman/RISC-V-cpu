@@ -5,24 +5,35 @@ module data_mem #(
 
 )(
     input  logic                     CLK,
-    input  logic                     WE,
+    input  logic                     WE0,
+    input  logic                     WE1,
+    input  logic                     WE2,
+    input  logic                     WE3,
     input  logic [ADDRESS_WIDTH-1:0] A,
     input  logic [DATA_WIDTH-1:0]    WD,
-    input  logic [2:0]               funct3,
     output logic [DATA_WIDTH-1:0]    RD
 );
 
-logic [DATA_WIDTH-1:0] ram_array [2**ADDRESS_WIDTH-1:0];
+    logic [BYTE_WIDTH-1:0] ram_array [2**ADDRESS_WIDTH-1:0];
 
 initial begin
     $display("Loading ram.");
     $readmemh("sineram.mem", ram_array);
 end;
 
-always_ff @(posedge CLK)
-    if (WE == 1'b1) begin
-        ram_array[A] <= WD;
-    end
-
+always_ff @(posedge CLK) begin
+    if (WE0 == 1'b1)
+        ram_array[A] <= WD[7:0];
+    
+    if (WE1 == 1'b1)
+        ram_array[A+1] <= WD[15:8];
+    
+    if (WE1 == 1'b1)
+        ram_array[A+2] <= WD[23:16];
+    
+    if (WE1 == 1'b1)
+        ram_array[A+3] <= WD[31:24];
+end
+    
 assign RD = ram_array[A];
 endmodule
