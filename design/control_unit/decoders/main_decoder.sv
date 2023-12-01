@@ -20,7 +20,7 @@ module main_decoder #(
             7'b0000011: // Load Word (lw)
                 begin
                     RegWrite  = 1'b1;
-                    ImmSrc    = 2'b00;
+                    ImmSrc    = 3'b000;
                     ALUSrc    = 1'b1;
                     MemWrite  = 1'b0;
                     ResultSrc = 2'b01;
@@ -31,7 +31,7 @@ module main_decoder #(
             7'b0100011: // Store Word (sw)
                 begin
                     RegWrite  = 1'b0;
-                    ImmSrc    = 2'b01;
+                    ImmSrc    = 3'b01;
                     ALUSrc    = 1'b1;
                     MemWrite  = 1'b1;
                     ResultSrc = 2'b00; // X
@@ -42,7 +42,7 @@ module main_decoder #(
             7'b0110011: // R-Type 
                 begin
                     RegWrite  = 1'b1;
-                    ImmSrc    = 2'b00;
+                    ImmSrc    = 3'b000;
                     ALUSrc    = 1'b0; // X
                     MemWrite  = 1'b0;
                     ResultSrc = 2'b00;
@@ -53,7 +53,7 @@ module main_decoder #(
             7'b0010011: // I-Type (addi, slli, slti, sltiu, xori, srli, srai, ori, andi)
                 begin
                     RegWrite  = 1'b1;
-                    ImmSrc    = 2'b00;
+                    ImmSrc    = 3'b000;
                     ALUSrc    = 1'b1;
                     MemWrite  = 1'b0;
                     ResultSrc = 2'b00;
@@ -64,7 +64,7 @@ module main_decoder #(
             7'b1100011: // Branch (beq/bne...)
                 begin
                     RegWrite  = 1'b0;
-                    ImmSrc    = 2'b10;
+                    ImmSrc    = 3'b010;
                     ALUSrc    = 1'b0;
                     MemWrite  = 1'b0;
                     ResultSrc = 2'b00; // X
@@ -75,27 +75,29 @@ module main_decoder #(
             7'b0010111: // U-type (Load upper immediate + PC)
                 begin
                     RegWrite  = 1'b1;
-                    ImmSrc    = 2'b11;
+                    ImmSrc    = 3'b011;
                     ALUSrc    = 1'b1;
                     MemWrite  = 1'b0;
                     ResultSrc = 2'b10;
                     Branch    = 1'b0;
                     ALUOp     = 3'b100;
+                    Jump      = 1'b0;
                 end
             7'b0110111: // U-type (Load upper immediate)
                 begin
                     RegWrite  = 1'b1;
-                    ImmSrc    = 2'b11;
+                    ImmSrc    = 3'b011;
                     ALUSrc    = 1'b1;
                     MemWrite  = 1'b0;
                     ResultSrc = 2'b00;
                     Branch    = 1'b0;
                     ALUOp     = 3'b100;
+                    Jump      = 1'b0;
                 end
             7'b1101111: // J-Type 
                 begin
                     RegWrite  = 1'b1;
-                    ImmSrc    = 2'b11;
+                    ImmSrc    = 3'b100;
                     ALUSrc    = 1'b0;
                     MemWrite  = 1'b0;
                     ResultSrc = 2'b11;
