@@ -1,7 +1,7 @@
 module alu_decoder #(
     parameter                         OP_WIDTH       = 7,
     parameter                         FUNCT3_WIDTH   = 3,
-    parameter                         ALU_OP_WIDTH   = 2,
+    parameter                         ALU_OP_WIDTH   = 3,
     parameter                         ALU_CTRL_WIDTH = 4
 
 
@@ -20,12 +20,15 @@ module alu_decoder #(
 
     always_comb
         case (ALUOp)
-            2'b00:                                      // Load/Store (lw/sw)
+            3'b000:                                      // Load/Store (lw/sw)
                 ALUControl = 4'b0000;                    //      add
-            2'b01:                                      // Branch (beq)
+            3'b001:                                      // Branch (beq)
                 ALUControl = 4'b0001;                    //      subtract
-            2'b10:                                      // R-Type
+            3'b100:
+                ALUControl = 4'b1011;                    //U-Type and J-type
 
+                
+            3'b010:                                      // R-Type
                 case (funct3)
                     3'b000:
                         if (op_5_funct_5_5 == 2'b11)
