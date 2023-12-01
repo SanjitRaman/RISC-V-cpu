@@ -24,7 +24,6 @@ always_comb
                     WD[3*BYTE_WIDTH-1:2*BYTE_WIDTH] <= RD[3*BYTE_WIDTH-1:2*BYTE_WIDTH];
                     WD[4*BYTE_WIDTH-1:3*BYTE_WIDTH] <= RD[4*BYTE_WIDTH-1:3*BYTE_WIDTH];
                 end
-            endcase
           
             2'b01: begin
                     WD[BYTE_WIDTH-1:0] = RD[BYTE_WIDTH-1:0];
@@ -32,7 +31,6 @@ always_comb
                     WD[3*BYTE_WIDTH-1:2*BYTE_WIDTH] <= RD[3*BYTE_WIDTH-1:2*BYTE_WIDTH];
                     WD[4*BYTE_WIDTH-1:3*BYTE_WIDTH] <= RD[4*BYTE_WIDTH-1:3*BYTE_WIDTH];
                 end
-            endcase
           
             2'b10: begin
                     WD[BYTE_WIDTH-1:0] = RD[BYTE_WIDTH-1:0];
@@ -40,7 +38,6 @@ always_comb
                     WD[3*BYTE_WIDTH-1:2*BYTE_WIDTH] <= rs2[3*BYTE_WIDTH-1:2*BYTE_WIDTH];
                     WD[4*BYTE_WIDTH-1:3*BYTE_WIDTH] <= RD[4*BYTE_WIDTH-1:3*BYTE_WIDTH];
                 end
-            endcase
           
             2'b11: begin
                     WD[BYTE_WIDTH-1:0] = RD[BYTE_WIDTH-1:0];
@@ -48,7 +45,6 @@ always_comb
                     WD[3*BYTE_WIDTH-1:2*BYTE_WIDTH] <= RD[3*BYTE_WIDTH-1:2*BYTE_WIDTH];
                     WD[4*BYTE_WIDTH-1:3*BYTE_WIDTH] <= rs2[4*BYTE_WIDTH-1:3*BYTE_WIDTH];
                 end
-            endcase
           
             default: begin
                     WD[BYTE_WIDTH-1:0] = rs2[BYTE_WIDTH-1:0];
