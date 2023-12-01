@@ -1,4 +1,4 @@
-module data_mem #(
+module ld_decoder #(
     parameter DATA_WIDTH = 32,
     parameter BYTE_WIDTH = 8,
     parameter ADDRESS_WIDTH = 9
