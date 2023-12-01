@@ -1,14 +1,17 @@
 module control_unit #(
     parameter                         OP_WIDTH       = 7,
     parameter                         FUNCT3_WIDTH   = 3,
-    parameter                         ALU_CTRL_WIDTH = 3,
-    parameter                         IMM_SRC_WIDTH  = 2,
-    parameter                         ALU_OP_WIDTH   = 2
+    parameter                         ALU_CTRL_WIDTH = 4,
+    parameter                         IMM_SRC_WIDTH  = 3,
+    parameter                         ALU_OP_WIDTH   = 3
 ) (
     input logic [OP_WIDTH-1:0]        op,
     input logic [FUNCT3_WIDTH-1:0]    funct3,
     input logic                       funct7_5,
     input logic                       Zero,
+    input logic                       N,
+    input logic                       C,
+    input logic                       V,
 
     output logic                      PCSrc,
     output logic [1:0]                ResultSrc,
@@ -17,11 +20,12 @@ module control_unit #(
     output logic                      ALUSrc,
     output logic [IMM_SRC_WIDTH-1:0]  ImmSrc,
     output logic                      RegWrite,
-    output logic                      Jump  
+    output logic                      Jump
 );
 
     logic [ALU_OP_WIDTH-1:0]          ALUOp;
     logic                             Branch;
+     logic                            signed_less_than;
 
     main_decoder  #(
         .IMM_SRC_WIDTH  (IMM_SRC_WIDTH),
@@ -52,6 +56,23 @@ module control_unit #(
         .ALUControl     (ALUControl)
     );
 
-    assign PCSrc = Branch & ~Zero; // Branching logic
+    always_comb begin
+        signed_less_than = (N ^ V) || (~N ^ Zero);
+        case (funct3)
+            3'b000: // beq
+                PCSrc = Branch & Zero;
+            3'b001: // bne
+                PCSrc = Branch & ~Zero;
+            3'b100: // blt
+                PCSrc = Branch &  signed_less_than;
+            3'b101: // bge
+                PCSrc = Branch & ~signed_less_than;
+            3'b110: // bltu
+                PCSrc = Branch & C;
+            3'b111: // bgeu
+                PCSrc = Branch & ~C;
+            default: PCSrc = 0;
+        endcase
+    end    
     
 endmodule
