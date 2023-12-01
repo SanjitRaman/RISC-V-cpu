@@ -94,7 +94,18 @@ module main_decoder #(
                     ALUOp     = 3'b100;
                     Jump      = 1'b0;
                 end
-            7'b1101111: // J-Type 
+            7'b01100111: // JALR
+                begin
+                    RegWrite  = 1'b1;
+                    ImmSrc    = 3'b100;
+                    ALUSrc    = 1'b0;
+                    MemWrite  = 1'b0;
+                    ResultSrc = 2'b10;
+                    Branch    = 1'b1;
+                    ALUOp     = 3'b100;
+                    Jump      = 1'b1;
+                end
+            7'b1101111: // JAL 
                 begin
                     RegWrite  = 1'b1;
                     ImmSrc    = 3'b100;
@@ -103,7 +114,7 @@ module main_decoder #(
                     ResultSrc = 2'b11;
                     Branch    = 1'b1;
                     ALUOp     = 3'b100;
-                    Jump      = 1'b1;
+                    Jump      = 1'b0;
                 end
             default:
                 begin
