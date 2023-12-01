@@ -89,7 +89,7 @@ module risc_v #(
         .DATA_WIDTH    (32),
         .ADDRESS_WIDTH (5)
     riscInstrMem (
-        .A          ({PC[4:2], 2'b00}),
+        .A          ({PC[4:1], 1'b0}),
         .RD         (Instr)
     );
 
