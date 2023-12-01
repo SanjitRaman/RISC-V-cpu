@@ -276,12 +276,26 @@ TEST_F(ControlUnitTest, BGEU1) {
 
 // U-type
 // auipc
+// RegWrite=-1, ImmSrc=-1, ALUSrc=-1 MemWrite=-1, ResultSrc=-1, PCSrc=-1, ALUControl=-1
+TEST_F(ControlUnitTest, AUIPC) {
+    setInputsAndEvaluate(0x00000517, 0b0); // auipc x10, 0x0
+    assertControlSignals(1, 0b11, -1, 0, 0b10, 0, -1);
+}
 // lui
+// immSrc = 0b00: instr[11:0]
+// immSrc = 0b01: 20 * instr[31], instr[31:25], instr[11:7]
+// immSrc = 0b10: 20 * instr[31], instr[7], instr[30:25], instr[11:8], 0
+// immSrc = 0b11: instr[31:12], 12 * 0 -- U-type
+// imSrc = 0b100: instr[] -- jump
+TEST_F(ControlUnitTest, LUI) {
+    setInputsAndEvaluate(0xff0105b7, 0b0); // lui x0, 0x0
+    assertControlSignals(1, 0b100, 1, 0, 0, 0, 0b1011);
+}
 
 // J-type
 // jalr
 // jal
-
+// regwrite = 1, PCSrc = 1, immSrc = 0b100, resultSrc = 0
 
 
 
