@@ -1,6 +1,6 @@
 module main_decoder #(
-    parameter                         IMM_SRC_WIDTH = 2,
-    parameter                         ALU_OP_WIDTH = 2,
+    parameter                         IMM_SRC_WIDTH = 3,
+    parameter                         ALU_OP_WIDTH = 3,
     parameter                         OP_WIDTH = 7
 ) (
     input logic [OP_WIDTH-1:0]        op,
@@ -31,7 +31,7 @@ module main_decoder #(
             7'b0100011: // Store Word (sw)
                 begin
                     RegWrite  = 1'b0;
-                    ImmSrc    = 3'b01;
+                    ImmSrc    = 3'b001;
                     ALUSrc    = 1'b1;
                     MemWrite  = 1'b1;
                     ResultSrc = 2'b00; // X
@@ -103,18 +103,18 @@ module main_decoder #(
                     ResultSrc = 2'b11;
                     Branch    = 1'b1;
                     ALUOp     = 3'b100;
-                    Jump      = 1'b1
+                    Jump      = 1'b1;
                 end
             default:
                 begin
                     RegWrite  = 0;
-                    ImmSrc    = 2'b00;
+                    ImmSrc    = 3'b000;
                     ALUSrc    = 0;
                     MemWrite  = 0;
                     ResultSrc = 2'b00;
                     Branch    = 0;
-                    ALUOp     = 2'b00;
-                    Jump      = 1
+                    ALUOp     = 3'b000;
+                    Jump      = 1;
                 end
         endcase
     end
