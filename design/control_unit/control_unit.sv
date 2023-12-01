@@ -11,12 +11,13 @@ module control_unit #(
     input logic                       Zero,
 
     output logic                      PCSrc,
-    output logic                      ResultSrc,
+    output logic [1:0]                ResultSrc,
     output logic                      MemWrite,
     output logic [ALU_CTRL_WIDTH-1:0] ALUControl,
     output logic                      ALUSrc,
     output logic [IMM_SRC_WIDTH-1:0]  ImmSrc,
-    output logic                      RegWrite
+    output logic                      RegWrite,
+    output logic                      Jump  
 );
 
     logic [ALU_OP_WIDTH-1:0]          ALUOp;
@@ -34,7 +35,8 @@ module control_unit #(
         .ALUSrc         (ALUSrc),
         .ImmSrc         (ImmSrc),
         .RegWrite       (RegWrite),
-        .ALUOp          (ALUOp)
+        .ALUOp          (ALUOp),
+        .Jump           (Jump)
     );
 
     alu_decoder #(
