@@ -131,14 +131,30 @@ TEST_F(ControlUnitTest, AND) {
 
 // I-type -- ImmOp = 0b00
 // lb
+TEST_F(ControlUnitTest, LB) {
+    setInputsAndEvaluate(0x00058503, 0b0);
+    assertControlSignals(1, 0b00, 1, 0, 1, 0, 0b0000);
+}
 // lh
+TEST_F(ControlUnitTest, LH) {
+    setInputsAndEvaluate(0x03259503, 0b0);
+    assertControlSignals(1, 0b00, 1, 0, 1, 0, 0b0000);
+}
 // lw
 TEST_F(ControlUnitTest, LW) {
     setInputsAndEvaluate(0x0005A503, 0b0);
     assertControlSignals(1, 0b00, 1, 0, 1, 0, 0b0000);
 }
 // lbu
+TEST_F(ControlUnitTest, LBU) {
+    setInputsAndEvaluate(0x0465c503, 0b0);
+    assertControlSignals(1, 0b00, 1, 0, 1, 0, 0b0000);
+}
 // lhu
+TEST_F(ControlUnitTest, LHU) {
+    setInputsAndEvaluate(0x0175d503, 0b0);
+    assertControlSignals(1, 0b00, 1, 0, 1, 0, 0b0000);
+}
 
 // addi
 TEST_F(ControlUnitTest, ADDI) {
@@ -188,8 +204,20 @@ TEST_F(ControlUnitTest, ANDI) {
 
 // S-type
 // sb
+TEST_F(ControlUnitTest, SB) {
+    setInputsAndEvaluate(0x00b80023, 0b0);
+    assertControlSignals(0, 0b00, 1, 1, -1, 0, 0b0000);
+}
 // sh
+TEST_F(ControlUnitTest, SH) {
+    setInputsAndEvaluate(0x02c81123, 0b0);
+    assertControlSignals(0, 0b00, 1, 1, -1, 0, 0b0000);
+}
 // sw
+TEST_F(ControlUnitTest, SW) {
+    setInputsAndEvaluate(0x00d5a2a3, 0b0);
+    assertControlSignals(0, 0b00, 1, 1, -1, 0, 0b0000);
+}
 
 // beq
 TEST_F(ControlUnitTest, BEQ0) {
