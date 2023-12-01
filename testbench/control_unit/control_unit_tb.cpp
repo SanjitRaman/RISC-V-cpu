@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <iostream>
 
 class ControlUnitTest: public ::testing::Test {
     protected:
@@ -33,6 +34,7 @@ class ControlUnitTest: public ::testing::Test {
                 funct3 = (Instr >> 12) & 0b111;
             }
             else if(op == 0b11 || op == 0b10011) { // I-type
+                funct7 = (Instr >> 25) & 0b1111111;
                 funct3 = (Instr >> 12) & 0b111;
             }
             else if (op == 0b0100011) { // S-type
@@ -41,7 +43,6 @@ class ControlUnitTest: public ::testing::Test {
             else if (op == 0b1100011) { // B-type
                 funct3 = (Instr >> 12) & 0b111;
             }
-
             return std::make_tuple(op, funct3, funct7);
         }
 
@@ -105,7 +106,7 @@ TEST_F(ControlUnitTest, SLTU) {
 }
 // xor
 TEST_F(ControlUnitTest, XOR) {
-    setInputsAndEvaluate(0x00c2a033, 0b0); // xor x18, x19, x20
+    setInputsAndEvaluate(0x0149c933, 0b0); // xor x18, x19, x20
     assertControlSignals(1, -1, 0, 0, 0, 0, 0b0101, 0);
 }
 // srl
@@ -125,7 +126,7 @@ TEST_F(ControlUnitTest, OR) {
 }
 // and
 TEST_F(ControlUnitTest, AND) {
-    setInputsAndEvaluate(0x00d2a033, 0b0); // and x26, x27, x28
+    setInputsAndEvaluate(0x01cdfd33, 0b0); // and x26, x27, x28
     assertControlSignals(1, -1, 0, 0, 0, 0, 0b1001, 0);
 }
 
@@ -207,45 +208,45 @@ TEST_F(ControlUnitTest, ANDI) {
 // sb
 TEST_F(ControlUnitTest, SB) {
     setInputsAndEvaluate(0x00b80023, 0b0);
-    assertControlSignals(0, 0b00, 1, 1, -1, 0, 0b0000, 0);
+    assertControlSignals(0, 0b001, 1, 1, -1, 0, 0b0000, 0);
 }
 // sh
 TEST_F(ControlUnitTest, SH) {
     setInputsAndEvaluate(0x02c81123, 0b0);
-    assertControlSignals(0, 0b00, 1, 1, -1, 0, 0b0000, 0);
+    assertControlSignals(0, 0b001, 1, 1, -1, 0, 0b0000, 0);
 }
 // sw
 TEST_F(ControlUnitTest, SW) {
     setInputsAndEvaluate(0x00d5a2a3, 0b0);
-    assertControlSignals(0, 0b00, 1, 1, -1, 0, 0b0000, 0);
+    assertControlSignals(0, 0b001, 1, 1, -1, 0, 0b0000, 0);
 }
 
 // beq
 TEST_F(ControlUnitTest, BEQ0) {
     setInputsAndEvaluate(0x00108463, 0b0); // beq r1 r1 8
-    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
 }
 TEST_F(ControlUnitTest, BEQ1) {
     setInputsAndEvaluate(0x00108463, 0b1); // beq r1 r1 8
-    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
 }
 // bne
-TEST_F(ControlUnitTest, BNE0) {
+TEST_F(ControlUnitTest, BNEZeroFlag0) {
     setInputsAndEvaluate(0x00109463, 0b0); // bne r1 r1 8
     assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
 }
-TEST_F(ControlUnitTest, BNE1) {
+TEST_F(ControlUnitTest, BNEZeroFlag1) {
     setInputsAndEvaluate(0x00109463, 0b1); // bne r1 r1 8
     assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
 }
 // blt
 TEST_F(ControlUnitTest, BLT0) {
     setInputsAndEvaluate(0x0010C463, 0b0, 0b0, 0b1, 0b1); 
-    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
 }
 TEST_F(ControlUnitTest, BLT1) {
     setInputsAndEvaluate(0x0010C463, 0b0, 0b0, 0b0, 0b1);
-    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
 }
 // bge
 TEST_F(ControlUnitTest, BGE0) {
@@ -259,20 +260,20 @@ TEST_F(ControlUnitTest, BGE1) {
 // bltu
 TEST_F(ControlUnitTest, BLTU0) {
     setInputsAndEvaluate(0x0010E463, 0b0, 0b0); 
-    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
 }
 TEST_F(ControlUnitTest, BLTU1) {
     setInputsAndEvaluate(0x0010E463, 0b0, 0b1);
-    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
 }
 // bgeu
 TEST_F(ControlUnitTest, BGEU0) {
     setInputsAndEvaluate(0x0010F463, 0b0, 0b1); 
-    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
 }
 TEST_F(ControlUnitTest, BGEU1) {
     setInputsAndEvaluate(0x0010F463, 0b0, 0b0);
-    assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
+    assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
 }
 
 // U-type
@@ -285,19 +286,19 @@ TEST_F(ControlUnitTest, AUIPC) {
 // lui
 TEST_F(ControlUnitTest, LUI) {
     setInputsAndEvaluate(0xff0105b7, 0b0); // lui x0, 0x0
-    assertControlSignals(1, 0b100, 1, 0, 0b10, 0, 0b1011);
+    assertControlSignals(1, 0b011, 1, 0, 0b00, 0, 0b1011);
 }
 
 // J-type
 // jalr
 TEST_F(ControlUnitTest, JALR) {
     setInputsAndEvaluate(0x032605e7, 0b0); // jalr a1, a2, 50
-    assertControlSignals(1, 0b100, 1, 0, 0b11, 1, -1, 1);
+    assertControlSignals(1, 0b100, 1, 0, 0b10, 1, -1, 1);
 }
 // jal
 TEST_F(ControlUnitTest, JAL) {
     setInputsAndEvaluate(0x018005ef, 0b0); // jal  a1, 28
-    assertControlSignals(1, 0b11, 1, 0, 0b11, 1, 0b000, 1);
+    assertControlSignals(1, 0b100, 1, 0, 0b11, 1, -1, 0);
 }
 // regwrite = 1, PCSrc = 1, immSrc = 0b100, resultSrc = 0
 
