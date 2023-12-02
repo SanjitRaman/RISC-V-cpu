@@ -3,8 +3,8 @@
 RUN = module
 GTEST = 1
 
-MODULE = reg_file
-MODULE.INCLUDE_DIRS = "" #-y design/control_unit/decoders
+MODULE = control_unit
+MODULE.INCLUDE_DIRS = -y design/control_unit/decoders
 
 UNIT = risc_v
 UNIT.INCLUDE_DIRS =  -y design/ \
