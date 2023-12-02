@@ -133,6 +133,10 @@ TEST_F(ALUTest, SLTU0) {
   top->SrcB = 0x30d2f191;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000000);
+  ASSERT_EQ(top->Zero, 0b1);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SLTU1) {
@@ -141,6 +145,10 @@ TEST_F(ALUTest, SLTU1) {
   top->SrcB = 0x735a1099;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000001);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, XOR) {
@@ -149,6 +157,10 @@ TEST_F(ALUTest, XOR) {
   top->SrcB = 0xD471D368;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0xB43605BB);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b1);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SRL) {
@@ -157,6 +169,10 @@ TEST_F(ALUTest, SRL) {
   top->SrcB = 8;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00A02002);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SRA0) {
@@ -165,6 +181,10 @@ TEST_F(ALUTest, SRA0) {
   top->SrcB = 5;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x001869BE);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SRA1) {
@@ -173,6 +193,10 @@ TEST_F(ALUTest, SRA1) {
   top->SrcB = 4;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0xFF000000);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b1);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, OR) {
@@ -181,6 +205,10 @@ TEST_F(ALUTest, OR) {
   top->SrcB = 0xA020025B;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0xA32D37DB);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b1);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, AND) {
@@ -189,6 +217,10 @@ TEST_F(ALUTest, AND) {
   top->SrcB = 0xE010F021;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x20000020);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, LUI) {
@@ -196,13 +228,8 @@ TEST_F(ALUTest, LUI) {
   top->SrcB = 0xFFFFF000;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0xFFFFF000);
-}
-
-int main(int argc, char **argv) {
-  Verilated::commandArgs(argc, argv);
-  testing::InitGoogleTest(&argc, argv);
-  auto res = RUN_ALL_TESTS();
-  Verilated::mkdir("logs");
-  VerilatedCov::write("logs/coverage_alu.dat");
-  return res;
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b1);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
