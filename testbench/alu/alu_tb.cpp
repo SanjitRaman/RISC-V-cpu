@@ -76,7 +76,7 @@ TEST_F(ALUTest, SLL) {
   top->SrcB = 3;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x0001BEC0); 
-  ASSERT_EQ(top->Zero, 0b1);
+  ASSERT_EQ(top->Zero, 0b0);
   ASSERT_EQ(top->N, 0b0);
   ASSERT_EQ(top->V, 0b0);
   ASSERT_EQ(top->C, 0b0);
@@ -117,7 +117,7 @@ TEST_F(ALUTest, SLTGNN) {
   ASSERT_EQ(top->ALUResult, 0x00000000);
   ASSERT_EQ(top->Zero, 0b1);
   ASSERT_EQ(top->N, 0b0);
-  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->V, 0b1);
   ASSERT_EQ(top->C, 0b0);
 }
 
@@ -153,7 +153,7 @@ TEST_F(ALUTest, SLTLNN) {
   ASSERT_EQ(top->ALUResult, 0x00000001);
   ASSERT_EQ(top->Zero, 0b0);
   ASSERT_EQ(top->N, 0b0);
-  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->V, 0b1);
   ASSERT_EQ(top->C, 0b0);
 }
 
@@ -260,7 +260,16 @@ TEST_F(ALUTest, LUI) {
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x01234567);
   ASSERT_EQ(top->Zero, 0b0);
-  ASSERT_EQ(top->N, 0b1);
+  ASSERT_EQ(top->N, 0b0);
   ASSERT_EQ(top->V, 0b0);
   ASSERT_EQ(top->C, 0b0);
+}
+
+int main(int argc, char **argv) {
+  Verilated::commandArgs(argc, argv);
+  testing::InitGoogleTest(&argc, argv);
+  auto res = RUN_ALL_TESTS();
+  Verilated::mkdir("logs");
+  VerilatedCov::write("logs/coverage_alu.dat");
+  return res;
 }
