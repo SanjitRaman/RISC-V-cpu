@@ -10,7 +10,6 @@ module we_decoder #()
 
 always_comb
     if (MemWrite) begin
-        $display("W %h", MemWrite);
         case (funct3)
             //store byte (sb)
             3'b000:
@@ -48,7 +47,6 @@ always_comb
                     WE0 = 1'b0;
                 end
         endcase
-        $display("W0 %h", WE0);
     end
     else begin
         WE3 = 1'b0;
