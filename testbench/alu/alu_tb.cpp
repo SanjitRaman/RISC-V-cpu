@@ -71,11 +71,11 @@ TEST_F(ALUTest, SUBFlags1) {
 }
 
 TEST_F(ALUTest, SLL) {
-  top->ALUControl = 0b0011;
+  top->ALUControl = 0b0010;
   top->SrcA = 0x000037D8;
   top->SrcB = 3;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x00000000);
+  ASSERT_EQ(top->ALUResult, 0x0001BEC0);
 }
 
 TEST_F(ALUTest, SLTGPP) {
@@ -193,7 +193,7 @@ TEST_F(ALUTest, AND) {
 
 TEST_F(ALUTest, LUI) {
   top->ALUControl = 0b1011;
-  top->SrcB = 0x000FFFFF;
+  top->SrcB = 0xFFFFF000;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0xFFFFF000);
 }
