@@ -58,7 +58,7 @@ module control_unit #(
 
     always_comb begin
         signed_less_than = (N ^ V) || (~N ^ Zero);
-        if({op[6:5], op[2:0]} == 5'b11111)
+        if({op[6:5], op[2:0]} == 5'b11111) // jal
             PCSrc = 1;
         else if ({op[6:5], op[1:0]} == 4'b1111) // b-type
             case (funct3)
