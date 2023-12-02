@@ -75,7 +75,14 @@ TEST_F(ALUTest, SLL) {
   top->SrcA = 0x000037D8;
   top->SrcB = 3;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0x0001BEC0);
+  ASSERT_EQ(top->ALUResult, 0x0001BEC0); 
+  ASSERT_EQ(top->Zero, 0b1);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
+  // only consider result is zero or not
+  // other flags don't have meaning in this instruction
+  // and check they are not active.
 }
 
 TEST_F(ALUTest, SLTGPP) {
@@ -84,6 +91,10 @@ TEST_F(ALUTest, SLTGPP) {
   top->SrcB = 0x0000025B;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000000);
+  ASSERT_EQ(top->Zero, 0b1);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SLTGPN) {
@@ -92,7 +103,10 @@ TEST_F(ALUTest, SLTGPN) {
   top->SrcB = 0xE010F021;
   top->eval();  
   ASSERT_EQ(top->ALUResult, 0x00000000);
-  //ASSERT_EQ(top->signs, 0b01);
+  ASSERT_EQ(top->Zero, 0b1);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SLTGNN) {
@@ -101,6 +115,10 @@ TEST_F(ALUTest, SLTGNN) {
   top->SrcB = 0xF01FF021;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000000);
+  ASSERT_EQ(top->Zero, 0b1);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SLTLPP) {
@@ -109,6 +127,10 @@ TEST_F(ALUTest, SLTLPP) {
   top->SrcB = 0x00007901;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000001);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SLTLNP) {
@@ -117,6 +139,10 @@ TEST_F(ALUTest, SLTLNP) {
   top->SrcB = 0x00AB0E38;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000001);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SLTLNN) {
@@ -125,6 +151,10 @@ TEST_F(ALUTest, SLTLNN) {
   top->SrcB = 0xF01FF021;
   top->eval();
   ASSERT_EQ(top->ALUResult, 0x00000001);
+  ASSERT_EQ(top->Zero, 0b0);
+  ASSERT_EQ(top->N, 0b0);
+  ASSERT_EQ(top->V, 0b0);
+  ASSERT_EQ(top->C, 0b0);
 }
 
 TEST_F(ALUTest, SLTU0) {
@@ -225,9 +255,10 @@ TEST_F(ALUTest, AND) {
 
 TEST_F(ALUTest, LUI) {
   top->ALUControl = 0b1011;
-  top->SrcB = 0xFFFFF000;
+  top->SrcA = 0x11111111;
+  top->SrcB = 0x01234567;
   top->eval();
-  ASSERT_EQ(top->ALUResult, 0xFFFFF000);
+  ASSERT_EQ(top->ALUResult, 0x01234567);
   ASSERT_EQ(top->Zero, 0b0);
   ASSERT_EQ(top->N, 0b1);
   ASSERT_EQ(top->V, 0b0);
