@@ -60,7 +60,7 @@ module control_unit #(
         signed_less_than = (N ^ V) || (~N ^ Zero);
         if({op[6:5], op[2:0]} == 5'b11111)
             PCSrc = 1;
-        else
+        else if ({op[6:5], op[1:0]} == 4'b1111) // b-type
             case (funct3)
                 3'b000: // beq
                     PCSrc = Branch & Zero;
@@ -76,5 +76,7 @@ module control_unit #(
                     PCSrc = Branch & ~C;
                 default: PCSrc = 0;
             endcase
+        else
+            PCSrc = 0;
     end    
 endmodule
