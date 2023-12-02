@@ -10,21 +10,53 @@ module we_decoder #()
 
 always_comb
     if (MemWrite) begin
-        case (funct3[1:0])
+        $display("W %h", MemWrite);
+        case (funct3)
             //store byte (sb)
-            2'b00:  {WE3, WE2, WE1, WE0} = {0 , 0 , 0 , 1};
-
+            3'b000:
+                begin
+                    WE3 = 1'b0;
+                    WE2 = 1'b0;
+                    WE1 = 1'b0;
+                    WE0 = 1'b1;
+                end
             //store half (sh)
-            2'b01: {WE3, WE2, WE1, WE0} = {0 , 0 , 1 , 1}; 
+            3'b001: 
+                begin
+                    WE3 = 1'b0;
+                    WE2 = 1'b0;
+                    WE1 = 1'b1;
+                    WE0 = 1'b1;
+                end
 
             //store word (sw)
-            2'b10:  {WE3, WE2, WE1, WE0} = {1 , 1 , 1 , 1};
+            3'b010: 
+                begin
+                    WE3 = 1'b1;
+                    WE2 = 1'b1;
+                    WE1 = 1'b1;
+                    WE0 = 1'b1;
+                end
 
             // default: don't write to show that something is wrong
             // in the instruction
-            default: {WE3, WE2, WE1, WE0} = {0 , 0 , 0 , 0};
+            default:
+                begin
+                    WE3 = 1'b0;
+                    WE2 = 1'b0;
+                    WE1 = 1'b0;
+                    WE0 = 1'b0;
+                end
         endcase
+        $display("W0 %h", WE0);
     end
-    else
-        {WE3, WE2, WE1, WE0} = {0 , 0 , 0 , 1};
+    else begin
+        WE3 = 1'b0;
+        WE2 = 1'b0;
+        WE1 = 1'b0;
+        WE0 = 1'b0;
+    end
+    
+
 endmodule
+
