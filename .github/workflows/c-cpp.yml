@@ -30,3 +30,15 @@ jobs:
 
     - name: Build and Run Reg File
       run: make runtest MODULE=reg_file MODULE.INCLUDE_DIRS="" && make clean
+
+    - name: Build and Run ALU
+      run: make runtest MODULE=alu MODULE.INCLUDE_DIRS="" && make clean
+
+    - name: Build and Run Sign Extend
+      run: make runtest MODULE=sign_extend MODULE.INCLUDE_DIRS="" && make clean
+
+    - name: Build and Run Data Memory Wrapper
+      run: make runtest MODULE=data_mem_wrapper MODULE.INCLUDE_DIRS="-y design/data_mem -y design/we_decoder -y design/ld_decoder" && make clean
+
+    - name: Build and Run Top Level Testbench
+      run: make runtest RUN=unit GTEST=0
