@@ -14,18 +14,9 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
-
-    - name: Cache Google Test
-      id: google-test-cache
-      uses: MasterworksIO/action-local-cache@2
-      with:
-        path: |
-          googletest/
-        key: ${{ runner.os }}-gtest-${{ hashFiles('**/googletest') }}
      
     - name: Install Google Test
-      run: make gtest
-      if: steps.google-test-cache.outputs.cache-hit != 'true'
+      run: mv ~/googletest ./googletest
 
     - name: Build and Run Control Unit
       run: make runtest MODULE=control_unit MODULE.INCLUDE_DIRS="-y design/control_unit/decoders" && make clean
