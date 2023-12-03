@@ -8,7 +8,7 @@ module pc #(
 );
 
     always_ff @ (posedge CLK)
-        if (RST) PC <= {DATA_WIDTH{1'b0}};
+        if (RST) PC <= 32'hBFC00000;
         else PC <= PCNext;
 
 endmodule

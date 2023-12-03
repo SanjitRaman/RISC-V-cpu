@@ -1,5 +1,5 @@
 module data_mem #(
-    parameter ADDRESS_WIDTH = 9,
+    parameter ADDRESS_WIDTH = 17,
     parameter DATA_WIDTH    = 32,
     parameter BYTE_WIDTH    = 8
 
