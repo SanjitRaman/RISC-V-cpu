@@ -1,6 +1,7 @@
 module alu #(
     parameter DATA_WIDTH = 32,
-    parameter ALU_CTRL_WIDTH = 3
+    parameter ALU_CTRL_WIDTH = 4,
+    parameter SHIFT_WIDTH = 5
 )(
     input  logic [DATA_WIDTH-1:0]     SrcA,
     input  logic [DATA_WIDTH-1:0]     SrcB,
@@ -27,7 +28,6 @@ assign signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]};
 // 1000 - or
 // 1001 - and
 // 1011 - load upper
-logic [1:0] signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]} ;
 
 always_comb begin
     case(ALUControl)
