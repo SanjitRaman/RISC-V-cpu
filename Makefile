@@ -41,11 +41,6 @@ VERILATOR = verilator
 VERILATOR_FLAGS = -Wall --coverage --cc --trace
 VERILATOR_COVERAGE_FLAGS = --annotate logs/annotate --annotate-all --annotate-min 1
 
-
-# Set testbench source and testbench executable
-TB_SOURCE = testbench/$(NAME)/$(NAME)_tb.cpp
-TB_EXECUTABLE = $(NAME)_tb
-
 # Set additional flags for compiling C++ files
 CXX_FLAGS = -std=c++17
 
@@ -68,6 +63,11 @@ BUILD_DIR = build/$(NAME)
 BIN_DIR = bin
 MEM_DIR = memory
 LOGS_DIR = logs
+TESTBENCH_DIR = testbench
+
+# Set testbench source and testbench executable
+TB_SOURCE = $(TESTBENCH_DIR)/$(NAME)/$(NAME)_tb.cpp
+TB_EXECUTABLE = $(NAME)_tb
 
 # Set makefile targets
 TARGET = $(BIN_DIR)/$(NAME)
@@ -79,7 +79,7 @@ create_dirs:
 	$(shell mkdir -p $(LOGS_DIR))
 
 # Makefile rules
-all: create_dirs create_symlinks $(TARGET)
+all: create_dirs apply_mem_from_tb create_symlinks $(TARGET)
 
 $(TARGET): $(TB_SOURCE)
 	@echo "Compiling Verilog sources and C++ testbench..."
@@ -95,6 +95,10 @@ $(TARGET): $(TB_SOURCE)
 	make -C $(BUILD_DIR) -j 8 -f $(NAME).mk
 	cp $(BUILD_DIR)/$(TB_EXECUTABLE) $(TARGET)
 
+# Copy any .mem files from the testbench directory to the mem directory as data_mem.mem and instr_mem.mem
+apply_mem_from_tb:
+	@echo "Copying memory files from testbench directory..."
+	cp $(TESTBENCH_DIR)/$(NAME)/*.mem $(MEM_DIR)/
 
 create_symlinks:
 	@echo "Creating symlinks..."

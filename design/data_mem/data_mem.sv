@@ -18,7 +18,7 @@ module data_mem #(
 
 initial begin
     $display("Loading ram.");
-    $readmemh("data_mem_wrapper_test.mem", ram_array);
+    $readmemh("data_mem.mem", ram_array);
 end;
 // TODO: check if writing in between words is allowed.
 always_ff @(posedge CLK) begin
