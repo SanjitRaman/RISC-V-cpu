@@ -98,8 +98,13 @@ $(TARGET): $(TB_SOURCE)
 # Copy any .mem files from the testbench directory to the mem directory as data_mem.mem and instr_mem.mem
 apply_mem_from_tb:
 	@echo "Copying memory files from testbench directory..."
-	cp $(TESTBENCH_DIR)/$(NAME)/*.mem $(MEM_DIR)/
-
+	 @if [ -e $(TESTBENCH_DIR)/$(NAME)/data_mem.mem ] && [ -e $(TESTBENCH_DIR)/$(NAME)/instr_mem.mem ]; then \
+        cp $(TESTBENCH_DIR)/$(NAME)/data_mem.mem $(MEM_DIR)/; \
+        cp $(TESTBENCH_DIR)/$(NAME)/instr_mem.mem $(MEM_DIR)/; \
+        echo "Memory files copied successfully."; \
+    else \
+        echo "One or both of the memory files do not exist in the source directory."; \
+    fi
 create_symlinks:
 	@echo "Creating symlinks..."
 	$(foreach file, $(wildcard $(MEM_DIR)/*), \
