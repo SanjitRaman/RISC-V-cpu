@@ -97,7 +97,7 @@ sign_extend * sgn_ext;
 
 // test sign extension for ImmSrc = 3'b000
 TEST_F(SignExtendTest, immSrc000) {
-  runTets(0b000)
+  runTests(0b000);
 }
 // test sign extension for ImmSrc = 3'b001
 TEST_F(SignExtendTest, immSrc001) {
