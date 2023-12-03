@@ -6,7 +6,6 @@ module alu #(
     input  logic [DATA_WIDTH-1:0]     SrcA,
     input  logic [DATA_WIDTH-1:0]     SrcB,
     input  logic [ALU_CTRL_WIDTH-1:0] ALUControl,
-    input  logic [DATA_WIDTH-1:0]     PC,
     output logic [DATA_WIDTH-1:0]     ALUResult,
     output logic                      Zero,
     output logic                      N,
