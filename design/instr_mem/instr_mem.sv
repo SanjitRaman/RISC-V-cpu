@@ -8,11 +8,11 @@ module instr_mem #(
 );
 
     // 32 instructions, 32 bits each 
-    logic [BYTE_WIDTH-1:0] rom_array [2**ADDRESS_WIDTH-1:0];
+    logic [BYTE_WIDTH-1:0] rom_array [32'hBFC00FFF:32'hBFC00000];
 
 initial begin
     $display("Loading rom.");
-    $readmemh("sinetestcode.mem", rom_array);
+    $readmemh("instr_mem.mem", rom_array, 32'hBFC00000);
 end;
 
 assign RD = {rom_array[A+3], rom_array[A+2], rom_array[A+1], rom_array[A]}; // read from address A
