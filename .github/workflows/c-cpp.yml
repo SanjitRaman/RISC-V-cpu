@@ -15,8 +15,8 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
      
-    - name: Install Google Test
-      run: mv ~/googletest ./googletest
+    - name: Retrieve Google Test
+      run: cp ~/actions-runner-local/googletest ./googletest
 
     - name: Build and Run Control Unit
       run: make runtest MODULE=control_unit MODULE.INCLUDE_DIRS="-y design/control_unit/decoders" && make clean
