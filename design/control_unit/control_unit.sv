@@ -9,6 +9,9 @@ module control_unit #(
     input logic [FUNCT3_WIDTH-1:0]    funct3,
     input logic                       funct7_5,
     input logic                       Zero,
+    input logic                       N,
+    input logic                       C,
+    input logic                       V,
 
     output logic                      PCSrc,
     output logic                      ResultSrc,
@@ -21,6 +24,7 @@ module control_unit #(
 
     logic [ALU_OP_WIDTH-1:0]          ALUOp;
     logic                             Branch;
+    logic                             signed_less_than;
 
     main_decoder  #(
         .IMM_SRC_WIDTH  (IMM_SRC_WIDTH),
@@ -50,6 +54,21 @@ module control_unit #(
         .ALUControl     (ALUControl)
     );
 
-    assign PCSrc = Branch & ~Zero; // Branching logic
-    
+    always_comb begin
+        signed_less_than = (N ^ V) || (~N ^ Zero);
+        case (funct3)
+            3'b000: // beq
+                PCSrc = Branch & Zero;
+            3'b001: // bne
+                PCSrc = Branch & ~Zero;
+            3'b100: // blt
+                PCSrc = Branch &  signed_less_than;
+            3'b101: // bge
+                PCSrc = Branch & ~signed_less_than;
+            3'b110: // bltu
+                PCSrc = Branch & C;
+            3'b111: // bgeu
+                PCSrc = Branch & ~C;
+        endcase
+    end    
 endmodule

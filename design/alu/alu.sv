@@ -8,6 +8,9 @@ module alu #(
     input  logic [ALU_CTRL_WIDTH-1:0] ALUControl,
     output logic [DATA_WIDTH-1:0]     ALUResult,
     output logic                      Zero
+    output logic                      N,
+    output logic                      C, // carry out of adder
+    output logic                      V // signed overflow
 );
 
 // 0000 - add
@@ -25,8 +28,8 @@ module alu #(
 
 always_comb begin
     case(ALUControl)
-        4'b0000:  ALUResult = SrcA + SrcB;
-        4'b0001:  ALUResult = SrcA - SrcB;
+        4'b0000:  {C, ALUResult} = SrcA + SrcB;
+        4'b0001:  {C, ALUResult} = SrcA - SrcB;
         4'b0010:  ALUResult = (SrcA<<SrcB[SHIFT_WIDTH-1:0]);
         4'b0011:  case(signs)
                     2'b00: ALUResult = (SrcA < SrcB) ? {{DATA_WIDTH-1{1'b0}}, {1'b1}} : {DATA_WIDTH{1'b0}};
@@ -41,9 +44,11 @@ always_comb begin
         4'b0111:  ALUResult = (SrcA>>>SrcB[SHIFT_WIDTH-1:0]);
         4'b1000:  ALUResult = SrcA | SrcB;
         4'b1001:  ALUResult = SrcA & SrcB;
-        default:  ALUResult = SrcA + SrcB;
+        {C, ALUResult}:  ALUResult = SrcA + SrcB;
     endcase
     Zero = ({DATA_WIDTH{1'b0}} == ALUResult) ? 1'b1 : 1'b0;
+    N = ALUResult[DATA_WIDTH-1];
+    V = (SrcA[DATA_WIDTH-1] == SrcB[DATA_WIDTH-1]) && (SrcA[DATA_WIDTH-1] != ALUResult[DATA_WIDTH-1]);
 end
 
 endmodule
