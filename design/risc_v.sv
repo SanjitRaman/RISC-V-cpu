@@ -209,7 +209,10 @@ module risc_v #(
         .WE2 (WE2),
         .WE3 (WE3)
     );
-    ld_decoder riscLd_decoder(
+    ld_decoder #(
+        .DATA_WIDTH(32)
+    )
+    riscLd_decoder(
         .RD (ReadData),
         .funct3 (funct3),
         .RDOut (RDOut)
