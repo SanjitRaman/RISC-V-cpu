@@ -62,8 +62,15 @@ sign_extend * sgn_ext;
         break;
       }
       case 3: {
-        immediate = bitExtracted(Instr, 20, 12);
+        immediate = (bitExtracted(Instr, 20, 12)<<12);
         break;
+      }
+      case 4: {
+        imm1 = bitExtracted(Instr, 1, 31);
+        imm2 = bitExtracted(Instr, 8, 12);
+        imm3 = bitExtracted(Instr, 1, 20);
+        imm4 = bitExtracted(Instr, 10, 21);
+        immediate = (imm1<<20) | (imm2<<12) | (imm3<<11) | (imm4<<1);
       }
       default: {
         immediate = bitExtracted(Instr, 12, 20);
@@ -88,28 +95,25 @@ sign_extend * sgn_ext;
 
 };
 
-// test sign extension for ImmSrc = 2'b00
-TEST_F(SignExtendTest, immSrc00) {
-  ASSERT_EQ(sgn_ext->ImmOp, 0);
-  const uint32_t Clocks10M = 10'000'000;
-  uint32_t Instr = gen_random_instr();
-  uint32_t ImmSrc = 0b00;
-  sgn_ext->Instr = Instr;
-  sgn_ext->ImmSrc = ImmSrc;
-  sgn_ext->eval();
-  ASSERT_EQ(sgn_ext->ImmOp, expected_value(Instr, ImmSrc));
+// test sign extension for ImmSrc = 3'b000
+TEST_F(SignExtendTest, immSrc000) {
+  runTets(0b000)
 }
-// test sign extension for ImmSrc = 2'b01
-TEST_F(SignExtendTest, immSrc01) {
-  runTests(0b01);
+// test sign extension for ImmSrc = 3'b001
+TEST_F(SignExtendTest, immSrc001) {
+  runTests(0b001);
 }
-// test sign extension for ImmSrc = 2'b10
-TEST_F(SignExtendTest, immSrc10) {
-  runTests(0b10);
+// test sign extension for ImmSrc = 3'b010
+TEST_F(SignExtendTest, immSrc010) {
+  runTests(0b010);
 }
-// test sign extension for ImmSrc = 2'b11
-TEST_F(SignExtendTest, immSrc11) {
-  runTests(0b11);
+// test sign extension for ImmSrc = 3'b011
+TEST_F(SignExtendTest, immSrc011) {
+  runTests(0b011);
+}
+// test sign extension for ImmSrc = 3'b100
+TEST_F(SignExtendTest, immSrc100) {
+  runTests(0b100);
 }
 // test default case
 TEST_F(SignExtendTest, other) {
