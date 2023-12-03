@@ -45,13 +45,13 @@ sign_extend * sgn_ext;
     switch(ImmSrc) {
       case 0: {
         immediate = bitExtracted(Instr, 12, 20); // 12 bits from bit 20;
-        break;
+        return ((immediate & 0xFFF) | -(immediate & 0x800));
       }
       case 1: {
         imm1 = bitExtracted(Instr, 7, 25);
         imm2 = bitExtracted(Instr, 5, 7);
         immediate = (imm1 << 5) | imm2;
-        break;
+        return ((immediate & 0xFFF) | -(immediate & 0x800));
       }
       case 2: {
         imm1 = bitExtracted(Instr, 1, 31);
@@ -59,11 +59,11 @@ sign_extend * sgn_ext;
         imm3 = bitExtracted(Instr, 6, 25);
         imm4 = bitExtracted(Instr, 4, 8);
         immediate = (imm1<<12) | (imm2<<11) | (imm3<<5) | (imm4<<1); 
-        break;
+        return ((immediate & 0xFFF) | -(immediate & 0x800));
       }
       case 3: {
         immediate = (bitExtracted(Instr, 20, 12)<<12);
-        break;
+        return immediate;
       }
       case 4: {
         imm1 = bitExtracted(Instr, 1, 31);
@@ -71,13 +71,14 @@ sign_extend * sgn_ext;
         imm3 = bitExtracted(Instr, 1, 20);
         imm4 = bitExtracted(Instr, 10, 21);
         immediate = (imm1<<20) | (imm2<<12) | (imm3<<11) | (imm4<<1);
+        return immediate;
       }
       default: {
         immediate = bitExtracted(Instr, 12, 20);
-        break;
+        return ((immediate & 0xFFF) | -(immediate & 0x800)); 
       }
     }
-    return ((immediate & 0xFFF) | -(immediate & 0x800)); // sign extension
+     // sign extension
   }
 
   void runTests(int din){
