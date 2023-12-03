@@ -3,8 +3,10 @@ module risc_v #(
     parameter                      OP_WIDTH       = 7,
     parameter                      FUNCT3_WIDTH   = 3,
     parameter                      REG_ADDR_WIDTH = 5,
-    parameter                      IMM_SRC_WIDTH  = 2,
-    parameter                      ALU_CTRL_WIDTH = 3
+    parameter                      IMM_SRC_WIDTH  = 3,
+    parameter                      ALU_CTRL_WIDTH = 4,
+    parameter                      ALU_OP_WIDTH   = 3,
+    parameter                      RES_SRC_WIDTH = 2
 )(
 // interface signals
     input  logic                   CLK,      // clock 
@@ -23,7 +25,7 @@ module risc_v #(
 
 // Sign Extend
     //logic [DATA_WIDTH-1:0]       Instr;
-    //logic [1:0]                  ImmSrc;
+    //logic [IMM_SRC_WIDTH:0]      ImmSrc;
     logic [DATA_WIDTH-1:0]         ImmExt;
 
 // Control Unit
@@ -31,22 +33,26 @@ module risc_v #(
     logic [FUNCT3_WIDTH-1:0]       funct3;
     logic                          funct7_5;
     logic                          PCSrc;
-    logic [1:0]                    ResultSrc;
+    logic [RES_SRC_WIDTH-1:0]      ResultSrc;
     logic                          MemWrite;
     logic [ALU_CTRL_WIDTH-1:0]     ALUControl;
     logic                          ALUSrc;
     logic [IMM_SRC_WIDTH-1:0]      ImmSrc;
     logic                          RegWrite;
     logic                          Jump;
+    logic                          Zero;
+    logic                          N;
+    logic                          C;
+    logic                          V;
 
 // ALU
     logic [DATA_WIDTH-1:0]         SrcA;
     logic [DATA_WIDTH-1:0]         SrcB;
     logic [DATA_WIDTH-1:0]         ALUResult;
-    logic                          Zero;
-    logic                          N;
-    logic                          C;
-    logic                          V;
+    //logic                          Zero;
+    //logic                          N;
+    //logic                          C;
+    //logic                          V;
 
 // Data Memory
     //CLK
@@ -69,6 +75,7 @@ module risc_v #(
 
 // WE decoder
     //logic[FUNCT3_WIDTH-1:0] funct3;
+    //logic MemWrite;
     //logic WE0;
     //logic WE1;
     //logic WE2;
@@ -77,7 +84,7 @@ module risc_v #(
 //LD decoder
     //logic ReadData;
     //logic funct3;
-    logic RDOut;
+    logic [31:0] RDOut;
 
 // linking wires
     logic [DATA_WIDTH-1:0]         PCTarget;
@@ -108,37 +115,38 @@ module risc_v #(
         .ADDRESS_WIDTH (5)
     )
     riscInstrMem (
-        .A          (PC),
+        .A          (PC[4:0),
         .RD         (Instr)
     );
 
     control_unit #(
         .OP_WIDTH       (7),
         .FUNCT3_WIDTH   (3),
-        .ALU_CTRL_WIDTH (3),
-        .IMM_SRC_WIDTH  (2),
-        .ALU_OP_WIDTH   (2)
+        .ALU_CTRL_WIDTH (4),
+        .IMM_SRC_WIDTH  (3),
+        .ALU_OP_WIDTH   (3)
     )
     riscControlUnit (
         .op         (op),
         .funct3     (funct3),
         .funct7_5   (funct7_5),
         .Zero       (Zero),
-        .N          (N),
-        .C          (C),
-        .V          (V),
         .PCSrc      (PCSrc),
         .ResultSrc  (ResultSrc),
         .MemWrite   (MemWrite),
         .ALUControl (ALUControl),
         .ALUSrc     (ALUSrc),
         .ImmSrc     (ImmSrc),
-        .RegWrite   (RegWrite)
+        .RegWrite   (RegWrite),
+        .Jump       (Jump),
+        .N          (N),
+        .C          (C),
+        .V          (V)
     );
 
     sign_extend # (
         .DATA_WIDTH    (32),
-        .IMM_SRC_WIDTH (2)
+        .IMM_SRC_WIDTH (3)
     )
     riscSignExtend (
         .Instr      (Instr),
@@ -164,13 +172,12 @@ module risc_v #(
 
     alu #(
         .DATA_WIDTH     (32),
-        .ALU_CTRL_WIDTH (3)
+        .ALU_CTRL_WIDTH (4)
     )
     riscALU (
         .SrcA        (SrcA),
         .SrcB        (SrcB),
         .ALUControl  (ALUControl),
-        .PC     (PC),
         .ALUResult   (ALUResult),
         .Zero        (Zero),
         .N           (N),
@@ -187,35 +194,33 @@ module risc_v #(
         .CLK         (CLK),
         .A           (ALUResult[8:0]),
         .WD          (WriteData),
-        .WE0          (WE0),
-        .WE1          (WE1),
-        .WE2          (WE2),
-        .WE3          (WE3),
-        .RD          (ReadData)
+        .RD          (ReadData),
+        .WE0         (WE0),
+        .WE1         (WE1),
+        .WE2         (WE2),
+        .WE3         (WE3)
     );
-    riscWe_decoder (
+
+    we_decoder riscWe_decoder (
         .funct3(funct3),
-        .MemWrite (MemWrite),
+        .MemWrite(MemWrite),
         .WE0 (WE0),
         .WE1 (WE1),
         .WE2 (WE2),
         .WE3 (WE3)
     );
+    ld_decoder #(
+        .DATA_WIDTH(32)
+    )
     riscLd_decoder(
         .RD (ReadData),
         .funct3 (funct3),
-        .RDOut (RDOut),
+        .RDOut (RDOut)
     );
 
 // MUXs
     assign SrcB     = ALUSrc    ? ImmExt   : WriteData;
-    case(ResultSrc)
-        2'b00: Result = ALUResult;
-        2'b01: Result = RDOut;
-        2'b10: Result = PCTarget;
-        2'b11: Result = PCPlus4;
-    endcase
-    assign Result   = ResultSrc ? ReadData  : ALUResult;
+    assign Result   = ResultSrc[1] ? (ResultSrc[0] ? RDOut : ALUResult) : (ResultSrc[0] ? PCTarget : PCPlus4);
     assign PCNext   = PCSrc     ? PCTarget  : PCPlus4;
     assign JumpMux  = Jump      ? WriteData : PC;
 
