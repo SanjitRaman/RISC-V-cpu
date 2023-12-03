@@ -154,6 +154,7 @@ module risc_v #(
         .SrcA        (SrcA),
         .SrcB        (SrcB),
         .ALUControl  (ALUControl),
+        .PC     (PC),
         .ALUResult   (ALUResult),
         .Zero        (Zero),
         .N           (N),

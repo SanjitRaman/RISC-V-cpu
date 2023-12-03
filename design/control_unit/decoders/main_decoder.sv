@@ -1,6 +1,6 @@
 module main_decoder #(
     parameter                         IMM_SRC_WIDTH = 2,
-    parameter                         ALU_OP_WIDTH = 2,
+    parameter                         ALU_OP_WIDTH = 3,
     parameter                         OP_WIDTH = 7
 ) (
     input logic [OP_WIDTH-1:0]        op,
@@ -24,7 +24,7 @@ module main_decoder #(
                     MemWrite  = 1'b0;
                     ResultSrc = 1'b1;
                     Branch    = 1'b0;
-                    ALUOp     = 2'b00;
+                    ALUOp     = 3'b000;
                 end
             7'b0100011: // Store Word (sw)
                 begin
@@ -34,7 +34,7 @@ module main_decoder #(
                     MemWrite  = 1'b1;
                     ResultSrc = 1'b0; // X
                     Branch    = 1'b0;
-                    ALUOp     = 2'b00;
+                    ALUOp     = 3'b000;
                 end
             7'b0110011: // R-Type 
                 begin
@@ -44,7 +44,7 @@ module main_decoder #(
                     MemWrite  = 1'b0;
                     ResultSrc = 1'b0;
                     Branch    = 1'b0;
-                    ALUOp     = 2'b10;
+                    ALUOp     = 3'b010;
                 end
             7'b0010011: // I-Type (addi, slli, slti, sltiu, xori, srli, srai, ori, andi)
                 begin
@@ -54,7 +54,7 @@ module main_decoder #(
                     MemWrite  = 1'b0;
                     ResultSrc = 1'b0;
                     Branch    = 1'b0;
-                    ALUOp     = 2'b10;
+                    ALUOp     = 3'b010;
                 end
             7'b1100011: // B-type (beq, bne, blt, bge, bltu, bgeu)
                 begin
@@ -64,7 +64,27 @@ module main_decoder #(
                     MemWrite  = 1'b0;
                     ResultSrc = 1'b0; // X
                     Branch    = 1'b1;
-                    ALUOp     = 2'b01;
+                    ALUOp     = 3'b001;
+                end
+            7'b0010111: // U-type (Load upper immediate + PC)
+                begin
+                    RegWrite  = 1'b1;
+                    ImmSrc    = 2'b11;
+                    ALUSrc    = 1'b1;
+                    MemWrite  = 1'b0;
+                    ResultSrc = 1'b0;
+                    Branch    = 1'b0;
+                    ALUOp     = 3'b101;
+                end
+            7'b0110111: // U-type (Load upper immediate)
+                begin
+                    RegWrite  = 1'b1;
+                    ImmSrc    = 2'b11;
+                    ALUSrc    = 1'b1;
+                    MemWrite  = 1'b0;
+                    ResultSrc = 1'b0;
+                    Branch    = 1'b0;
+                    ALUOp     = 3'b100;
                 end
             default:
                 begin
@@ -74,7 +94,7 @@ module main_decoder #(
                     MemWrite  = 0;
                     ResultSrc = 0;
                     Branch    = 0;
-                    ALUOp     = 2'b00;
+                    ALUOp     = 3'b000;
                 end
         endcase
     end
