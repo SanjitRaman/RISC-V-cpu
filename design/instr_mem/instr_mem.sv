@@ -1,7 +1,7 @@
 module instr_mem #(
     parameter DATA_WIDTH   = 32,
     parameter BYTE_WIDTH    = 8,
-    parameter ADDRESS_WIDTH = 5
+    parameter ADDRESS_WIDTH = 32
 ) (
    input  logic [ADDRESS_WIDTH-1:0] A,
    output logic [DATA_WIDTH-1:0]    RD

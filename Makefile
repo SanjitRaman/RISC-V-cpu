@@ -16,6 +16,8 @@ UNIT.INCLUDE_DIRS =  -y design/ \
 				-y design/pc                    \
 				-y design/reg_file              \
 				-y design/sign_extend           \
+				-y design/ld_decoder			\
+				-y design/we_decoder			\
 
 
 NAME=""

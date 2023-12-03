@@ -112,10 +112,10 @@ module risc_v #(
 
     instr_mem #(
         .DATA_WIDTH    (32),
-        .ADDRESS_WIDTH (5)
+        .ADDRESS_WIDTH (32)
     )
     riscInstrMem (
-        .A          (PC[4:0),
+        .A          (PC),
         .RD         (Instr)
     );
 
@@ -186,13 +186,13 @@ module risc_v #(
     );
 
     data_mem #(
-        .ADDRESS_WIDTH (9),
+        .ADDRESS_WIDTH (17),
         .BYTE_WIDTH    (8),
         .DATA_WIDTH    (32)
     )
     riscDataMem (
         .CLK         (CLK),
-        .A           (ALUResult[8:0]),
+        .A           (ALUResult[16:0]),
         .WD          (WriteData),
         .RD          (ReadData),
         .WE0         (WE0),
