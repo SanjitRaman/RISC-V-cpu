@@ -1,29 +1,40 @@
 module data_mem #(
     parameter ADDRESS_WIDTH = 9,
-    parameter BYTE_WIDTH    = 8,
-    parameter DATA_WIDTH    = 32
+    parameter DATA_WIDTH    = 32,
+    parameter BYTE_WIDTH    = 8
 
 )(
     input  logic                     CLK,
-    input  logic                     WE,
+    input  logic                     WE0,
+    input  logic                     WE1,
+    input  logic                     WE2,
+    input  logic                     WE3,
     input  logic [ADDRESS_WIDTH-1:0] A,
     input  logic [DATA_WIDTH-1:0]    WD,
     output logic [DATA_WIDTH-1:0]    RD
 );
 
-logic [BYTE_WIDTH-1:0] ram_array [2**ADDRESS_WIDTH-1:0];
+    logic [BYTE_WIDTH-1:0] ram_array [2**ADDRESS_WIDTH-1:0];
 
 initial begin
     $display("Loading ram.");
-    $readmemh("sineram.mem", ram_array);
+    $readmemh("data_mem_wrapper_test.mem", ram_array);
 end;
+// TODO: check if writing in between words is allowed.
+always_ff @(posedge CLK) begin
+    if (WE0 == 1'b1)
+        ram_array[A] <= WD[31:24];
+    
+    if (WE1 == 1'b1)
+        ram_array[A+1] <= WD[23:16];
+    
+    if (WE2 == 1'b1)
+        ram_array[A+2] <= WD[15:8];
+    
+    if (WE3 == 1'b1)
+        ram_array[A+3] <= WD[7:0];
+end
+    
+assign RD = {ram_array[A+3], ram_array[A+2], ram_array[A+1], ram_array[A]};
 
-always_ff @(posedge CLK)
-    if (WE == 1'b1) begin
-        ram_array[A] <= WD[BYTE_WIDTH-1:0];
-        ram_array[A+1] <= WD[2*BYTE_WIDTH-1:BYTE_WIDTH];
-        ram_array[A+2] <= WD[3*BYTE_WIDTH-1:2*BYTE_WIDTH];
-        ram_array[A+3] <= WD[4*BYTE_WIDTH-1:3*BYTE_WIDTH]; // this will be a problem for sw: individual bytes are not written to.
-    end
-assign RD = {{24{1'b0}}, ram_array[A]};
 endmodule

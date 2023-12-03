@@ -7,11 +7,14 @@ module alu #(
     input  logic [ALU_CTRL_WIDTH-1:0] ALUControl,
     input  logic [DATA_WIDTH-1:0]     PC,
     output logic [DATA_WIDTH-1:0]     ALUResult,
-    output logic                      Zero
+    output logic                      Zero,
     output logic                      N,
     output logic                      C, // carry out of adder
     output logic                      V // signed overflow
 );
+    
+logic [1:0] signs;
+assign signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]};
 
 // 0000 - add
 // 0001 - subtract
@@ -23,10 +26,8 @@ module alu #(
 // 0111 - shift right illogical 
 // 1000 - or
 // 1001 - and
-// 1010 - load upper + pc
 // 1011 - load upper
-
-    logic [1:0] signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]} ;
+logic [1:0] signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]} ;
 
 always_comb begin
     case(ALUControl)
@@ -43,12 +44,11 @@ always_comb begin
         4'b0100:  ALUResult = (SrcA < SrcB) ? {{DATA_WIDTH-1{1'b0}}, {1'b1}} : {DATA_WIDTH{1'b0}};
         4'b0101:  ALUResult = SrcA ^ SrcB;
         4'b0110:  ALUResult = (SrcA>>SrcB[SHIFT_WIDTH-1:0]);
-        4'b0111:  ALUResult = (SrcA>>>SrcB[SHIFT_WIDTH-1:0]);
+        4'b0111:  ALUResult = SrcA[31] ? ~({32{1'b1}}>>SrcB[SHIFT_WIDTH-1:0])| SrcA>>SrcB[SHIFT_WIDTH-1:0]: SrcA>>SrcB[SHIFT_WIDTH-1:0];
         4'b1000:  ALUResult = SrcA | SrcB;
         4'b1001:  ALUResult = SrcA & SrcB;
-        4'b1010:  ALUResult = (SrcB<<12) + PC;
-        4'b1011:  ALUResult = SrcB<<12;
-        default:  {C, ALUResult} = SrcA + SrcB;
+        4'b1011:  ALUResult = SrcB; 
+        default:  ALUResult = {32{1'b0}};
     endcase
     Zero = ({DATA_WIDTH{1'b0}} == ALUResult) ? 1'b1 : 1'b0;
     N = ALUResult[DATA_WIDTH-1];
