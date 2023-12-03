@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v3
      
     - name: Retrieve Google Test
-      run: cp ~/actions-runner-local/googletest ./googletest
+      run: cp -r ~/actions-runner-local/googletest ./googletest
 
     - name: Build and Run Control Unit
       run: make runtest MODULE=control_unit MODULE.INCLUDE_DIRS="-y design/control_unit/decoders" && make clean
