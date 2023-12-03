@@ -61,7 +61,7 @@ module main_decoder #(
                     ALUOp     = 3'b010;
                     Jump      = 1'b0;
                 end
-            7'b1100011: // Branch (beq/bne...)
+            7'b1100011: // B-type (beq, bne, blt, bge, bltu, bgeu)
                 begin
                     RegWrite  = 1'b0;
                     ImmSrc    = 3'b010;

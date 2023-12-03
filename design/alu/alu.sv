@@ -1,11 +1,11 @@
 module alu #(
     parameter DATA_WIDTH = 32,
-    parameter ALU_CTRL_WIDTH = 4,
-    parameter SHIFT_WIDTH = 5
+    parameter ALU_CTRL_WIDTH = 3
 )(
     input  logic [DATA_WIDTH-1:0]     SrcA,
     input  logic [DATA_WIDTH-1:0]     SrcB,
     input  logic [ALU_CTRL_WIDTH-1:0] ALUControl,
+    input  logic [DATA_WIDTH-1:0]     PC,
     output logic [DATA_WIDTH-1:0]     ALUResult,
     output logic                      Zero,
     output logic                      N,
@@ -27,7 +27,8 @@ assign signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]};
 // 1000 - or
 // 1001 - and
 // 1011 - load upper
-    
+logic [1:0] signs = {SrcA[DATA_WIDTH-1], SrcB[DATA_WIDTH-1]} ;
+
 always_comb begin
     case(ALUControl)
         4'b0000:  {C, ALUResult} = SrcA + SrcB;
@@ -49,7 +50,6 @@ always_comb begin
         4'b1011:  ALUResult = SrcB; 
         default:  ALUResult = {32{1'b0}};
     endcase
-    
     Zero = ({DATA_WIDTH{1'b0}} == ALUResult) ? 1'b1 : 1'b0;
     N = ALUResult[DATA_WIDTH-1];
     V = (SrcA[DATA_WIDTH-1] == SrcB[DATA_WIDTH-1]) && (SrcA[DATA_WIDTH-1] != ALUResult[DATA_WIDTH-1]);

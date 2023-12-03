@@ -4,8 +4,7 @@ module risc_v #(
     parameter                      FUNCT3_WIDTH   = 3,
     parameter                      REG_ADDR_WIDTH = 5,
     parameter                      IMM_SRC_WIDTH  = 2,
-    parameter                      ALU_CTRL_WIDTH = 3,
-    parameter                      ALU_OP_WIDTH   = 2
+    parameter                      ALU_CTRL_WIDTH = 3
 )(
 // interface signals
     input  logic                   CLK,      // clock 
@@ -45,6 +44,9 @@ module risc_v #(
     logic [DATA_WIDTH-1:0]         SrcB;
     logic [DATA_WIDTH-1:0]         ALUResult;
     logic                          Zero;
+    logic                          N;
+    logic                          C;
+    logic                          V;
 
 // Data Memory
     //CLK
@@ -122,6 +124,9 @@ module risc_v #(
         .funct3     (funct3),
         .funct7_5   (funct7_5),
         .Zero       (Zero),
+        .N          (N),
+        .C          (C),
+        .V          (V),
         .PCSrc      (PCSrc),
         .ResultSrc  (ResultSrc),
         .MemWrite   (MemWrite),
@@ -165,8 +170,12 @@ module risc_v #(
         .SrcA        (SrcA),
         .SrcB        (SrcB),
         .ALUControl  (ALUControl),
+        .PC     (PC),
         .ALUResult   (ALUResult),
-        .Zero        (Zero)
+        .Zero        (Zero),
+        .N           (N),
+        .C           (C),
+        .V           (V)
     );
 
     data_mem #(
