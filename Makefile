@@ -1,23 +1,7 @@
 # Makefile
 
-RUN = module
-GTEST = 1
-
-MODULE = control_unit
-MODULE.INCLUDE_DIRS = -y design/control_unit/decoders
-
-UNIT = risc_v
-UNIT.INCLUDE_DIRS =  -y design/ \
-				-y design/alu                   \
-				-y design/control_unit          \
-				-y design/control_unit/decoders \
-				-y design/data_mem              \
-				-y design/instr_mem             \
-				-y design/pc                    \
-				-y design/reg_file              \
-				-y design/sign_extend           \
-				-y design/ld_decoder			\
-				-y design/we_decoder			\
+# Set the module or unit to run in this file.
+include testbench_select.mk
 
 
 NAME=""
@@ -66,11 +50,18 @@ BIN_DIR = bin
 MEM_DIR = memory
 LOGS_DIR = logs
 TESTBENCH_DIR = testbench
+TESTPROGRAMS = $(TESTBENCH_DIR)/risc_v/testprograms
 VBUDDY_DIR = vbuddy
 
 # Set testbench source and testbench executable
 TB_SOURCE = $(TESTBENCH_DIR)/$(NAME)/$(NAME)_tb.cpp
 TB_EXECUTABLE = $(NAME)_tb
+
+# Hexfile generation
+S_FILES = $(shell find $(TESTPROGRAMS) -name '*.s')
+S_HEX_FILES = $(patsubst $(TESTPROGRAMS)/%.s, $(TESTPROGRAMS)/%.hex, $(S_FILES))
+include hexfile.mk
+
 
 # Set makefile targets
 TARGET = $(BIN_DIR)/$(NAME)
@@ -99,6 +90,8 @@ $(TARGET): $(TB_SOURCE)
 	cp $(BUILD_DIR)/$(TB_EXECUTABLE) $(TARGET)
 	cp $(VBUDDY_DIR)/vbuddy.cpp $(BIN_DIR)
 	cp $(VBUDDY_DIR)/vbuddy.cfg $(BIN_DIR)
+
+
 
 # Copy any .mem files from the testbench directory to the mem directory as data_mem.mem and instr_mem.mem
 apply_mem_from_tb:
