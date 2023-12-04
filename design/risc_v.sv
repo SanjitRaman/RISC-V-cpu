@@ -219,9 +219,9 @@ module risc_v #(
 
 // MUXs
     assign SrcB     = ALUSrc    ? ImmExt   : WriteData;
-    assign Result   = ResultSrc[1] ? (ResultSrc[0] ? PCTarget : PCPlus4)  : (ResultSrc[0] ? RDOut : ALUResult);
+    assign Result   = ResultSrc[1] ? (ResultSrc[0] ? PCPlus4 : PCTarget)  : (ResultSrc[0] ? RDOut : ALUResult);
     assign PCNext   = PCSrc     ? PCTarget  : PCPlus4;
-    assign JumpMux  = Jump      ? WriteData : PC;
+    assign JumpMux  = Jump      ? SrcA : PC;
 
 // Adders
     assign PCTarget = JumpMux + ImmExt;

@@ -54,7 +54,8 @@ module alu_decoder #(
                     default:
                         ALUControl = 4'b000;                // add
                 endcase
-
+            3'b011:
+                ALUControl = 4'b0000;                        // JALR -- do an add.
             default:
                 ALUControl = 4'b000;                        // add
 
