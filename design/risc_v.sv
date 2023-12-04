@@ -5,7 +5,6 @@ module risc_v #(
     parameter                      REG_ADDR_WIDTH = 5,
     parameter                      IMM_SRC_WIDTH  = 3,
     parameter                      ALU_CTRL_WIDTH = 4,
-    parameter                      ALU_OP_WIDTH   = 3,
     parameter                      RES_SRC_WIDTH = 2
 )(
 // interface signals

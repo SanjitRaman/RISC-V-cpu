@@ -16,7 +16,7 @@ module reg_file #(
 logic [DATA_WIDTH-1:0] registers [2**ADDRESS_WIDTH-1:0];
 
 always_ff @(posedge CLK) begin
-    if(WE3 == 1'b1) registers[A3] <= WD3;
+    if(WE3 == 1'b1 && A3 != 0) registers[A3] <= WD3;
 end
 
 always_comb begin

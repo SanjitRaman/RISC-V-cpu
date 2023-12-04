@@ -66,6 +66,7 @@ BIN_DIR = bin
 MEM_DIR = memory
 LOGS_DIR = logs
 TESTBENCH_DIR = testbench
+VBUDDY_DIR = vbuddy
 
 # Set testbench source and testbench executable
 TB_SOURCE = $(TESTBENCH_DIR)/$(NAME)/$(NAME)_tb.cpp
@@ -96,6 +97,8 @@ $(TARGET): $(TB_SOURCE)
 		
 	make -C $(BUILD_DIR) -j 8 -f $(NAME).mk
 	cp $(BUILD_DIR)/$(TB_EXECUTABLE) $(TARGET)
+	cp $(VBUDDY_DIR)/vbuddy.cpp $(BIN_DIR)
+	cp $(VBUDDY_DIR)/vbuddy.cfg $(BIN_DIR)
 
 # Copy any .mem files from the testbench directory to the mem directory as data_mem.mem and instr_mem.mem
 apply_mem_from_tb:
