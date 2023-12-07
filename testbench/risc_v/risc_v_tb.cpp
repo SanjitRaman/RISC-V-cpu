@@ -33,7 +33,6 @@ protected:
 
 TEST_F(RiscVTest, LW) {
     // read the instruction memory
-    system("make hexfile PROGRAM=single_instruction_tests/add");
     // read the data memory
     // load into registers
     // check the result
@@ -43,6 +42,7 @@ TEST_F(RiscVTest, LW) {
 // Test the add instruction
 TEST_F(RiscVTest, ADD) {
     // read the instruction memory
+    system("make hexfile PROGRAM=single_instruction_tests/add");
     // read the data memory
     // load into registers
     // check the result
