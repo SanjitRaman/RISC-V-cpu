@@ -63,9 +63,6 @@ PROGRAM = $(PROGRAMS_DIR)/$(PROGRAM_NAME)/instr_mem.mem
 DATA_MEMORY  = $(PROGRAMS_DIR)/$(PROGRAM_NAME)/data_mem.mem
 
 # Hexfile generation
-S_FILES = $(shell find $(TESTPROGRAMS) -name '*.s')
-#S_MEM_FILES = $(patsubst $(TESTPROGRAMS)/%.s, $(TESTPROGRAMS)/%.mem, $(S_FILES))
-S_MEM_FILES = $(PROGRAM)
 include hexfile.mk
 
 
@@ -102,21 +99,24 @@ $(TARGET): $(TB_SOURCE)
 	make -C $(BUILD_DIR) -j 8 -f $(NAME).mk
 	cp $(BUILD_DIR)/$(TB_EXECUTABLE) $(TARGET)
 
-
-build_memory_files: hexfile
+ifeq ($(RUN), unit)
+build_memory_files: assemble
 	@echo "Building memory files..."
+else
+	@echo "No Memory files to build, not running unit tests."
+endif
 
 
 # Copy instr_mem.mem from PROGRAM and data_mem.mem from DATA_MEMORY to the mem directory
-copy_memory_files:
-	@echo "Copying memory files from PROGRAM and DATA_MEMORY directories..."
-	@if [ -e $(PROGRAM)/instr_mem.mem ] && [ -e $(DATA_MEMORY)/data_mem.mem ]; then \
-		cp $(PROGRAM)/instr_mem.mem $(MEM_DIR)/; \
-		cp $(DATA_MEMORY)/data_mem.mem $(MEM_DIR)/; \
-		echo "Memory files copied successfully."; \
-	else \
-		echo "One or both of the memory files do not exist in the source directories."; \
-	fi
+#copy_memory_files:
+#	@echo "Copying memory files from PROGRAM and DATA_MEMORY directories..."
+#	@if [ -e $(PROGRAM)/instr_mem.mem ] && [ -e $(DATA_MEMORY)/data_mem.mem ]; then \
+#		cp $(PROGRAM)/instr_mem.mem $(MEM_DIR)/; \
+#		cp $(DATA_MEMORY)/data_mem.mem $(MEM_DIR)/; \
+#		echo "Memory files copied successfully."; \
+#	else \
+#		echo "One or both of the memory files do not exist in the source directories."; \
+#	fi
 
 
 create_symlinks:
@@ -125,7 +125,7 @@ create_symlinks:
 		ln -s $(realpath $(file)) $(BIN_DIR)/$(notdir $(file));)
 
 # Makefile rules
-all: create_dirs build_memory_files copy_memory_files include_vbuddy create_symlinks $(TARGET)
+all: create_dirs build_memory_files include_vbuddy create_symlinks $(TARGET)
 
 
 runtest: all $(TARGET)

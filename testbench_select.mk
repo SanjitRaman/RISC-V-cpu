@@ -1,4 +1,4 @@
-RUN = module
+RUN = unit
 GTEST = 1
 VBUDDY=0
 
