@@ -1,11 +1,12 @@
 RUN = module
 GTEST = 1
+VBUDDY=0
 
 MODULE = control_unit
 MODULE.INCLUDE_DIRS = -y design/control_unit/decoders
 
 UNIT = risc_v
-UNIT.INCLUDE_DIRS =  -y design/ \
+UNIT.INCLUDE_DIRS = -y design/ \
 				-y design/alu                   \
 				-y design/control_unit          \
 				-y design/control_unit/decoders \
@@ -15,4 +16,6 @@ UNIT.INCLUDE_DIRS =  -y design/ \
 				-y design/reg_file              \
 				-y design/sign_extend           \
 				-y design/ld_decoder			\
-				-y design/we_decoder			\
+				-y design/we_decoder
+
+PROGRAM_NAME = counter

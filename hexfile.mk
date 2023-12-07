@@ -1,10 +1,10 @@
 # hexfile.mk
 
 # Compile all test programs
-hexfile: $(S_HEX_FILES)
-	@echo "** Making .hex file for instruction memory"
+hexfile: $(S_MEM_FILES)
+	@echo "** Making .mem file for instruction memory"
 
-$(TESTPROGRAMS)/%.hex: $(TESTPROGRAMS)/%.s
+$(PROGRAM): $(PROGRAMS_DIR)/$(PROGRAM_NAME)/$(PROGRAM_NAME).s
 	@riscv64-unknown-elf-as -R -march=rv32im -mabi=ilp32 -o "$?.out" "$?"
 	@riscv64-unknown-elf-ld -melf32lriscv -e 0xBFC00000 -Ttext 0xBFC00000 -o "$?.out.reloc" "$?.out"
 	@rm "$?.out"

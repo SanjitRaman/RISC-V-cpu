@@ -8,6 +8,7 @@ NAME=""
 INCLUDE_DIRS=""
 SOURCES=""
 
+# configure variables to run both top-level testbenches and unit testbenches.
 ifeq ($(RUN), module)
 	NAME = $(MODULE)
 	INCLUDE_DIRS = $(MODULE.INCLUDE_DIRS)
@@ -50,30 +51,42 @@ BIN_DIR = bin
 MEM_DIR = memory
 LOGS_DIR = logs
 TESTBENCH_DIR = testbench
-TESTPROGRAMS = $(TESTBENCH_DIR)/risc_v/testprograms
+PROGRAMS_DIR = programs
 VBUDDY_DIR = vbuddy
 
 # Set testbench source and testbench executable
 TB_SOURCE = $(TESTBENCH_DIR)/$(NAME)/$(NAME)_tb.cpp
 TB_EXECUTABLE = $(NAME)_tb
 
+# Set program memory files
+PROGRAM = $(PROGRAMS_DIR)/$(PROGRAM_NAME)/instr_mem.mem
+DATA_MEMORY  = $(PROGRAMS_DIR)/$(PROGRAM_NAME)/data_mem.mem
+
 # Hexfile generation
 S_FILES = $(shell find $(TESTPROGRAMS) -name '*.s')
-S_HEX_FILES = $(patsubst $(TESTPROGRAMS)/%.s, $(TESTPROGRAMS)/%.hex, $(S_FILES))
+#S_MEM_FILES = $(patsubst $(TESTPROGRAMS)/%.s, $(TESTPROGRAMS)/%.mem, $(S_FILES))
+S_MEM_FILES = $(PROGRAM)
 include hexfile.mk
 
 
 # Set makefile targets
 TARGET = $(BIN_DIR)/$(NAME)
 
+include_vbuddy:
+# Copy VBuddy files to the bin directory
+ifeq ($(VBUDDY), 1)
+	@echo "Including VBuddy Files..."
+	@cp $(VBUDDY_DIR)/vbuddy.cpp $(BUILD_DIR)/
+	@cp $(VBUDDY_DIR)/vbuddy.cfg $(BIN_DIR)/
+else
+	@echo "VBUDDY=0, omitting VBuddy files..."
+endif
+
 create_dirs:
 	@echo "Creating build and bin directories..."
 	$(shell mkdir -p $(BUILD_DIR))
 	$(shell mkdir -p $(BIN_DIR))
 	$(shell mkdir -p $(LOGS_DIR))
-
-# Makefile rules
-all: create_dirs apply_mem_from_tb create_symlinks $(TARGET)
 
 $(TARGET): $(TB_SOURCE)
 	@echo "Compiling Verilog sources and C++ testbench..."
@@ -88,36 +101,38 @@ $(TARGET): $(TB_SOURCE)
 		
 	make -C $(BUILD_DIR) -j 8 -f $(NAME).mk
 	cp $(BUILD_DIR)/$(TB_EXECUTABLE) $(TARGET)
-	cp $(VBUDDY_DIR)/vbuddy.cpp $(BIN_DIR)
-	cp $(VBUDDY_DIR)/vbuddy.cfg $(BIN_DIR)
 
 
+build_memory_files: hexfile
+	@echo "Building memory files..."
 
-# Copy any .mem files from the testbench directory to the mem directory as data_mem.mem and instr_mem.mem
-apply_mem_from_tb:
-	@echo "Copying memory files from testbench directory..."
-	 @if [ -e $(TESTBENCH_DIR)/$(NAME)/data_mem.mem ] && [ -e $(TESTBENCH_DIR)/$(NAME)/instr_mem.mem ]; then \
-        cp $(TESTBENCH_DIR)/$(NAME)/data_mem.mem $(MEM_DIR)/; \
-        cp $(TESTBENCH_DIR)/$(NAME)/instr_mem.mem $(MEM_DIR)/; \
-        echo "Memory files copied successfully."; \
-    else \
-        echo "One or both of the memory files do not exist in the source directory."; \
-    fi
+
+# Copy instr_mem.mem from PROGRAM and data_mem.mem from DATA_MEMORY to the mem directory
+copy_memory_files:
+	@echo "Copying memory files from PROGRAM and DATA_MEMORY directories..."
+	@if [ -e $(PROGRAM)/instr_mem.mem ] && [ -e $(DATA_MEMORY)/data_mem.mem ]; then \
+		cp $(PROGRAM)/instr_mem.mem $(MEM_DIR)/; \
+		cp $(DATA_MEMORY)/data_mem.mem $(MEM_DIR)/; \
+		echo "Memory files copied successfully."; \
+	else \
+		echo "One or both of the memory files do not exist in the source directories."; \
+	fi
+
+
 create_symlinks:
 	@echo "Creating symlinks..."
 	$(foreach file, $(wildcard $(MEM_DIR)/*), \
 		ln -s $(realpath $(file)) $(BIN_DIR)/$(notdir $(file));)
 
+# Makefile rules
+all: create_dirs build_memory_files copy_memory_files include_vbuddy create_symlinks $(TARGET)
 
+
+runtest: all $(TARGET)
+		 @echo "Running testbench..."
+		 cd $(BIN_DIR) && ./$(patsubst $(BIN_DIR)/%,%,$(TARGET))
 ifeq ($(GTEST), 1)
-runtest: all $(TARGET)
-	@echo "Running testbench..."
-	cd $(BIN_DIR) && ./$(patsubst $(BIN_DIR)/%,%,$(TARGET))
-	mv $(BIN_DIR)/logs/ $(realpath .)
-else
-runtest: all $(TARGET)
-	@echo "Running testbench..."
-	cd $(BIN_DIR) && ./$(patsubst $(BIN_DIR)/%,%,$(TARGET))
+		 mv $(BIN_DIR)/logs/ $(realpath .)
 endif
 
 gtkwave: runtest

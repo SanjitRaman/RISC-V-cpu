@@ -12,7 +12,7 @@ module instr_mem #(
 
 initial begin
     $display("Loading rom.");
-    $readmemh("instr_mem.mem", rom_array, 32'hBFC00000);
+    $readmemh("instr_mem.hex", rom_array, 32'hBFC00000);
 end;
 
 assign RD = {rom_array[A+3], rom_array[A+2], rom_array[A+1], rom_array[A]}; // read from address A
