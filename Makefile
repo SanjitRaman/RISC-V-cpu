@@ -59,13 +59,13 @@ TB_SOURCE = $(TESTBENCH_DIR)/$(NAME)/$(NAME)_tb.cpp
 TB_EXECUTABLE = $(NAME)_tb
 
 # Set program memory files
-PROGRAM = $(PROGRAMS_DIR)/$(PROGRAM_NAME)/instr_mem.mem
-DATA_MEMORY  = $(PROGRAMS_DIR)/$(PROGRAM_NAME)/data_mem.mem
+PROGRAM = $(PROGRAMS_DIR)/$(PROGRAM_NAME)
+DATA_MEMORY  = $(dirname $(PROGRAM))/data_mem.mem
 
 # Hexfile generation
 S_FILES = $(shell find $(TESTPROGRAMS) -name '*.s')
 #S_MEM_FILES = $(patsubst $(TESTPROGRAMS)/%.s, $(TESTPROGRAMS)/%.mem, $(S_FILES))
-S_MEM_FILES = $(PROGRAM)
+S_MEM_FILES = $(dirname $(PROGRAM))/instr_mem.mem
 include hexfile.mk
 
 

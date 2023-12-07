@@ -4,7 +4,7 @@
 hexfile: $(S_MEM_FILES)
 	@echo "** Making .mem file for instruction memory"
 
-$(PROGRAM): $(PROGRAMS_DIR)/$(PROGRAM_NAME)/$(PROGRAM_NAME).s
+$(dirname $(PROGRAM)).: $(basename $(PROGRAM)).s
 	@riscv64-unknown-elf-as -R -march=rv32im -mabi=ilp32 -o "$?.out" "$?"
 	@riscv64-unknown-elf-ld -melf32lriscv -e 0xBFC00000 -Ttext 0xBFC00000 -o "$?.out.reloc" "$?.out"
 	@rm "$?.out"
@@ -16,4 +16,4 @@ $(PROGRAM): $(PROGRAMS_DIR)/$(PROGRAM_NAME)/$(PROGRAM_NAME).s
 # Debugging target to print variables
 debug:
 	@echo "S_FILES: $(S_FILES)"
-	@echo "S_HEX_FILES: $(S_HEX_FILES)"
+	@echo "S_MEM_FILES: $(S_MEM_FILES)"

@@ -1,43 +1,85 @@
-#include "verilated.h"
-#include "verilated_vcd_c.h"
-#include "risc_v.h"
-#include "vbuddy.cpp"
-#define MAX_SIM_CYC 5000
+#include <reg_file.h>
+#include <verilated.h>
+#include <gtest/gtest.h>
+#include <string>
+#include <vector>
 
-int main(int argc, char **argv, char **env) {
-  int simcyc;     // simulation clock count
-  int tick;       // each CLK cycle has two ticks for two edges
+class RiscVTest: public ::testing::Test {
+protected:
+    risc_v * top;
+    const uint32_t simcyc = 10'000'000;
 
-  Verilated::commandArgs(argc, argv);
-  // init top verilog instance
-  risc_v * top = new risc_v;
-  // init trace dump
-  Verilated::traceEverOn(true);
-  VerilatedVcdC* tfp = new VerilatedVcdC;
-  top->trace (tfp, 99);
-  tfp->open ("risc_v.vcd");
-
-  if(vbdOpen() != 1) return -1;
-  vbdHeader("Triangle PDF");
- 
-  // initialize simulation inputs
-  top->CLK = 1;
-  top->RST = 1;
-  
-  // run simulation for MAX_SIM_CYC clock cycles
-  for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
-    if(simcyc > 0) top->RST = 0;
-    // dump variables into VCD file and toggle clock
-    for (tick=0; tick<2; tick++) {
-      tfp->dump (2*simcyc+tick);
-      top->CLK = !top->CLK;
-      top->eval ();
+    void clock_ticks(int N) {
+    for (int i = 1; i <= N; i++) {
+        top->CLK = 1;
+        top->eval();
+        top->CLK = 0;
+        top->eval();
     }
-    if (Verilated::gotFinish() || vbdGetkey()=='q') break;
-    vbdPlot(int(top->a0), 0, 255);
-    vbdCycle(simcyc);
-  }
-  vbdClose();
-  tfp->close(); 
-  exit(0);
+    }
+
+    void SetUp( ) {
+    top = new risc_v;
+    //top->CLK = 1;
+    //top->rst = 0;
+    top->eval();
+    }
+
+    void TearDown( ) {
+    top->final();
+    delete top;
+    }
+};
+
+TEST_F(RiscVTest, LW) {
+    // read the instruction memory
+    system("make hexfile PROGRAM=single_instruction_tests/add");
+    // read the data memory
+    // load into registers
+    // check the result
+}
+
+
+// Test the add instruction
+TEST_F(RiscVTest, ADD) {
+    // read the instruction memory
+    // read the data memory
+    // load into registers
+    // check the result
+}
+
+
+// test property async read
+TEST_F(RegFileTest, ASYNCREAD) {
+    // for each register write its index.
+    for(int i = 0; i < 32; i++) {
+        // set write enable
+        top->WE3 = 1;
+        // set write address
+        top->A3 = i;
+        // set write data
+        top->WD3 = i;
+        clock_ticks(1);   
+    }
+    
+    // for each register read its index.
+    for(int i = 0; i < 32; i++) {
+        // set read addresses
+        top->A1 = i;
+        top->A2 = (i+1) % 32;
+        top->eval(); // evaluate
+        // check read data
+        ASSERT_EQ(top->RD1, i);
+        ASSERT_EQ(top->RD2, (i+1) % 32);
+    }
+}
+
+
+int main(int argc, char **argv) {
+  Verilated::commandArgs(argc, argv);
+  testing::InitGoogleTest(&argc, argv);
+  auto res = RUN_ALL_TESTS();
+  Verilated::mkdir("logs");
+  VerilatedCov::write("logs/coverage_reg_file.dat");
+  return res;
 }
