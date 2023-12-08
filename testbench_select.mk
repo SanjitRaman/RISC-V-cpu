@@ -2,7 +2,7 @@ RUN = unit
 GTEST = 1
 VBUDDY=0
 
-MODULE = control_unit
+MODULE = reg_file
 MODULE.INCLUDE_DIRS = -y design/control_unit/decoders
 
 UNIT = risc_v

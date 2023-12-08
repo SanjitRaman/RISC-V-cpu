@@ -22,10 +22,10 @@ reference: $(PROGRAMS_DIR)/$(PROGRAM_NAME)/$(notdir $(PROGRAM_NAME)).s
 	@./format_mem.sh "$?"
 	@rm "$?.bin"
 
-assemble: debug reference
-	@echo "pwd: " $(shell pwd)
-	@echo "PROGRAM: " $(PROGRAM)
-	cp $(PROGRAM) $(MEM_DIR)/instr_mem.mem
+assemble: reference
+	cp $(PROGRAMS_DIR)/$(PROGRAM_NAME)/instr_mem.mem $(MEM_DIR)/instr_mem.mem
+#@echo "pwd: " $(shell pwd)
+#@echo "PROGRAM: " $(PROGRAM)
 
 ifneq ($(wildcard $(dir $(PROGRAM))/data_mem.mem),)
 	cp $(dir $(PROGRAM))/data_mem.mem $(MEM_DIR)/data_mem.mem

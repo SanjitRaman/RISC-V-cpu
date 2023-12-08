@@ -1,7 +1,7 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "risc_v.h"
-#include "vbuddy.cpp"
+// #include "vbuddy.cpp"
 #define MAX_SIM_CYC 5000
 
 int main(int argc, char **argv, char **env) {
@@ -17,8 +17,8 @@ int main(int argc, char **argv, char **env) {
   top->trace (tfp, 99);
   tfp->open ("risc_v.vcd");
 
-  if(vbdOpen() != 1) return -1;
-  vbdHeader("Triangle PDF");
+  // if(vbdOpen() != 1) return -1;
+  // vbdHeader("Triangle PDF");
  
   // initialize simulation inputs
   top->CLK = 1;
@@ -33,11 +33,11 @@ int main(int argc, char **argv, char **env) {
       top->CLK = !top->CLK;
       top->eval ();
     }
-    if (Verilated::gotFinish() || vbdGetkey()=='q') break;
-    vbdPlot(int(top->a0), 0, 255);
-    vbdCycle(simcyc);
+    //if (Verilated::gotFinish() || vbdGetkey()=='q') break;
+    // vbdPlot(int(top->a0), 0, 255);
+    //vbdCycle(simcyc);
   }
-  vbdClose();
+  //vbdClose();
   tfp->close(); 
   exit(0);
 }

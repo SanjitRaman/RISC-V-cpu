@@ -129,10 +129,12 @@ all: create_dirs build_memory_files include_vbuddy create_symlinks $(TARGET)
 
 
 runtest: all $(TARGET)
-		 @echo "Running testbench..."
-		 cd $(BIN_DIR) && ./$(patsubst $(BIN_DIR)/%,%,$(TARGET))
+	@echo "Running testbench..."
+	@echo $(BIN_DIR)/$(patsubst $(BIN_DIR)/%,%,$(TARGET))
+	cd $(BIN_DIR) && ./$(patsubst $(BIN_DIR)/%,%,$(TARGET))
 ifeq ($(GTEST), 1)
-		 mv $(BIN_DIR)/logs/ $(realpath .)
+	@echo "Moving logs to logs directory..."
+	mv $(BIN_DIR)/logs/ $(realpath .)
 endif
 
 gtkwave: runtest
@@ -158,4 +160,4 @@ clean:
 	rm -rf $(BIN_DIR)
 	rm -rf $(LOGS_DIR)
 
-.PHONY: all clean create_symlinks coverage genhtml gtest runtest gtkwave
+.PHONY: all clean create_symlinks coverage genhtml gtest runtest gtkwave include_vbuddy build_memory_files assemble create_dirs

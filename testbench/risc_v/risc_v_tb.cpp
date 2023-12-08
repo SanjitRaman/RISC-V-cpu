@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <vector>
+#include <iostream>
 
 class RiscVTest: public ::testing::Test {
 protected:
@@ -35,19 +36,26 @@ protected:
 // Test the add instruction
 TEST_F(RiscVTest, ADD) {
     // read the instruction memory
-    system("make -C ../ assemble PROGRAM=single_instruction_tests/add");
+    // system("make -C ../ assemble PROGRAM=single_instruction_tests/add");
     //system("make -C ../ hexfile PROGRAM=single_instruction_tests/add");
-
+    clock_ticks(1);
     // read the data memory
     // load into registers
     // check the result
 }
 
 int main(int argc, char **argv) {
-  Verilated::commandArgs(argc, argv);
-  testing::InitGoogleTest(&argc, argv);
-  auto res = RUN_ALL_TESTS();
-  Verilated::mkdir("logs");
-  VerilatedCov::write("logs/coverage_reg_file.dat");
-  return res;
+    std::cout << "Verilated Command Args" << std::endl;
+    Verilated::commandArgs(argc, argv);
+    std::cout << "Init Google Test" << std::endl;
+    testing::InitGoogleTest(&argc, argv);
+    std::cout << "Run All Tests" << std::endl;
+    auto res = RUN_ALL_TESTS();
+    system("pwd");
+    std::cout << "Making Logs Directory" << std::endl;
+    Verilated::mkdir("logs");
+
+    std::cout << "Write Coverage" << std::endl;
+    VerilatedCov::write("logs/coverage_risc_v.dat");
+    return res;
 }
