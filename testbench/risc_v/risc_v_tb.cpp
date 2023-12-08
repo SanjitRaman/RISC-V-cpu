@@ -189,6 +189,37 @@ TEST_F(RiscVTest, SLL) {
     n_clock_ticks(5);
 }
 
+TEST_F(RiscVTest, BEQ) {
+// read the instruction memory
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/beq");
+    set_tfp("risc_v_beq.vcd");
+    reset();
+
+    // check lw worked
+    n_clock_ticks(1);
+    assert_reg(2, 1);
+
+    // check the second lw
+    n_clock_ticks(1);
+    assert_reg(3, 2);
+    
+    //check the beq worked.
+    n_clock_ticks(1);
+    ASSERT_EQ(top->pc_viewer, 0xBCF00010);
+
+    // Test overflow:
+    // lw big numbers from data memory.
+    n_clock_ticks(1);
+    assert_reg(2, 1);
+
+    n_clock_ticks(1);
+    assert_reg(3, 1);
+
+    // check the add worked.
+    n_clock_ticks(1);
+    ASSERT_EQ(top->pc_viewer, 0xBCF00010);
+    n_clock_ticks(5);
+}
 
 int main(int argc, char **argv) {
     std::cout << "Verilated Command Args" << std::endl;
