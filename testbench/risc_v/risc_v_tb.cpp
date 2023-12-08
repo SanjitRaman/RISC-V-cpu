@@ -123,7 +123,7 @@ TEST_F(RiscVTest, ADDI) {
 
 
 // Test the add instruction
-// We know that addi works.
+// We know that addi, lw works.
 TEST_F(RiscVTest, ADD) {
 // read the instruction memory
     system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/add");
@@ -174,6 +174,20 @@ TEST_F(RiscVTest, SUB) {
     n_clock_ticks(5);
 }
 
+TEST_F(RiscVTest, SLL) {
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/sll");
+    set_tfp("risc_v_sll.vcd");
+    reset();
+    
+    // load first two operands
+    // and check the operation worked.
+    n_clock_ticks(3);
+    assert_reg(1, 0x118);
+    
+    n_clock_ticks(3);
+    assert_reg(1, 152);
+    n_clock_ticks(5);
+}
 
 
 int main(int argc, char **argv) {
