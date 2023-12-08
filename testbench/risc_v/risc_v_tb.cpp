@@ -98,6 +98,17 @@ protected:
     }
 };
 
+TEST_F(RiscVTest, LW) {
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/lw");
+    set_tfp("risc_v_lw.vcd");
+    reset();
+
+    n_clock_ticks(1);
+    assert_reg(1, 0xFFFFFFFF);
+
+    n_clock_ticks(3);
+}
+
 
 TEST_F(RiscVTest, ADDI) {
     // read the instruction memory
@@ -119,18 +130,48 @@ TEST_F(RiscVTest, ADD) {
     set_tfp("risc_v_add.vcd");
     reset();
 
-    // check addi worked
+    // check lw worked
     n_clock_ticks(1);
     assert_reg(2, 1);
 
-    // check the second addi
+    // check the second lw
     n_clock_ticks(1);
     assert_reg(3, 2);
     
     //check the add worked.
     n_clock_ticks(1);
     assert_reg(1, 3);
-    n_clock_ticks(2);
+
+    // Test overflow:
+    // lw big numbers from data memory.
+    n_clock_ticks(1);
+    assert_reg(2, 0xFFFFFFFF);
+
+    n_clock_ticks(1);
+    assert_reg(3, 0x00000001);
+
+    // check the add worked.
+    n_clock_ticks(1);
+    assert_reg(1, 0x00000000);
+    n_clock_ticks(5);
+}
+
+TEST_F(RiscVTest, SUB) {
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/sub");
+    set_tfp("risc_v_sub.vcd");
+    reset();
+    
+    // load first two numbers
+    // and check the sub worked.
+    n_clock_ticks(3);
+    assert_reg(1, 1);
+    
+
+    // Test overflow:
+    // check the sub worked.
+    n_clock_ticks(3);
+    assert_reg(1, -5);
+    n_clock_ticks(5);
 }
 
 
