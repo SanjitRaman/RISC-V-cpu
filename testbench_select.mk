@@ -1,3 +1,4 @@
+# Set the module or unit to run in this file.
 RUN = unit
 GTEST = 1
 VBUDDY=0
@@ -18,5 +19,7 @@ UNIT.INCLUDE_DIRS = -y design/ \
 				-y design/ld_decoder			\
 				-y design/we_decoder
 
-# give the program name relative ot the programs folder.
-PROGRAM_NAME = single_instruction_tests/add
+
+NAME=""
+INCLUDE_DIRS=""
+SOURCES=""

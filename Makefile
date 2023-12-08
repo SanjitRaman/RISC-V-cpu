@@ -1,12 +1,6 @@
 # Makefile
 
-# Set the module or unit to run in this file.
 include testbench_select.mk
-
-
-NAME=""
-INCLUDE_DIRS=""
-SOURCES=""
 
 # configure variables to run both top-level testbenches and unit testbenches.
 ifeq ($(RUN), module)
@@ -59,11 +53,9 @@ TB_SOURCE = $(TESTBENCH_DIR)/$(NAME)/$(NAME)_tb.cpp
 TB_EXECUTABLE = $(NAME)_tb
 
 # Set program memory files
+PROGRAM_NAME ?= single_instruction_tests/addi
 PROGRAM = $(PROGRAMS_DIR)/$(PROGRAM_NAME)/instr_mem.mem
 DATA_MEMORY  = $(PROGRAMS_DIR)/$(PROGRAM_NAME)/data_mem.mem
-
-# Hexfile generation
-include hexfile.mk
 
 
 # Set makefile targets
@@ -85,6 +77,20 @@ create_dirs:
 	$(shell mkdir -p $(BIN_DIR))
 	$(shell mkdir -p $(LOGS_DIR))
 
+assemble: $(PROGRAMS_DIR)/$(PROGRAM_NAME)/$(notdir $(PROGRAM_NAME)).s
+	@riscv64-unknown-elf-as -R -march=rv32im -mabi=ilp32 -o "$?.out" "$?"
+	@riscv64-unknown-elf-ld -melf32lriscv -e 0xBFC00000 -Ttext 0xBFC00000 -o "$?.out.reloc" "$?.out"
+	@rm "$?.out"
+	@riscv64-unknown-elf-objcopy -O binary -j .text "$?.out.reloc" "$?.bin"
+	@rm "$?.out.reloc"
+	@./format_mem.sh "$?"
+	@rm "$?.bin"
+	cp $(PROGRAMS_DIR)/$(PROGRAM_NAME)/instr_mem.mem $(MEM_DIR)/instr_mem.mem
+ifneq ($(wildcard $(dir $(PROGRAM))/data_mem.mem),)
+	cp $(dir $(PROGRAM))/data_mem.mem $(MEM_DIR)/data_mem.mem
+endif
+
+
 $(TARGET): $(TB_SOURCE)
 	@echo "Compiling Verilog sources and C++ testbench..."
 	$(VERILATOR) $(VERILATOR_FLAGS) \
@@ -99,25 +105,6 @@ $(TARGET): $(TB_SOURCE)
 	make -C $(BUILD_DIR) -j 8 -f $(NAME).mk
 	cp $(BUILD_DIR)/$(TB_EXECUTABLE) $(TARGET)
 
-ifeq ($(RUN), unit)
-build_memory_files: assemble
-	@echo "Building memory files..."
-else
-	@echo "No Memory files to build, not running unit tests."
-endif
-
-
-# Copy instr_mem.mem from PROGRAM and data_mem.mem from DATA_MEMORY to the mem directory
-#copy_memory_files:
-#	@echo "Copying memory files from PROGRAM and DATA_MEMORY directories..."
-#	@if [ -e $(PROGRAM)/instr_mem.mem ] && [ -e $(DATA_MEMORY)/data_mem.mem ]; then \
-#		cp $(PROGRAM)/instr_mem.mem $(MEM_DIR)/; \
-#		cp $(DATA_MEMORY)/data_mem.mem $(MEM_DIR)/; \
-#		echo "Memory files copied successfully."; \
-#	else \
-#		echo "One or both of the memory files do not exist in the source directories."; \
-#	fi
-
 
 create_symlinks:
 	@echo "Creating symlinks..."
@@ -125,7 +112,7 @@ create_symlinks:
 		ln -s $(realpath $(file)) $(BIN_DIR)/$(notdir $(file));)
 
 # Makefile rules
-all: create_dirs build_memory_files include_vbuddy create_symlinks $(TARGET)
+all: create_dirs include_vbuddy create_symlinks $(TARGET)
 
 
 runtest: all $(TARGET)
