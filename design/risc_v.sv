@@ -11,7 +11,8 @@ module risc_v #(
     input  logic                   CLK,      // clock 
     input  logic                   RST,      // reset 
     input  logic [REG_ADDR_WIDTH-1:0] address_to_view,
-    output logic [DATA_WIDTH-1:0]  reg_output
+    output logic [DATA_WIDTH-1:0]  reg_output,
+    output logic [DATA_WIDTH-1:0]  pc_viewer
 );
 
 // PC
@@ -228,5 +229,7 @@ module risc_v #(
 // Adders
     assign PCTarget = JumpMux + ImmExt;
     assign PCPlus4  = PC + 4;
+
+    assign pc_viewer = PC;
 
 endmodule
