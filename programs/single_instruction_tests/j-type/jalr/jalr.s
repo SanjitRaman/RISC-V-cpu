@@ -2,4 +2,4 @@ lui a0, 0xBCF00
 jalr ra, a0, 0xC
 slli  a1, a0, 0x2
 addi a2, x0, 0x1
-ret
+jalr x0, ra, 0x0
