@@ -380,18 +380,32 @@ TEST_F(RiscVTest, AND) {
     int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/and");
     set_tfp("risc_v_and.vcd");
     reset();
-    std::vector<uint32_t> expected_results = {0xB1429900, 0x018B2312, 0x058040B2, 0x040C8604,
-                                              0x98122006, 0x198C0340, 0x80800041, 0x86700108,
-                                              0x00B30800, 0x20200044, 0x0A370100, 0x00110309,
-                                              0x4C042040, 0x80018400, 0x4010C1A4, 0x02009842};
+    std::vector<uint32_t> expected_results = {0xFFFFFFFF, 0x02244220, 0x8000821A, 0x04240002,
+                                              0x105080A1};
     n_clock_ticks(1);
 
-    for(int i = 0; i < 100; i++) {
+    for(int i = 0; i < 5; i++) {
         n_clock_ticks(5);
         assert_reg(RiscVRegisters::a1, expected_results[i]);
         n_clock_ticks(2);
     }
 }
+
+TEST_F(RiscVTest, OR) {
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/or");
+    set_tfp("risc_v_or.vcd");
+    reset();
+    std::vector<uint32_t> expected_results = {0xFFFFFFFF, 0x736DF97D, 0xBF73AFF3, 0x3F3EF2B9, 0xFE7AFFFF, 0x8FB78CFE};
+    n_clock_ticks(1);
+
+    for(int i = 0; i < 6; i++) {
+        n_clock_ticks(5);
+        assert_reg(RiscVRegisters::a1, expected_results[i]);
+        n_clock_ticks(2);
+    }
+}
+
+
 
 int main(int argc, char **argv) {
     std::cout << "Verilated Command Args" << std::endl;
