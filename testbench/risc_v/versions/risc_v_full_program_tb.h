@@ -4,7 +4,7 @@
 #include "vbuddy.cpp"
 #include <string>
 #define MAX_SIM_CYC 5000
-#define PROGRAM_NAME "sinegen"
+#define PROGRAM_NAME "f1_starting_light"
 
 int main(int argc, char **argv, char **env) {
   int simcyc;     // simulation clock count
@@ -42,7 +42,10 @@ int main(int argc, char **argv, char **env) {
     }
     if (Verilated::gotFinish() || vbdGetkey()=='q') break;
     
-    vbdPlot(top->reg_output, 0, 255);
+    if(PROGRAM_NAME == "f1_starting_light")
+      vbdBar(int(top->reg_output));
+    else
+      vbdPlot(top->reg_output, 0, 255);
     
     
     vbdCycle(simcyc);

@@ -1,5 +1,5 @@
 setup:
-    addi a2, a2, 0x5
+    addi a2, a2, 0x14    # Delay to use
     addi a3, a3, 0xff
     addi a4, a4, 0x4b
 
