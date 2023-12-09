@@ -210,7 +210,7 @@ TEST_F(RiscVTest, BGE) {
     n_clock_ticks(1);
     assert_reg(RiscVRegisters::a1, 2);
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a2, 1);
+    assert_reg(RiscVRegisters::a2, FFFFFFFF);
 
     // check the bge taken.
     n_clock_ticks(1); // do the bge
