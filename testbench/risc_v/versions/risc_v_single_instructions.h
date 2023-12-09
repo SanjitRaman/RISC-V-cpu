@@ -99,7 +99,7 @@ protected:
 };
 
 TEST_F(RiscVTest, LW) {
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/lw");
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lw");
     set_tfp("risc_v_lw.vcd");
     reset();
 
@@ -112,7 +112,7 @@ TEST_F(RiscVTest, LW) {
 
 TEST_F(RiscVTest, ADDI) {
     // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/addi");
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/addi");
     set_tfp("risc_v_addi.vcd");
     reset();
 
@@ -121,12 +121,41 @@ TEST_F(RiscVTest, ADDI) {
     n_clock_ticks(1);
 }
 
+TEST_F(RiscVTest, BEQ) {
+// read the instruction memory
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/beq");
+    set_tfp("risc_v_beq.vcd");
+    reset();
+
+    // check lw worked
+    n_clock_ticks(1);
+    assert_reg(2, 1);
+
+    // check the second lw
+    n_clock_ticks(1);
+    assert_reg(3, 2);
+    
+    //check the beq not taken
+    n_clock_ticks(1);
+    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    
+    // check next lw
+    n_clock_ticks(1);
+    assert_reg(2, 1);
+    n_clock_ticks(1);
+    assert_reg(3, 1);
+
+    // check the beq taken.
+    n_clock_ticks(1); // do the beq
+    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    n_clock_ticks(1);
+}
 
 // Test the add instruction
 // We know that addi, lw works.
 TEST_F(RiscVTest, ADD) {
 // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/add");
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/add");
     set_tfp("risc_v_add.vcd");
     reset();
 
@@ -157,7 +186,7 @@ TEST_F(RiscVTest, ADD) {
 }
 
 TEST_F(RiscVTest, SUB) {
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/sub");
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sub");
     set_tfp("risc_v_sub.vcd");
     reset();
     
@@ -175,7 +204,7 @@ TEST_F(RiscVTest, SUB) {
 }
 
 TEST_F(RiscVTest, SLL) {
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/sll");
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sll");
     set_tfp("risc_v_sll.vcd");
     reset();
     
@@ -186,38 +215,6 @@ TEST_F(RiscVTest, SLL) {
     
     n_clock_ticks(3);
     assert_reg(1, 152);
-    n_clock_ticks(5);
-}
-
-TEST_F(RiscVTest, BEQ) {
-// read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/beq");
-    set_tfp("risc_v_beq.vcd");
-    reset();
-
-    // check lw worked
-    n_clock_ticks(1);
-    assert_reg(2, 1);
-
-    // check the second lw
-    n_clock_ticks(1);
-    assert_reg(3, 2);
-    
-    //check the beq worked.
-    n_clock_ticks(1);
-    ASSERT_EQ(top->pc_viewer, 0xBCF00010);
-
-    // Test overflow:
-    // lw big numbers from data memory.
-    n_clock_ticks(1);
-    assert_reg(2, 1);
-
-    n_clock_ticks(1);
-    assert_reg(3, 1);
-
-    // check the add worked.
-    n_clock_ticks(1);
-    ASSERT_EQ(top->pc_viewer, 0xBCF00010);
     n_clock_ticks(5);
 }
 
