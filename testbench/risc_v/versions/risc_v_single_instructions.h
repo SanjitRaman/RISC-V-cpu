@@ -329,6 +329,40 @@ TEST_F(RiscVTest, AUIPC) {
     n_clock_ticks(1);
 }
 
+TEST_F(RiscVTest, JALR) {
+    // read the instruction memory
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/JALR");
+    set_tfp("risc_v_jalr.vcd");
+    reset();
+
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a0, 0xBCF00000);
+    n_clock_ticks(1);
+    assert_reg(top->pc_viewer, 0xBCF0000C);
+    assert_reg(RiscVRegisters::x1, 0xBCF00008);
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a2, 0x00000001);
+    n_clock_ticks(1);
+    assert_reg(top->pc_viewer, 0xBCF0000C);
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a1, 0xf3c00000);
+
+}
+
+TEST_F(RiscVTest, JAL) {
+    // read the instruction memory
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/JAL");
+    set_tfp("risc_v_jal.vcd");
+    reset();
+
+    n_clock_ticks(1);
+    assert_reg(top->pc_viewer, 0xBCF00008);
+    assert_reg(RiscVRegisters::x1, 0xBCF00004 );
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a2, 0x00000001);
+    n_clock_ticks(1);
+}
+
 // Test the add instruction
 // We know that addi, lw works.
 TEST_F(RiscVTest, ADD) {
