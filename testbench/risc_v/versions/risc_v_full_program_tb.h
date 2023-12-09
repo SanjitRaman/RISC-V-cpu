@@ -1,14 +1,15 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "risc_v.h"
-// #include "vbuddy.cpp"
-#define MAX_SIM_CYC 5000
+#include "vbuddy.cpp"
+#define MAX_SIM_CYC 1e6
 
 int main(int argc, char **argv, char **env) {
   int simcyc;     // simulation clock count
   int tick;       // each CLK cycle has two ticks for two edges
 
   Verilated::commandArgs(argc, argv);
+  int system_return = system("make -C .. / assemble PROGRAM_NAME=pdf"); //Bash command
   // init top verilog instance
   risc_v * top = new risc_v;
   // init trace dump
@@ -16,6 +17,7 @@ int main(int argc, char **argv, char **env) {
   VerilatedVcdC* tfp = new VerilatedVcdC;
   top->trace (tfp, 99);
   tfp->open ("risc_v.vcd");
+  top->address_to_view = 10;
 
   // if(vbdOpen() != 1) return -1;
   // vbdHeader("Triangle PDF");
@@ -31,13 +33,16 @@ int main(int argc, char **argv, char **env) {
     for (tick=0; tick<2; tick++) {
       tfp->dump (2*simcyc+tick);
       top->CLK = !top->CLK;
-      top->eval ();
+      top->eval();
     }
-    //if (Verilated::gotFinish() || vbdGetkey()=='q') break;
-    // vbdPlot(int(top->a0), 0, 255);
-    //vbdCycle(simcyc);
+    // if (Verilated::gotFinish() || vbdGetkey()=='q') break;
+    // if (simcyc > 5e5){
+    //   vbdPlot(top->reg_output, 0, 255)
+    // }
+    
+    // vbdCycle(simcyc);
   }
-  //vbdClose();
+  // vbdClose();
   tfp->close(); 
   exit(0);
 }
