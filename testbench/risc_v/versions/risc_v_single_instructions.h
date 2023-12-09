@@ -158,6 +158,35 @@ TEST_F(RiscVTest, BEQ) {
     n_clock_ticks(1);
 }
 
+TEST_F(RiscVTest, BNE) {
+// read the instruction memory
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bne");
+    set_tfp("risc_v_bne.vcd");
+    reset();
+
+    // check lw worked
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a1, 1);
+
+    // check the second lw
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a2, 1);
+    
+    //check the bne not taken
+    n_clock_ticks(1);
+    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    
+    // check next lw
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a1, 1);
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a2, 2);
+
+    // check the bne taken.
+    n_clock_ticks(1); // do the bne
+    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    n_clock_ticks(1);
+}
 // Test the add instruction
 // We know that addi, lw works.
 TEST_F(RiscVTest, ADD) {
