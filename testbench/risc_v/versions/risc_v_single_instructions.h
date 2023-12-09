@@ -404,7 +404,19 @@ TEST_F(RiscVTest, OR) {
     }
 }
 
+TEST_F(RiscVTest, XOR) {
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/xor");
+    set_tfp("risc_v_xor.vcd");
+    reset();
+    std::vector<uint32_t> expected_results = {0x0, 0x95511559, 0x6433891B, 0x7B05859D, 0x87DF334E, 0xF4976244, 0xE0B20A37};
+    n_clock_ticks(1);
 
+    for(int i = 0; i < 6; i++) {
+        n_clock_ticks(5);
+        assert_reg(RiscVRegisters::a1, expected_results[i]);
+        n_clock_ticks(2);
+    }
+}
 
 int main(int argc, char **argv) {
     std::cout << "Verilated Command Args" << std::endl;

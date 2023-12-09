@@ -1,7 +1,7 @@
 import random
 
 results = []
-numcases = 1
+numcases = 5
 
 for i in range(numcases):
     operand1 = random.randrange(0, 2**32)
@@ -10,7 +10,7 @@ for i in range(numcases):
     operand2_str = ' '.join(f'{operand2:08X}'[i:i+2] for i in range(0, 8, 2))
     print(operand1_str)
     print(operand2_str)
-    results.append(operand1 | operand2)
+    results.append(operand1 ^ operand2)
 
 print("Answers:")
 
