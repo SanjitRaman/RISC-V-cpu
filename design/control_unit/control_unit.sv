@@ -25,7 +25,7 @@ module control_unit #(
 
     logic [ALU_OP_WIDTH-1:0]          ALUOp;
     logic                             Branch;
-    logic                             signed_less_than;
+    logic                             signed_greater_than;
 
     main_decoder  #(
         .IMM_SRC_WIDTH  (IMM_SRC_WIDTH),
