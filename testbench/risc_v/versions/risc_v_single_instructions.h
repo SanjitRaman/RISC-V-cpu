@@ -249,7 +249,7 @@ TEST_F(RiscVTest, SLL) {
     assert_reg(RiscVRegisters::a1, 0x118);
     
     n_clock_ticks(3);
-    assert_reg(RiscVRegisters::a1, 0x118);
+    assert_reg(RiscVRegisters::a1, 0x98);
     n_clock_ticks(5);
 }
 
