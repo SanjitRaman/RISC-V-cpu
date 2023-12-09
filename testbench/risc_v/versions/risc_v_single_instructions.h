@@ -106,7 +106,7 @@ protected:
 };
 
 TEST_F(RiscVTest, LW) {
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lw");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lw");
     set_tfp("risc_v_lw.vcd");
     reset();
 
@@ -119,7 +119,7 @@ TEST_F(RiscVTest, LW) {
 
 TEST_F(RiscVTest, ADDI) {
     // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/addi");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/addi");
     set_tfp("risc_v_addi.vcd");
     reset();
 
@@ -130,7 +130,7 @@ TEST_F(RiscVTest, ADDI) {
 
 TEST_F(RiscVTest, BEQ) {
 // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/beq");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/beq");
     set_tfp("risc_v_beq.vcd");
     reset();
 
@@ -160,7 +160,7 @@ TEST_F(RiscVTest, BEQ) {
 
 TEST_F(RiscVTest, BNE) {
 // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bne");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bne");
     set_tfp("risc_v_bne.vcd");
     reset();
 
@@ -190,7 +190,7 @@ TEST_F(RiscVTest, BNE) {
 
 TEST_F(RiscVTest, BGE) {
 // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bge");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bge");
     set_tfp("risc_v_bge.vcd");
     reset();
 
@@ -220,7 +220,7 @@ TEST_F(RiscVTest, BGE) {
 
 TEST_F(RiscVTest, BGEU) {
 // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bgeu");
+    int reg = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bgeu");
     set_tfp("risc_v_bgeu.vcd");
     reset();
 
@@ -250,7 +250,7 @@ TEST_F(RiscVTest, BGEU) {
 
 TEST_F(RiscVTest, BLT) {
 // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/blt");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/blt");
     set_tfp("risc_v_blt.vcd");
     reset();
 
@@ -280,7 +280,7 @@ TEST_F(RiscVTest, BLT) {
 
 TEST_F(RiscVTest, BLTU) {
 // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bltu");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bltu");
     set_tfp("risc_v_bltu.vcd");
     reset();
 
@@ -312,7 +312,7 @@ TEST_F(RiscVTest, BLTU) {
 // We know that addi, lw works.
 TEST_F(RiscVTest, ADD) {
 // read the instruction memory
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/add");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/add");
     set_tfp("risc_v_add.vcd");
     reset();
 
@@ -343,7 +343,7 @@ TEST_F(RiscVTest, ADD) {
 }
 
 TEST_F(RiscVTest, SUB) {
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sub");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sub");
     set_tfp("risc_v_sub.vcd");
     reset();
     
@@ -361,7 +361,7 @@ TEST_F(RiscVTest, SUB) {
 }
 
 TEST_F(RiscVTest, SLL) {
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sll");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sll");
     set_tfp("risc_v_sll.vcd");
     reset();
     
@@ -377,11 +377,20 @@ TEST_F(RiscVTest, SLL) {
 
 
 TEST_F(RiscVTest, AND) {
-    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/and");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/and");
     set_tfp("risc_v_and.vcd");
     reset();
+    std::vector<uint32_t> expected_results = {0xB1429900, 0x018B2312, 0x058040B2, 0x040C8604,
+                                              0x98122006, 0x198C0340, 0x80800041, 0x86700108,
+                                              0x00B30800, 0x20200044, 0x0A370100, 0x00110309,
+                                              0x4C042040, 0x80018400, 0x4010C1A4, 0x02009842};
+    n_clock_ticks(1);
 
-
+    for(int i = 0; i < 100; i++) {
+        n_clock_ticks(5);
+        assert_reg(RiscVRegisters::a1, expected_results[i]);
+        n_clock_ticks(2);
+    }
 }
 
 int main(int argc, char **argv) {
