@@ -116,7 +116,6 @@ TEST_F(RiscVTest, LW) {
     n_clock_ticks(3);
 }
 
-
 TEST_F(RiscVTest, ADDI) {
     // read the instruction memory
     int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/addi");
@@ -268,9 +267,9 @@ TEST_F(RiscVTest, BLT) {
     
     // check next lw
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a1, 1);
+    assert_reg(RiscVRegisters::a1, 0xFFFFFFFF);
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a2, 0xFFFFFFFF);
+    assert_reg(RiscVRegisters::a2, 2);
 
     // check the bge taken.
     n_clock_ticks(1); // do the bge
@@ -298,9 +297,9 @@ TEST_F(RiscVTest, BLTU) {
     
     // check next lw
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a1, 0xFFFFFFFF);
+    assert_reg(RiscVRegisters::a1, 1);
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a2, 1);
+    assert_reg(RiscVRegisters::a2, 0xFFFFFFFF);
 
     // check the bgeu taken.
     n_clock_ticks(1); // do the bgeu
