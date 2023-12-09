@@ -2,14 +2,18 @@
 #include "verilated_vcd_c.h"
 #include "risc_v.h"
 #include "vbuddy.cpp"
-#define MAX_SIM_CYC 1e6
+#include <string>
+#define MAX_SIM_CYC 5000
+#define PROGRAM_NAME "sinegen"
 
 int main(int argc, char **argv, char **env) {
   int simcyc;     // simulation clock count
   int tick;       // each CLK cycle has two ticks for two edges
 
   Verilated::commandArgs(argc, argv);
-  int system_return = system("make -C .. / assemble PROGRAM_NAME=pdf"); //Bash command
+  std::string command = std::string("make -C .. / assemble PROGRAM_NAME=")+std::string(PROGRAM_NAME);
+  const char* commandArray = command.c_str(); // Convert command string to char array
+  int system_return = system(commandArray); //Bash command
   // init top verilog instance
   risc_v * top = new risc_v;
   // init trace dump
@@ -19,8 +23,9 @@ int main(int argc, char **argv, char **env) {
   tfp->open ("risc_v.vcd");
   top->address_to_view = 10;
 
-  // if(vbdOpen() != 1) return -1;
-  // vbdHeader("Triangle PDF");
+  if(vbdOpen() != 1) return -1;
+  
+  vbdHeader(PROGRAM_NAME);
  
   // initialize simulation inputs
   top->CLK = 1;
@@ -35,14 +40,14 @@ int main(int argc, char **argv, char **env) {
       top->CLK = !top->CLK;
       top->eval();
     }
-    // if (Verilated::gotFinish() || vbdGetkey()=='q') break;
-    // if (simcyc > 5e5){
-    //   vbdPlot(top->reg_output, 0, 255)
-    // }
+    if (Verilated::gotFinish() || vbdGetkey()=='q') break;
     
-    // vbdCycle(simcyc);
+    vbdPlot(top->reg_output, 0, 255);
+    
+    
+    vbdCycle(simcyc);
   }
-  // vbdClose();
+  vbdClose();
   tfp->close(); 
   exit(0);
 }
