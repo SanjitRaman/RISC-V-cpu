@@ -307,6 +307,28 @@ TEST_F(RiscVTest, BLTU) {
     n_clock_ticks(1);
 }
 
+TEST_F(RiscVTest, LUI) {
+    // read the instruction memory
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/u-type/lui");
+    set_tfp("risc_v_lui.vcd");
+    reset();
+
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a1, 0x00015000);
+    n_clock_ticks(1);
+}
+
+TEST_F(RiscVTest, AUIPC) {
+    // read the instruction memory
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/u-type/auipc");
+    set_tfp("risc_v_auipc.vcd");
+    reset();
+
+    n_clock_ticks(2);
+    assert_reg(RiscVRegisters::a1, 0x12618004);
+    n_clock_ticks(1);
+}
+
 // Test the add instruction
 // We know that addi, lw works.
 TEST_F(RiscVTest, ADD) {
