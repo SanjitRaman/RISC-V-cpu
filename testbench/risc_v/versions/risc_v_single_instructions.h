@@ -5,6 +5,41 @@
 #include <string>
 #include <vector>
 
+enum class RiscVRegisters : uint32_t {
+    zero = 0,
+    ra = 1,
+    sp = 2,
+    gp = 3,
+    tp = 4,
+    t0 = 5,
+    t1 = 6,
+    t2 = 7,
+    s0 = 8,
+    s1 = 9,
+    a0 = 10,
+    a1 = 11,
+    a2 = 12,
+    a3 = 13,
+    a4 = 14,
+    a5 = 15,
+    a6 = 16,
+    a7 = 17,
+    s2 = 18,
+    s3 = 19,
+    s4 = 20,
+    s5 = 21,
+    s6 = 22,
+    s7 = 23,
+    s8 = 24,
+    s9 = 25,
+    s10 = 26,
+    s11 = 27,
+    t3 = 28,
+    t4 = 29,
+    t5 = 30,
+    t6 = 31
+};
+
 class RiscVTest: public ::testing::Test {
 protected:
     risc_v * top;
@@ -12,8 +47,8 @@ protected:
     const uint32_t simcyc = 10'000'000;
     uint32_t curr_cyc = 0;
 
-    void assert_reg(uint32_t reg, uint32_t value) {
-        top->address_to_view = reg;
+    void assert_reg(RiscVRegisters reg, uint32_t value) {
+        top->address_to_view = static_cast<uint32_t>(reg);
         top->eval();
         EXPECT_EQ(top->reg_output, value);
     }
@@ -104,7 +139,7 @@ TEST_F(RiscVTest, LW) {
     reset();
 
     n_clock_ticks(1);
-    assert_reg(1, 0xFFFFFFFF);
+    assert_reg(RiscVRegisters::a0, 0xFFFFFFFF);
 
     n_clock_ticks(3);
 }
@@ -117,7 +152,7 @@ TEST_F(RiscVTest, ADDI) {
     reset();
 
     n_clock_ticks(1);
-    assert_reg(11, 5);
+    assert_reg(RiscVRegisters::a1, 5);
     n_clock_ticks(1);
 }
 
@@ -129,11 +164,11 @@ TEST_F(RiscVTest, BEQ) {
 
     // check lw worked
     n_clock_ticks(1);
-    assert_reg(2, 1);
+    assert_reg(RiscVRegisters::a1, 1);
 
     // check the second lw
     n_clock_ticks(1);
-    assert_reg(3, 2);
+    assert_reg(RiscVRegisters::a2, 2);
     
     //check the beq not taken
     n_clock_ticks(1);
@@ -141,9 +176,9 @@ TEST_F(RiscVTest, BEQ) {
     
     // check next lw
     n_clock_ticks(1);
-    assert_reg(2, 1);
+    assert_reg(RiscVRegisters::a1, 1);
     n_clock_ticks(1);
-    assert_reg(3, 1);
+    assert_reg(RiscVRegisters::a2, 1);
 
     // check the beq taken.
     n_clock_ticks(1); // do the beq
@@ -161,27 +196,27 @@ TEST_F(RiscVTest, ADD) {
 
     // check lw worked
     n_clock_ticks(1);
-    assert_reg(2, 1);
+    assert_reg(RiscVRegisters::a2, 1);
 
     // check the second lw
     n_clock_ticks(1);
-    assert_reg(3, 2);
+    assert_reg(RiscVRegisters::a3, 2);
     
     //check the add worked.
     n_clock_ticks(1);
-    assert_reg(1, 3);
+    assert_reg(RiscVRegisters::a1, 3);
 
     // Test overflow:
     // lw big numbers from data memory.
     n_clock_ticks(1);
-    assert_reg(2, 0xFFFFFFFF);
+    assert_reg(RiscVRegisters::a2, 0xFFFFFFFF);
 
     n_clock_ticks(1);
-    assert_reg(3, 0x00000001);
+    assert_reg(RiscVRegisters::a3, 0x00000001);
 
     // check the add worked.
     n_clock_ticks(1);
-    assert_reg(1, 0x00000000);
+    assert_reg(RiscVRegisters::a1, 0x00000000);
     n_clock_ticks(5);
 }
 
@@ -193,13 +228,13 @@ TEST_F(RiscVTest, SUB) {
     // load first two numbers
     // and check the sub worked.
     n_clock_ticks(3);
-    assert_reg(1, 1);
+    assert_reg(RiscVRegisters::a1, 1);
     
 
     // Test overflow:
     // check the sub worked.
     n_clock_ticks(3);
-    assert_reg(1, -5);
+    assert_reg(RiscVRegisters::a1, -5);
     n_clock_ticks(5);
 }
 
@@ -211,13 +246,21 @@ TEST_F(RiscVTest, SLL) {
     // load first two operands
     // and check the operation worked.
     n_clock_ticks(3);
-    assert_reg(1, 0x118);
+    assert_reg(RiscVRegisters::a1, 0x118);
     
     n_clock_ticks(3);
-    assert_reg(1, 152);
+    assert_reg(RiscVRegisters::a1, 0x118);
     n_clock_ticks(5);
 }
 
+
+TEST_F(RiscVTest, AND) {
+    system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/and");
+    set_tfp("risc_v_and.vcd");
+    reset();
+
+
+}
 
 int main(int argc, char **argv) {
     std::cout << "Verilated Command Args" << std::endl;

@@ -1,9 +1,8 @@
 loop1:
-lw x2, 0(x0)
-lw x3, 4(x0)
-beq x2, x3, loop1
+lw a1, 0(x0)
+lw a2, 4(x0)
+beq a1, a2, loop1
 loop2:
-lw x2, 8(x0)
-lw x3, 12(x0)
-beq x2, x3, loop2 
-
+lw a1, 8(x0)
+lw a2, 12(x0)
+beq a1, a2, loop2 
