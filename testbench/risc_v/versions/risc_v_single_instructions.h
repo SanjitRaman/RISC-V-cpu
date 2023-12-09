@@ -286,11 +286,11 @@ TEST_F(RiscVTest, BLTU) {
 
     // check lw worked
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a1, 1);
+    assert_reg(RiscVRegisters::a1, 2);
 
     // check the second lw
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a2, 2);
+    assert_reg(RiscVRegisters::a2, 1);
     
     //check the bgeu not taken
     n_clock_ticks(1);
