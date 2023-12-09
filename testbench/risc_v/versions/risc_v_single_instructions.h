@@ -396,6 +396,20 @@ TEST_F(RiscVTest, SLL) {
     n_clock_ticks(5);
 }
 
+TEST_F(RiscVTest, SLT) {
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/slt");
+    set_tfp("risc_v_slt.vcd");
+    reset();
+    
+    std::vector<uint32_t> expected_results = {};
+    n_clock_ticks(1);
+
+    for(int i = 0; i < 5; i++) {
+        n_clock_ticks(5);
+        assert_reg(RiscVRegisters::a1, expected_results[i]);
+        n_clock_ticks(2);
+    }
+}
 
 TEST_F(RiscVTest, AND) {
     int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/and");
