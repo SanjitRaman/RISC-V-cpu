@@ -59,7 +59,7 @@ sign_extend * sgn_ext;
         imm3 = bitExtracted(Instr, 6, 25);
         imm4 = bitExtracted(Instr, 4, 8);
         immediate = (imm1<<12) | (imm2<<11) | (imm3<<5) | (imm4<<1); 
-        return ((immediate & 0xFFF) | -(immediate & 0x800));
+        return ((immediate & 0x1FFF) | -(immediate & 0x1000));
       }
       case 3: {
         immediate = (bitExtracted(Instr, 20, 12)<<12);
