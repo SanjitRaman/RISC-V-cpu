@@ -1,8 +1,9 @@
-RUN = module
-GTEST = 1
-VBUDDY=0
+# Set the module or unit to run in this file.
+RUN = unit
+GTEST = 0
+VBUDDY=1
 
-MODULE = control_unit
+MODULE = reg_file
 MODULE.INCLUDE_DIRS = -y design/control_unit/decoders
 
 UNIT = risc_v
@@ -18,4 +19,7 @@ UNIT.INCLUDE_DIRS = -y design/ \
 				-y design/ld_decoder			\
 				-y design/we_decoder
 
-PROGRAM_NAME = counter
+
+NAME=""
+INCLUDE_DIRS=""
+SOURCES=""
