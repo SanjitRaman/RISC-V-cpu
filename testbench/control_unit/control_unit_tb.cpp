@@ -241,7 +241,7 @@ TEST_F(ControlUnitTest, BNEZeroFlag1) {
 }
 // blt
 TEST_F(ControlUnitTest, BLT0) {
-    setInputsAndEvaluate(0x0010C463, 0b0, 0b0, 0b1, 0b1); 
+    setInputsAndEvaluate(0x0010C463, 0b0, 0b0, 0b0, 0b0); 
     assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
 }
 TEST_F(ControlUnitTest, BLT1) {
