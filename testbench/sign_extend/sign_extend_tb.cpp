@@ -121,7 +121,7 @@ TEST_F(SignExtendTest, other) {
   ASSERT_EQ(sgn_ext->ImmOp, 0);
   const uint32_t Clocks10M = 10'000'000;
   uint32_t Instr = gen_random_instr();
-  uint32_t ImmSrc = 0b10;
+  uint32_t ImmSrc = 0b111;
   sgn_ext->Instr = Instr;
   sgn_ext->ImmSrc = ImmSrc;
   sgn_ext->eval();
