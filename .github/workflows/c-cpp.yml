@@ -18,8 +18,6 @@ jobs:
     - name: Retrieve Google Test
       run: cp -r ~/actions-runner-local/googletest ./googletest
 
-    - name: Build and Run Control Unit
-      run: make runtest RUN=module GTEST=1 MODULE=control_unit MODULE.INCLUDE_DIRS="-y design/control_unit/decoders" && make clean
 
     - name: Build and Run Reg File
       run: make runtest RUN=module GTEST=1 MODULE=reg_file MODULE.INCLUDE_DIRS="" && make clean
@@ -33,5 +31,8 @@ jobs:
     - name: Build and Run Data Memory Wrapper
       run: make runtest RUN=module GTEST=1 MODULE=data_mem_wrapper MODULE.INCLUDE_DIRS="-y design/data_mem -y design/we_decoder -y design/ld_decoder" && make clean
 
+    - name: Build and Run Control Unit
+      run: make runtest RUN=module GTEST=1 MODULE=control_unit MODULE.INCLUDE_DIRS="-y design/control_unit/decoders" && make clean
+      
     - name: Build and Run Top Level Testbench
       run: make runtest RUN=unit GTEST=0
