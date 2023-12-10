@@ -1,20 +1,24 @@
+#define VBUDDY false
+#define MAX_SIM_CYC 1'000'000
+#define PROGRAM_NAME "counter"
+#define DATASET "Triangle"
+
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "risc_v.h"
 #include "vbuddy.cpp"
 #include <string>
 #include <iostream>
-#define MAX_SIM_CYC 1'000'000
-#define PROGRAM_NAME "counter"
-#define DATASET "Triangle"
-#define VBUDDY true
 
 int main(int argc, char **argv, char **env) {
     int simcyc;     // simulation clock count
     int tick;       // each CLK cycle has two ticks for two edges
 
     Verilated::commandArgs(argc, argv);
-    std::string command = std::string("make -C .. / assemble PROGRAM_NAME=")+std::string(PROGRAM_NAME);
+    std::string command = std::string("make -C .. / assemble PROGRAM_NAME=");
+    command.append(std::string(PROGRAM_NAME));
+    command.append(std::string(" VBUDDY="));
+    command.append(std::string(VBUDDY ? "1" : "0"));
     const char* commandArray = command.c_str(); // Convert command string to char array
     int system_return = system(commandArray); //Bash command
     // init top verilog instance

@@ -63,13 +63,9 @@ TARGET = $(BIN_DIR)/$(NAME)
 
 include_vbuddy:
 # Copy VBuddy files to the bin directory
-ifeq ($(VBUDDY), 1)
 	@echo "Including VBuddy Files..."
 	@cp $(VBUDDY_DIR)/vbuddy.cpp $(BUILD_DIR)/
 	@cp $(VBUDDY_DIR)/vbuddy.cfg $(BIN_DIR)/
-else
-	@echo "VBUDDY=0, omitting VBuddy files..."
-endif
 
 create_dirs:
 	@echo "Creating build and bin directories..."
