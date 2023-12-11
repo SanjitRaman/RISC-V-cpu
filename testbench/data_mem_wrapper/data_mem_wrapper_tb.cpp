@@ -239,6 +239,6 @@ int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   auto res = RUN_ALL_TESTS();
   Verilated::mkdir("logs");
-  VerilatedCov::write("logs/coverage_data_mem_wrapper.dat");
+  //VerilatedCov::write("logs/coverage_data_mem_wrapper.dat");
   return res;
 }
