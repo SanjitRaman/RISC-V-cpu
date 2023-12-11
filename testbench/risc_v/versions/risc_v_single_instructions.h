@@ -195,6 +195,37 @@ TEST_F(RiscVTest, LHU) {
 
 }
 
+// assumes addi is working.
+// assumes lbu is working.
+TEST_F(RiscVTest, SB) {
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/s-type/sb 1> /dev/null");
+    set_tfp("risc_v_sb.vcd");
+    reset();
+
+    n_clock_ticks(1); // addi
+    assert_reg(RiscVRegisters::a0, 0x12);
+
+    n_clock_ticks(1); // sb
+
+    n_clock_ticks(1); // lbu
+    assert_reg(RiscVRegisters::a1, 0x12);
+}
+
+// assumes addi is working.
+// assumes lhu is working.
+TEST_F(RiscVTest, SH) {
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/s-type/sh 1> /dev/null");
+    set_tfp("risc_v_sh.vcd");
+    reset();
+
+    n_clock_ticks(1); // addi
+    assert_reg(RiscVRegisters::a0, 0x0123);
+
+    n_clock_ticks(1); // sh
+
+    n_clock_ticks(1); // lhu
+    assert_reg(RiscVRegisters::a1, 0x0123);
+}
 
 TEST_F(RiscVTest, BEQ) {
     // read the instruction memory
