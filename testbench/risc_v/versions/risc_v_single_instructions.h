@@ -180,6 +180,20 @@ TEST_F(RiscVTest, LBU) {
 
 }
 
+TEST_F(RiscVTest, LHU) {
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lhu 1> /dev/null");
+    set_tfp("risc_v_lhu.vcd");
+    reset();
+
+    std::vector<uint32_t> expected_results = {0x0123, 0x2345, 0x4567, 0x6780, 
+                                              0x8081, 0x8182, 0x8283, 0x8300};
+    
+    for(int i = 0; i < 8; i++) {
+        n_clock_ticks(1); // LHU
+        assert_reg(RiscVRegisters::a0, expected_results[i]);
+    }
+
+}
 
 
 TEST_F(RiscVTest, BEQ) {
