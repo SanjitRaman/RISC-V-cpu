@@ -331,7 +331,7 @@ TEST_F(RiscVTest, AUIPC) {
     reset();
 
     n_clock_ticks(2);
-    assert_reg(RiscVRegisters::a1, 0x12618004);
+    assert_reg(RiscVRegisters::a1, 0x15318004); // BFC00004 + {0x557718, 12'b0}
     n_clock_ticks(1);
 }
 
