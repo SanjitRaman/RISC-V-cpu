@@ -4,7 +4,7 @@ addi t0, x0, 0
 # Loop condition
 loop:
     # Compare loop counter with a constant value
-    addi t1, x0, 40
+    addi t1, x0, 48
     beq t0, t1, loop_end
 
     # Loop body

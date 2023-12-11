@@ -451,7 +451,7 @@ TEST_F(RiscVTest, SLT) {
     set_tfp("risc_v_slt.vcd");
     reset();
     
-    std::vector<uint32_t> expected_results = {0,0,0,0,0,0};
+    std::vector<uint32_t> expected_results = {0,0,0,1,1,1};
     n_clock_ticks(1);
 
     for(int i = 0; i < 5; i++) {
