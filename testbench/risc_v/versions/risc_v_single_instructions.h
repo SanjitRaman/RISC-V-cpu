@@ -19,6 +19,12 @@ protected:
     const uint32_t simcyc = 10'000'000;
     uint32_t curr_cyc = 0;
 
+    void assert_reg(int reg, uint32_t value) {
+        top->address_to_view = reg;
+        top->eval();
+        EXPECT_EQ(top->reg_output, value);
+    }
+
     void assert_reg(RiscVRegisters reg, uint32_t value) {
         top->address_to_view = static_cast<uint32_t>(reg);
         top->eval();
@@ -331,33 +337,43 @@ TEST_F(RiscVTest, AUIPC) {
 
 TEST_F(RiscVTest, JALR) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/JALR");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/jalr");
     set_tfp("risc_v_jalr.vcd");
     reset();
 
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a0, 0xBCF00000);
+    assert_reg(RiscVRegisters::a0, 0xBFC00000); // check LUI worked
+
     n_clock_ticks(1);
-    assert_reg(top->pc_viewer, 0xBCF0000C);
-    assert_reg(RiscVRegisters::x1, 0xBCF00008);
+    assert_reg(1, 0xBFC00008); // check return address is slli
+
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a2, 0x00000001);
+    EXPECT_EQ(top->pc_viewer, 0xBFC0000C); // next cycle should go to addi
+
     n_clock_ticks(1);
-    assert_reg(top->pc_viewer, 0xBCF0000C);
+    assert_reg(RiscVRegisters::a2, 0x00000001); // check addi worked.
+    EXPECT_EQ(top->pc_viewer, 0xBFC00010);  // check we are at jalr instruction
+    assert_reg(RiscVRegisters::zero, 0x0); // check hardwire zero worked, ret shouldn't modify anything.
+    
     n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a1, 0xf3c00000);
+    EXPECT_EQ(top->pc_viewer, 0xBFC00008); // check we have returned to slli
+    
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a1, 0xFF000000); // check slli worked.
+
+    n_clock_ticks(5); // add some clock ticks for the waveforms.
 
 }
 
 TEST_F(RiscVTest, JAL) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/JAL");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/jal");
     set_tfp("risc_v_jal.vcd");
     reset();
 
     n_clock_ticks(1);
-    assert_reg(top->pc_viewer, 0xBCF00008);
-    assert_reg(RiscVRegisters::x1, 0xBCF00004 );
+    EXPECT_EQ(top->pc_viewer, 0xBFC00008);
+    assert_reg(1, 0xBFC00004);
     n_clock_ticks(1);
     assert_reg(RiscVRegisters::a2, 0x00000001);
     n_clock_ticks(1);
@@ -435,7 +451,7 @@ TEST_F(RiscVTest, SLT) {
     set_tfp("risc_v_slt.vcd");
     reset();
     
-    std::vector<uint32_t> expected_results = {};
+    std::vector<uint32_t> expected_results = {0,0,0,0,0,0};
     n_clock_ticks(1);
 
     for(int i = 0; i < 5; i++) {
