@@ -337,7 +337,7 @@ TEST_F(RiscVTest, AUIPC) {
 
 TEST_F(RiscVTest, JALR) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/jalr 1> /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/jalr 1> /dev/null");
     set_tfp("risc_v_jalr.vcd");
     reset();
 
