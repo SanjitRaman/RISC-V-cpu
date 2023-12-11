@@ -140,10 +140,25 @@ TEST_F(RiscVTest, LB) {
     reset();
 
     std::vector<uint32_t> expected_results = {0x01, 0x23, 0x45, 0x67, 
-                                         0xFFFFFF80, 0xFFFFFF81, 0xFFFFFF82, 0xFFFFFF83};
+                                              0xFFFFFF80, 0xFFFFFF81, 0xFFFFFF82, 0xFFFFFF83};
 
     for(int i = 0; i < 8; i++) {
         n_clock_ticks(1); // LB
+        assert_reg(RiscVRegisters::a0, expected_results[i]);
+    }
+
+}
+
+TEST_F(RiscVTest, LH) {
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lh 1> /dev/null");
+    set_tfp("risc_v_lh.vcd");
+    reset();
+
+    std::vector<uint32_t> expected_results = {0x0123, 0x2345, 0x4567, 0x6780, 
+                                              0xFFFF8081, 0xFFFF8182, 0xFFFF8283, 0xFFFF8300};
+    
+    for(int i = 0; i < 8; i++) {
+        n_clock_ticks(1); // LH
         assert_reg(RiscVRegisters::a0, expected_results[i]);
     }
 
