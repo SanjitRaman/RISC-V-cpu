@@ -1,9 +1,9 @@
 module data_mem_wrapper #(
     parameter DATA_WIDTH = 32,
-    parameter MEM_ADDRESS_WIDTH = 9,
+    parameter MEM_ADDRESS_WIDTH = 17,
     parameter FUNCT3_WIDTH = 3,
-    parameter BYTE_WIDTH   = 8
-
+    parameter BYTE_WIDTH   = 8,
+    parameter string MEM_FILE = "data_mem_wrapper.mem"
 )(
     input logic                  CLK,
     input logic [DATA_WIDTH-1:0] ALUResult,
@@ -20,11 +20,12 @@ module data_mem_wrapper #(
     data_mem  #(
         .DATA_WIDTH(DATA_WIDTH),
         .ADDRESS_WIDTH(MEM_ADDRESS_WIDTH),
-        .BYTE_WIDTH(BYTE_WIDTH)
+        .BYTE_WIDTH(BYTE_WIDTH),
+        .MEM_FILE (MEM_FILE)
     )
     data_mem (
         .CLK(CLK),
-        .A(ALUResult[8:0]),
+        .A(ALUResult[16:0]),
         .WD(WriteData),
         .WE0(WE0),
         .WE1(WE1),
