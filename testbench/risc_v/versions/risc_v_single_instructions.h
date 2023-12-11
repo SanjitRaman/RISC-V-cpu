@@ -112,7 +112,7 @@ protected:
 };
 
 TEST_F(RiscVTest, LW) {
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lw ? /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lw 1> /dev/null");
     set_tfp("risc_v_lw.vcd");
     reset();
 
@@ -124,7 +124,7 @@ TEST_F(RiscVTest, LW) {
 
 TEST_F(RiscVTest, ADDI) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/addi > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/addi 1> /dev/null");
     set_tfp("risc_v_addi.vcd");
     reset();
 
@@ -135,7 +135,7 @@ TEST_F(RiscVTest, ADDI) {
 
 TEST_F(RiscVTest, BEQ) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/beq > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/beq 1> /dev/null");
     set_tfp("risc_v_beq.vcd");
     reset();
 
@@ -165,7 +165,7 @@ TEST_F(RiscVTest, BEQ) {
 
 TEST_F(RiscVTest, BNE) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bne > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bne 1> /dev/null");
     set_tfp("risc_v_bne.vcd");
     reset();
 
@@ -195,7 +195,7 @@ TEST_F(RiscVTest, BNE) {
 
 TEST_F(RiscVTest, BGE) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bge > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bge 1> /dev/null");
     set_tfp("risc_v_bge.vcd");
     reset();
 
@@ -225,7 +225,7 @@ TEST_F(RiscVTest, BGE) {
 
 TEST_F(RiscVTest, BGEU) {
     // read the instruction memory
-    int reg = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bgeu > /dev/null");
+    int reg = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bgeu 1> /dev/null");
     set_tfp("risc_v_bgeu.vcd");
     reset();
 
@@ -255,7 +255,7 @@ TEST_F(RiscVTest, BGEU) {
 
 TEST_F(RiscVTest, BLT) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/blt > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/blt 1> /dev/null");
     set_tfp("risc_v_blt.vcd");
     reset();
 
@@ -285,7 +285,7 @@ TEST_F(RiscVTest, BLT) {
 
 TEST_F(RiscVTest, BLTU) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bltu > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/b-type/bltu 1> /dev/null");
     set_tfp("risc_v_bltu.vcd");
     reset();
 
@@ -315,7 +315,7 @@ TEST_F(RiscVTest, BLTU) {
 
 TEST_F(RiscVTest, LUI) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/u-type/lui > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/u-type/lui 1> /dev/null");
     set_tfp("risc_v_lui.vcd");
     reset();
 
@@ -326,7 +326,7 @@ TEST_F(RiscVTest, LUI) {
 
 TEST_F(RiscVTest, AUIPC) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/u-type/auipc > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/u-type/auipc 1> /dev/null");
     set_tfp("risc_v_auipc.vcd");
     reset();
 
@@ -337,7 +337,7 @@ TEST_F(RiscVTest, AUIPC) {
 
 TEST_F(RiscVTest, JALR) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/jalr > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/jalr 1> /dev/null");
     set_tfp("risc_v_jalr.vcd");
     reset();
 
@@ -367,7 +367,7 @@ TEST_F(RiscVTest, JALR) {
 
 TEST_F(RiscVTest, JAL) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/jal > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/j-type/jal 1> /dev/null");
     set_tfp("risc_v_jal.vcd");
     reset();
 
@@ -383,7 +383,7 @@ TEST_F(RiscVTest, JAL) {
 // We know that addi, lw works.
 TEST_F(RiscVTest, ADD) {
     // read the instruction memory
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/add > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/add 1> /dev/null");
     set_tfp("risc_v_add.vcd");
     reset();
 
@@ -414,7 +414,7 @@ TEST_F(RiscVTest, ADD) {
 }
 
 TEST_F(RiscVTest, SUB) {
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sub > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sub 1> /dev/null");
     set_tfp("risc_v_sub.vcd");
     reset();
     
@@ -432,7 +432,7 @@ TEST_F(RiscVTest, SUB) {
 }
 
 TEST_F(RiscVTest, SLL) {
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sll > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/sll 1> /dev/null");
     set_tfp("risc_v_sll.vcd");
     reset();
     
@@ -447,7 +447,7 @@ TEST_F(RiscVTest, SLL) {
 }
 
 TEST_F(RiscVTest, SLT) {
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/slt > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/slt 1> /dev/null");
     set_tfp("risc_v_slt.vcd");
     reset();
     
@@ -462,7 +462,7 @@ TEST_F(RiscVTest, SLT) {
 }
 
 TEST_F(RiscVTest, AND) {
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/and > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/and 1> /dev/null");
     set_tfp("risc_v_and.vcd");
     reset();
     std::vector<uint32_t> expected_results = {0xFFFFFFFF, 0x02244220, 0x8000821A, 0x04240002,
@@ -477,7 +477,7 @@ TEST_F(RiscVTest, AND) {
 }
 
 TEST_F(RiscVTest, OR) {
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/or > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/or 1> /dev/null");
     set_tfp("risc_v_or.vcd");
     reset();
     std::vector<uint32_t> expected_results = {0xFFFFFFFF, 0x736DF97D, 0xBF73AFF3, 0x3F3EF2B9, 0xFE7AFFFF, 0x8FB78CFE};
@@ -491,7 +491,7 @@ TEST_F(RiscVTest, OR) {
 }
 
 TEST_F(RiscVTest, XOR) {
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/xor > /dev/null");
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/r-type/xor 1> /dev/null");
     set_tfp("risc_v_xor.vcd");
     reset();
     std::vector<uint32_t> expected_results = {0x0, 0x95511559, 0x6433891B, 0x7B05859D, 0x87DF334E, 0xF4976244, 0xE0B20A37};
