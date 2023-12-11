@@ -123,16 +123,6 @@ TEST_F(RiscVTest, ADDI) {
     n_clock_ticks(1);
 }
 
-TEST_F(RiscVTest, LW) {
-    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lw 1> /dev/null");
-    set_tfp("risc_v_lw.vcd");
-    reset();
-
-    n_clock_ticks(1);
-    assert_reg(RiscVRegisters::a0, 0xFFFFFFFF);
-
-    n_clock_ticks(3);
-}
 
 TEST_F(RiscVTest, LB) {
     int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lb 1> /dev/null");
@@ -163,6 +153,34 @@ TEST_F(RiscVTest, LH) {
     }
 
 }
+
+TEST_F(RiscVTest, LW) {
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lw 1> /dev/null");
+    set_tfp("risc_v_lw.vcd");
+    reset();
+
+    n_clock_ticks(1);
+    assert_reg(RiscVRegisters::a0, 0xFFFFFFFF);
+
+    n_clock_ticks(3);
+}
+
+TEST_F(RiscVTest, LBU) {
+    int ret = system("make -C ../ assemble PROGRAM_NAME=single_instruction_tests/i-type/lbu 1> /dev/null");
+    set_tfp("risc_v_lbu.vcd");
+    reset();
+
+    std::vector<uint32_t> expected_results = {0x01, 0x23, 0x45, 0x67, 
+                                              0x80, 0x81, 0x82, 0x83};
+
+    for(int i = 0; i < 8; i++) {
+        n_clock_ticks(1); // LBU
+        assert_reg(RiscVRegisters::a0, expected_results[i]);
+    }
+
+}
+
+
 
 TEST_F(RiscVTest, BEQ) {
     // read the instruction memory
