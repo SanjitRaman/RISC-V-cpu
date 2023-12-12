@@ -129,8 +129,8 @@ TEST_F(RiscVTest, LB) {
     set_tfp("risc_v_lb.vcd");
     reset();
 
-    std::vector<uint32_t> expected_results = {0x01, 0x23, 0x45, 0x67, 
-                                              0xFFFFFF80, 0xFFFFFF81, 0xFFFFFF82, 0xFFFFFF83};
+    std::vector<uint32_t> expected_results = {0x67, 0x45, 0x23, 0x01,
+                                              0xFFFFFF83, 0xFFFFFF82, 0xFFFFFF81, 0xFFFFFF80};
 
     for(int i = 0; i < 8; i++) {
         n_clock_ticks(1); // LB
@@ -144,8 +144,8 @@ TEST_F(RiscVTest, LH) {
     set_tfp("risc_v_lh.vcd");
     reset();
 
-    std::vector<uint32_t> expected_results = {0x0123, 0x2345, 0x4567, 0x6780, 
-                                              0xFFFF8081, 0xFFFF8182, 0xFFFF8283, 0xFFFF8300};
+    std::vector<uint32_t> expected_results = {0x4567, 0x2345, 0x0123, 0xFFFF8301, 
+                                              0xFFFF8283, 0xFFFF8182, 0xFFFF8081, 0x00000080};
     
     for(int i = 0; i < 8; i++) {
         n_clock_ticks(1); // LH
@@ -170,8 +170,8 @@ TEST_F(RiscVTest, LBU) {
     set_tfp("risc_v_lbu.vcd");
     reset();
 
-    std::vector<uint32_t> expected_results = {0x01, 0x23, 0x45, 0x67, 
-                                              0x80, 0x81, 0x82, 0x83};
+    std::vector<uint32_t> expected_results = {0x67, 0x45, 0x23, 0x01, 
+                                              0x83, 0x82, 0x81, 0x80};
 
     for(int i = 0; i < 8; i++) {
         n_clock_ticks(1); // LBU
