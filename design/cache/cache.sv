@@ -1,9 +1,10 @@
 module cache #(
     parameter DATA_WIDTH = 32,
-    parameter TAG_WIDTH = 27,
-    parameter SET_ADDRESS_WIDTH = 3, 
-    parameter BYTE_WIDTH = 8
-
+    parameter SET_ADDRESS_WIDTH = 2, 
+    parameter BYTE_WIDTH = 8,
+    TAG_WIDTH = DATA_WIDTH - SET_ADDRESS_WIDTH - 2,
+    WAYS = 2,
+    CACHE_WIDTH = (2 + TAG_WIDTH + DATA_WIDTH) * WAYS
 ) (
     input logic CLK,
     input logic RST, 
@@ -17,28 +18,29 @@ module cache #(
     input logic [DATA_WIDTH-1:0] WD,
     
     output logic hit,
-    output logic WE0Cache,
+    output logic WECache, // merge into one signal that is used for all of them 
+    output logic WE0Cache, 
     output logic WE1Cache,
     output logic WE2Cache,
     output logic WE3Cache,
     output logic [DATA_WIDTH-1:0] ACache,
     output logic [DATA_WIDTH-1:0] WDCache,
-    output logic [DATA_WIDTH-1:0] RD,
+    output logic [DATA_WIDTH-1:0] RD
 
 );
 
-    int CACHE_WIDTH = (2 + TAG_WIDTH + DATA_WIDTH);
+    logic [SET_ADDRESS_WIDTH-1:0] set;
+    logic [TAG_WIDTH-1:0] tag;
+    assign tag = A[DATA_WIDTH-1:SET_ADDRESS_WIDTH+2];
+    assign set = A[SET_ADDRESS_WIDTH+1:2]; // 4 sets (2 bits)
 
     logic [CACHE_WIDTH-1:0] cache_array [2**SET_ADDRESS_WIDTH-1:0];
-    logic [SET_ADDRESS_WIDTH-1:0] set;
-    logic V;
-    logic D;
-    logic [TAG_WIDTH-1:0] tag;
-    logic [TAG_WIDTH-1:0] tagc;
-    logic [CACHE_WIDTH-1:0] CIN;
-
-assign tag = A[DATA_WIDTH-1:5]
-assign set = A[4:2]; // 8 sets (3 bits)
+    logic V0;
+    logic D0;
+    logic V1;
+    logic D1;
+    logic [TAG_WIDTH-1:0] tag0;
+    logic [TAG_WIDTH-1:0] tag1;
 
 
 always_ff @(posedge RST) begin
@@ -53,39 +55,48 @@ always_ff @(posedge RST) begin
 end
 
 always_ff @(posedge CLK) begin
-    tagc = cache_array[set][DATA_WIDTH+TAG_WIDTH-1:DATA_WIDTH];
-
-    if(MemRead) begin
-        RD <= cache_array[set][DATA_WIDTH-1:0];
-        hit <= (cache_array[set][CACHE_WIDTH-1] && (tag == tagc));
-    end
+    tag0 = cache_array[set][CACHE_WIDTH-3:CACHE_WIDTH-3-(TAG_WIDTH-1)];
+    tag1 = cache_array[set][DATA_WIDTH+TAG_WIDTH-1:DATA_WIDTH];
     
      if(MemWrite) begin
-        V = cache_array[set][CACHE_WIDTH-2]
-        D = cache_array[set][CACHE_WIDTH-1]
-        if(~V) begin
+        V0 = cache_array[set][CACHE_WIDTH-2];
+        D0 = cache_array[set][CACHE_WIDTH-1];
+        if(~V0) begin
             // Cache - {Dirty, Valid, Tag, Write data}
-            cache_array[set] <= {2'b11, tag, ({BYTE_WIDTH{WE3}} & WD[31:24]), ({BYTE_WIDTH{WE2}} & WD[23:16]), ({BYTE_WIDTH{WE1}} & WD[15:8]), ({BYTE_WIDTH{WE0}} & WD[7:0])};
-            WE0Cache <= 0;
-            WE1Cache <= 0;
-            WE2Cache <= 0;
-            WE3Cache <= 0;
+            cache_array[set] <= {2'b11, tag, 
+            ({BYTE_WIDTH{WE3}} & WD[31:24]), 
+            ({BYTE_WIDTH{WE2}} & WD[23:16]), 
+            ({BYTE_WIDTH{WE1}} & WD[15:8]), 
+            ({BYTE_WIDTH{WE0}} & WD[7:0]),
+            {(CACHE_WIDTH/2){1'b0}}
+            };
         end
         else begin
             WDCache <= cache_array[set][DATA_WIDTH-1:0];
-            ACache  <= {cache_array[set][tagc], set, 2'b00};
-            WE0Cache <= 1;
-            WE1Cache <= 1;
-            WE2Cache <= 1;
-            WE3Cache <= 1;
-            cache_array[set] <= {2'b11, tag, ({BYTE_WIDTH{WE3}} & WD[31:24]), ({BYTE_WIDTH{WE2}} & WD[23:16]), ({BYTE_WIDTH{WE1}} & WD[15:8]), ({BYTE_WIDTH{WE0}} & WD[7:0])};
+            ACache  <= {cache_array[set][tag1], set, 2'b00};
+            cache_array[set] <= ({2'b11, tag, 
+            ({BYTE_WIDTH{WE3}} & WD[31:24]), 
+            ({BYTE_WIDTH{WE2}} & WD[23:16]), 
+            ({BYTE_WIDTH{WE1}} & WD[15:8]), 
+            ({BYTE_WIDTH{WE0}} & WD[7:0]), 
+            {(CACHE_WIDTH/2){1'b0}}
+            }) | (cache_array[set]>>(CACHE_WIDTH/WAYS));
         end
+        WECache <= V0;
     end
+
+
+    if(MemRead) begin
+        RD <= cache_array[set][DATA_WIDTH-1:0];
+        hit <= (cache_array[set][CACHE_WIDTH-1] && (tag == tag0)); //UPDATE 
+    end
+
+
 end
 
 always_ff @(negedge CLK) begin
     if(MemRead) begin
-        A[set] <= {2'b01, tag, ({BYTE_WIDTH{WE3}} & WD[31:24]), ({BYTE_WIDTH{WE2}} & WD[23:16]), ({BYTE_WIDTH{WE1}} & WD[15:8]), ({BYTE_WIDTH{WE0}} & WD[7:0])};
+        cache_array[set] <= {2'b01, tag, ({BYTE_WIDTH{WE3}} & WD[31:24]), ({BYTE_WIDTH{WE2}} & WD[23:16]), ({BYTE_WIDTH{WE1}} & WD[15:8]), ({BYTE_WIDTH{WE0}} & WD[7:0])};
     end
 end
 
