@@ -13,5 +13,5 @@ will run a variety of test programs found in the `programs/` directory, by setti
 
   Results:
 
-  https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/2492e76d-793d-4d1b-a8fe-2ea2dc4fc37d
+https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/2492e76d-793d-4d1b-a8fe-2ea2dc4fc37d
 
