@@ -18,11 +18,7 @@ module cache #(
     input logic [DATA_WIDTH-1:0] WD,
     
     output logic hit,
-    output logic WECache, // merge into one signal that is used for all of them 
-    output logic WE0Cache, 
-    output logic WE1Cache,
-    output logic WE2Cache,
-    output logic WE3Cache,
+    output logic WECache, 
     output logic [DATA_WIDTH-1:0] ACache,
     output logic [DATA_WIDTH-1:0] WDCache,
     output logic [DATA_WIDTH-1:0] RD
@@ -49,10 +45,6 @@ module cache #(
 always_ff @(posedge RST) begin
     hit <= 0;
     WECache <= 0;
-    WE0Cache <= 0;
-    WE1Cache <= 0;
-    WE2Cache <= 0;
-    WE3Cache <= 0;
     ACache <= 0;
     WDCache <= 0;
     RD <= 0;

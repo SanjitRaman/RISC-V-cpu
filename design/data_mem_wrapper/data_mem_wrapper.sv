@@ -17,7 +17,7 @@ module data_mem_wrapper #(
     logic WE0, WE1, WE2, WE3;
     logic [DATA_WIDTH-1:0] RDMem, WD;
     logic hit;
-    logic WE0Cache, WE1Cache, WE2Cache, WE3Cache;
+    logic WECache;
     logic [DATA_WIDTH-1:0] ACache, RDCache, WDCache;
     logic [DATA_WIDTH-1:0] FoundData;
 
@@ -30,10 +30,10 @@ module data_mem_wrapper #(
         .CLK(CLK),
         .A(ACache),
         .WD(WDCache),
-        .WE0(WE0Cache),
-        .WE1(WE1Cache),
-        .WE2(WE2Cache),
-        .WE3(WE3Cache),
+        .WE0(WECache),
+        .WE1(WECache),
+        .WE2(WECache),
+        .WE3(WECache),
         .RD(RDMem)
     );
 
@@ -72,10 +72,7 @@ module data_mem_wrapper #(
         // outputs
         .RD(RDCache),
         .hit(hit),
-        .WE0Cache(WE0Cache),
-        .WE1Cache(WE1Cache),
-        .WE2Cache(WE2Cache),
-        .WE3Cache(WE3Cache),
+        .WECache(WECache),
         .ACache(ACache),
         .WDCache(WDCache)
     );
