@@ -1,7 +1,7 @@
 # Set the module or unit to run in this file.
 RUN = unit
-GTEST = 1
-VBUDDY=0
+GTEST = 0
+VBUDDY=1
 
 MODULE = reg_file
 MODULE.INCLUDE_DIRS = -y design/control_unit/decoders
@@ -17,7 +17,14 @@ UNIT.INCLUDE_DIRS = -y design/ \
 				-y design/reg_file              \
 				-y design/sign_extend           \
 				-y design/ld_decoder			\
-				-y design/we_decoder
+				-y design/we_decoder            \
+				-y design/reg_file_d            \
+				-y design/reg_file_e            \
+				-y design/reg_file_m            \
+				-y design/reg_file_w            \
+				-y design/hazard_unit           \
+				-y design/hazard_unit/subunits  \
+				-y design/flags
 
 
 NAME=""

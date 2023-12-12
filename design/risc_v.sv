@@ -2,104 +2,115 @@ module risc_v #(
     parameter                      DATA_WIDTH     = 32,
     parameter                      OP_WIDTH       = 7,
     parameter                      FUNCT3_WIDTH   = 3,
-    parameter                      REG_ADDR_WIDTH = 5,
+    parameter                      ADDRESS_WIDTH = 5,
     parameter                      IMM_SRC_WIDTH  = 3,
     parameter                      ALU_CTRL_WIDTH = 4,
-    parameter                      RES_SRC_WIDTH = 2
+    parameter                      RES_SRC_WIDTH = 2,
+    parameter                      FORWARD_WIDTH = 2
 )(
 // interface signals
-    input  logic                   CLK,      // clock 
-    input  logic                   RST,      // reset 
-    input  logic [REG_ADDR_WIDTH-1:0] address_to_view,
+    input  logic                   CLK, RST, 
+    input  logic [ADDRESS_WIDTH-1:0] address_to_view,
     output logic [DATA_WIDTH-1:0]  reg_output,
     output logic [DATA_WIDTH-1:0]  pc_viewer
 );
 
+// Hazard Unit
+    logic                          StallF, StallD;
+    logic                          FlushD, FlushE;
+    logic [FORWARD_WIDTH-1:0]      ForwardAE, ForwardBE;
+
 // PC
-    logic [DATA_WIDTH-1:0]         PC;
-    logic [DATA_WIDTH-1:0]         PCNext;
-    logic [DATA_WIDTH-1:0]         PCPlus4;
+    logic [DATA_WIDTH-1:0]         PCF, PCNextF, PCPlus4F;
 
 // Instruction Memory
-    //logic                        PC;
-    logic [DATA_WIDTH-1:0]         Instr;
+    logic [DATA_WIDTH-1:0]         InstrF;
 
-// Sign Extend
-    //logic [DATA_WIDTH-1:0]       Instr;
-    //logic [IMM_SRC_WIDTH:0]      ImmSrc;
-    logic [DATA_WIDTH-1:0]         ImmExt;
+// Reg File D
+    logic [DATA_WIDTH-1:0]         InstrD, PCD, PCPlus4D;
 
 // Control Unit
     logic [OP_WIDTH-1:0]           op;
-    logic [FUNCT3_WIDTH-1:0]       funct3;
-    logic                          funct7_5;
-    logic                          PCSrc;
-    logic [RES_SRC_WIDTH-1:0]      ResultSrc;
-    logic                          MemWrite;
-    logic [ALU_CTRL_WIDTH-1:0]     ALUControl;
-    logic                          ALUSrc;
-    logic [IMM_SRC_WIDTH-1:0]      ImmSrc;
-    logic                          RegWrite;
-    logic                          Jump;
-    logic                          Zero;
-    logic                          N;
-    logic                          C;
-    logic                          V;
+    logic [FUNCT3_WIDTH-1:0]       funct3D;
+    logic [RES_SRC_WIDTH-1:0]      ResultSrcD;
+    logic [ALU_CTRL_WIDTH-1:0]     ALUControlD;
+    logic [IMM_SRC_WIDTH-1:0]      ImmSrcD;
+    logic                          MemWriteD, ALUSrcD, RegWriteD, BranchD, JumpD;
+    logic                          funct7_5D;
+
+// Register File
+    logic [ADDRESS_WIDTH-1:0]     A1, A2, RdD;
+    logic [DATA_WIDTH-1:0]        RD1, RD2; 
+
+// Sign Extend
+    logic [DATA_WIDTH-1:0]         ImmExtD;
+
+// Reg File E
+    logic                          RegWriteE, MemWriteE, JumpE, BranchE, ALUSrcE;
+    logic [ALU_CTRL_WIDTH-1:0]     ALUControlE;
+    logic [RES_SRC_WIDTH-1:0]      ResultSrcE;
+    logic [DATA_WIDTH-1:0]         RD1E, RD2E, PCE, ImmExtE, PCPlus4E;
+    logic [ADDRESS_WIDTH-1:0]      Rs1E, Rs2E, RdE;
+    logic [FUNCT3_WIDTH-1:0]       funct3E;
+    logic [OP_WIDTH-1:0]           opE;
+
+    logic [DATA_WIDTH-1:0]         JumpMux;
+    logic [DATA_WIDTH-1:0]         WriteDataE;
+    logic [DATA_WIDTH-1:0]         PCTargetE;
+
+// flags
+    logic                          PCSrcE;
 
 // ALU
     logic [DATA_WIDTH-1:0]         SrcA;
     logic [DATA_WIDTH-1:0]         SrcB;
-    logic [DATA_WIDTH-1:0]         ALUResult;
-    //logic                          Zero;
-    //logic                          N;
-    //logic                          C;
-    //logic                          V;
+    logic [DATA_WIDTH-1:0]         ALUResultE;
+    logic                          Zero, N, C, V;
+    logic [DATA_WIDTH-1:0]         ResultW;
+
+// Reg File M 
+    logic                          RegWriteM, MemWriteM;
+    logic [RES_SRC_WIDTH-1:0]      ResultSrcM;
+    logic [DATA_WIDTH-1:0]         ALUResultM, WriteDataM, ReadDataM, PCPlus4M;
+    logic [ADDRESS_WIDTH-1:0]      RdM;
+    logic [FUNCT3_WIDTH-1:0]       funct3M;
 
 // Data Memory
-    //CLK
-    logic WE0;
-    logic WE1;
-    logic WE2;
-    logic WE3;
-    //logic [ADDRESS_WIDTH-1:0] ALUResult;
-    logic [DATA_WIDTH-1:0]   WriteData;
-    logic [DATA_WIDTH-1:0]   ReadData;
+    logic                          WE0, WE1, WE2, WE3;
+    logic [DATA_WIDTH-1:0]         ReadData;
 
-// Register File
-    //CLK
-    logic [REG_ADDR_WIDTH-1:0]     A1;
-    logic [REG_ADDR_WIDTH-1:0]     A2;
-    logic [REG_ADDR_WIDTH-1:0]     A3;
-    logic [DATA_WIDTH-1:0]         Result;
-    //logic [DATA_WIDTH-1:0]       SrcA;
-    //logic [DATA_WIDTH-1:0]       WriteData; RD2 output.
+// Reg File W 
+    logic                          RegWriteW;
+    logic [RES_SRC_WIDTH-1:0]      ResultSrcW;
+    logic [DATA_WIDTH-1:0]         ALUResultW, PCPlus4W, ReadDataW;
+    logic [ADDRESS_WIDTH-1:0]      RdW;
+    logic [FUNCT3_WIDTH-1:0]       funct3W;
 
-// WE decoder
-    //logic[FUNCT3_WIDTH-1:0] funct3;
-    //logic MemWrite;
-    //logic WE0;
-    //logic WE1;
-    //logic WE2;
-    //logic WE3;
+    assign PCNextF   = PCSrcE     ? PCTargetE  : PCPlus4F;
 
-//LD decoder
-    //logic ReadData;
-    //logic funct3;
-    logic [31:0] RDOut;
-
-// linking wires
-    logic [DATA_WIDTH-1:0]         PCTarget;
-    logic [DATA_WIDTH-1:0]         JumpMux;
-
-
-// extractions from Instruction
-    assign op         = Instr[6:0];
-    assign funct3     = Instr[14:12];
-    assign funct7_5   = Instr[30];
-    assign A1         = Instr[19:15];
-    assign A2         = Instr[24:20];
-    assign A3         = Instr[11:7];
-
+    hazard_unit #(
+        .ADDRESS_WIDTH(5),
+        .FORWARD_WIDTH(2)
+    ) 
+    risc_HazardUnit (
+        .Rs1D        (A1),
+        .Rs2D        (A2),
+        .RdE         (RdE),
+        .Rs1E        (Rs1E),
+        .Rs2E        (Rs2E),
+        .PCSrcE      (PCSrcE),
+        .ResultSrcE0 (ResultSrcE[0]),
+        .RdM         (RdM),
+        .RegWriteM   (RegWriteM),
+        .RdW         (RdW),
+        .RegWriteW   (RegWriteW),
+        .StallF      (StallF),
+        .StallD      (StallD),
+        .FlushD      (FlushD),
+        .FlushE      (FlushE),
+        .ForwardAE   (ForwardAE),
+        .ForwardBE   (ForwardBE)
+    );
 
     pc #(
         .DATA_WIDTH (32)
@@ -107,8 +118,9 @@ module risc_v #(
     riscPC (
         .CLK        (CLK),
         .RST        (RST),
-        .PCNext     (PCNext),
-        .PC         (PC)
+        .PCNext     (PCNextF),
+        .PC         (PCF),
+        .EN         (StallF)        
     );
 
     instr_mem #(
@@ -116,9 +128,35 @@ module risc_v #(
         .ADDRESS_WIDTH (32)
     )
     riscInstrMem (
-        .A          (PC),
-        .RD         (Instr)
+        .A          (PCF),
+        .RD         (InstrF)
     );
+
+    assign PCPlus4F  = PCF + 4;
+
+    reg_file_d #(
+        .DATA_WIDTH    (32)
+    )
+    risc_reg_file_d (
+        .CLK(CLK),
+        .CLR(FlushD), 
+        .EN (StallD),
+        .RD(InstrF),
+        .PCF(PCF),
+        .PCPlus4F(PCPlus4F),
+        
+        .InstrD(InstrD),
+        .PCD(PCD), 
+        .PCPlus4D(PCPlus4D)
+    );
+
+    // extractions from Instruction
+    assign op         = InstrD[6:0];
+    assign funct3D    = InstrD[14:12];
+    assign funct7_5D   = InstrD[30];
+    assign A1         = InstrD[19:15];
+    assign A2         = InstrD[24:20];
+    assign RdD         = InstrD[11:7];
 
     control_unit #(
         .OP_WIDTH       (7),
@@ -129,30 +167,16 @@ module risc_v #(
     )
     riscControlUnit (
         .op         (op),
-        .funct3     (funct3),
-        .funct7_5   (funct7_5),
-        .Zero       (Zero),
-        .PCSrc      (PCSrc),
-        .ResultSrc  (ResultSrc),
-        .MemWrite   (MemWrite),
-        .ALUControl (ALUControl),
-        .ALUSrc     (ALUSrc),
-        .ImmSrc     (ImmSrc),
-        .RegWrite   (RegWrite),
-        .Jump       (Jump),
-        .N          (N),
-        .C          (C),
-        .V          (V)
-    );
-
-    sign_extend # (
-        .DATA_WIDTH    (32),
-        .IMM_SRC_WIDTH (3)
-    )
-    riscSignExtend (
-        .Instr      (Instr),
-        .ImmSrc     (ImmSrc),
-        .ImmOp      (ImmExt)
+        .funct3     (funct3D),
+        .funct7_5   (funct7_5D),
+        .ResultSrc  (ResultSrcD),
+        .MemWrite   (MemWriteD),
+        .ALUControl (ALUControlD),
+        .ALUSrc     (ALUSrcD),
+        .ImmSrc     (ImmSrcD),
+        .RegWrite   (RegWriteD),
+        .Jump       (JumpD),
+        .Branch     (BranchD)
     );
 
     reg_file #(
@@ -163,13 +187,90 @@ module risc_v #(
         .CLK        (CLK),
         .A1         (A1),
         .A2         (A2),
-        .A3         (A3),
-        .WE3        (RegWrite),
-        .RD1        (SrcA),
-        .RD2        (WriteData),
-        .WD3        (Result),
-        .address_to_view(address_to_view),
+        .A3         (RdW), 
+        .WE3        (RegWriteW), 
+        .RD1        (RD1),
+        .RD2        (RD2),
+        .WD3        (ResultW),
+        .address_to_view (address_to_view),
         .reg_output (reg_output)
+    );
+
+    sign_extend # (
+        .DATA_WIDTH    (32),
+        .IMM_SRC_WIDTH (3)
+    )
+    riscSignExtend (
+        .Instr      (InstrD),
+        .ImmSrc     (ImmSrcD),
+        .ImmOp      (ImmExtD)
+    );
+
+    reg_file_e #(
+        .ADDRESS_WIDTH (5),
+        .DATA_WIDTH    (32),
+        .ALU_CTRL_WIDTH (4),
+        .OP_WIDTH       (7)
+    )
+    reg_file_e (
+        .CLK(CLK),
+        .CLR(FlushE), 
+        .RegWriteD(RegWriteD),
+        .ResultSrcD(ResultSrcD), 
+        .MemWriteD(MemWriteD), 
+        .JumpD(JumpD), 
+        .BranchD(BranchD), 
+        .ALUControlD(ALUControlD), 
+        .ALUSrcD(ALUSrcD),
+        .RD1(RD1), 
+        .RD2(RD2),
+        .PCD(PCD), 
+        .Rs1D(A1), 
+        .Rs2D(A2),
+        .RdD(RdD),
+        .ImmExtD(ImmExtD),
+        .PCPlus4D(PCPlus4D), 
+        .funct3D(funct3D),
+        .opD(op),
+
+        .RegWriteE(RegWriteE),
+        .ResultSrcE(ResultSrcE),
+        .MemWriteE(MemWriteE), 
+        .JumpE(JumpE), 
+        .BranchE(BranchE), 
+        .ALUControlE(ALUControlE), 
+        .ALUSrcE(ALUSrcE), 
+        .RD1E(RD1E), 
+        .RD2E(RD2E),
+        .PCE(PCE), 
+        .Rs1E(Rs1E), 
+        .Rs2E(Rs2E),
+        .RdE(RdE),
+        .ImmExtE(ImmExtE),
+        .PCPlus4E(PCPlus4E),
+        .funct3E(funct3E),
+        .opE(opE)
+    );
+
+    assign SrcA = ForwardAE[1] ? ALUResultM : (ForwardAE[0] ? ResultW : RD1E);
+    assign WriteDataE = ForwardBE[1] ? ALUResultM : (ForwardBE[0] ? ResultW : RD2E);
+    assign SrcB     = ALUSrcE ? ImmExtE : WriteDataE; 
+    assign JumpMux  = JumpE      ? RD1E : PCE;
+    assign PCTargetE = JumpMux + ImmExtE;
+
+    flags #(
+        .OP_WIDTH     (7),
+        .FUNCT3_WIDTH (3)
+    ) 
+    riscflags (
+        .op (opE),
+        .funct3 (funct3E),
+        .Zero(Zero),
+        .N(N),
+        .C(C),
+        .V(V),
+        .Branch(BranchE),
+        .PCSrc(PCSrcE)
     );
 
     alu #(
@@ -179,12 +280,46 @@ module risc_v #(
     riscALU (
         .SrcA        (SrcA),
         .SrcB        (SrcB),
-        .ALUControl  (ALUControl),
-        .ALUResult   (ALUResult),
+        .ALUControl  (ALUControlE),
+        .ALUResult   (ALUResultE),
         .Zero        (Zero),
         .N           (N),
         .C           (C),
         .V           (V)
+    );
+
+    reg_file_m #(
+        .ADDRESS_WIDTH (5),
+        .DATA_WIDTH    (32)
+    )
+    reg_file_m (
+        .CLK(CLK),
+        .RegWriteE(RegWriteE),
+        .ResultSrcE(ResultSrcE),
+        .MemWriteE(MemWriteE),
+        .ALUResultE(ALUResultE),
+        .WriteDataE(WriteDataE), 
+        .RdE(RdE),
+        .PCPlus4E(PCPlus4E),
+        .funct3E(funct3E),
+
+        .RegWriteM(RegWriteM),
+        .ResultSrcM(ResultSrcM),
+        .MemWriteM(MemWriteM),
+        .ALUResultM(ALUResultM),
+        .WriteDataM(WriteDataM),
+        .RdM(RdM),
+        .PCPlus4M(PCPlus4M),
+        .funct3M(funct3M)
+    );
+
+    we_decoder riscWe_decoder (
+        .funct3(funct3M),
+        .MemWrite(MemWriteM),
+        .WE0 (WE0),
+        .WE1 (WE1),
+        .WE2 (WE2),
+        .WE3 (WE3)
     );
 
     data_mem #(
@@ -194,8 +329,8 @@ module risc_v #(
     )
     riscDataMem (
         .CLK         (CLK),
-        .A           (ALUResult[16:0]),
-        .WD          (WriteData),
+        .A           (ALUResultM[16:0]),
+        .WD          (WriteDataM),
         .RD          (ReadData),
         .WE0         (WE0),
         .WE1         (WE1),
@@ -203,33 +338,39 @@ module risc_v #(
         .WE3         (WE3)
     );
 
-    we_decoder riscWe_decoder (
-        .funct3(funct3),
-        .MemWrite(MemWrite),
-        .WE0 (WE0),
-        .WE1 (WE1),
-        .WE2 (WE2),
-        .WE3 (WE3)
-    );
     ld_decoder #(
         .DATA_WIDTH(32)
     )
     riscLd_decoder(
         .RD (ReadData),
-        .funct3 (funct3),
-        .RDOut (RDOut)
+        .funct3 (funct3M),
+        .RDOut (ReadDataM)
     );
 
-// MUXs
-    assign SrcB     = ALUSrc    ? ImmExt   : WriteData;
-    assign Result   = ResultSrc[1] ? (ResultSrc[0] ? PCPlus4 : PCTarget)  : (ResultSrc[0] ? RDOut : ALUResult);
-    assign PCNext   = PCSrc     ? PCTarget  : PCPlus4;
-    assign JumpMux  = Jump      ? SrcA : PC;
+    reg_file_w #(
+        .ADDRESS_WIDTH (5),
+        .DATA_WIDTH    (32)
+    )
+    reg_file_w (
+        .CLK(CLK),
+        .RegWriteM(RegWriteM),
+        .ResultSrcM(ResultSrcM),
+        .ALUResultM(ALUResultM),
+        .RD(ReadDataM),
+        .RdM(RdM),
+        .PCPlus4M(PCPlus4M),
+        .funct3M(funct3M),
 
-// Adders
-    assign PCTarget = JumpMux + ImmExt;
-    assign PCPlus4  = PC + 4;
+        .RegWriteW(RegWriteW),
+        .ResultSrcW(ResultSrcW),
+        .ALUResultW(ALUResultW),
+        .ReadDataW(ReadDataW),
+        .RdW(RdW),
+        .PCPlus4W(PCPlus4W),
+        .funct3W(funct3W)
+    );
 
-    assign pc_viewer = PC;
-
+    assign ResultW  = ResultSrcW[1] ? PCPlus4W : (ResultSrcW[0] ? ReadDataW : ALUResultW);
+    
+    assign pc_viewer = PCF;
 endmodule

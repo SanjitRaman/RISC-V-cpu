@@ -1,7 +1,7 @@
-#define VBUDDY false
+#define VBUDDY true
 #define MAX_SIM_CYC 1'000'000
-#define PROGRAM_NAME "counter"
-#define DATASET "Triangle"
+#define PROGRAM_NAME "pdf"
+#define DATASET "Gaussian"
 
 #include "verilated.h"
 #include "verilated_vcd_c.h"
@@ -15,7 +15,7 @@ int main(int argc, char **argv, char **env) {
     int tick;       // each CLK cycle has two ticks for two edges
 
     Verilated::commandArgs(argc, argv);
-    std::string command = std::string("make -C .. / assemble PROGRAM_NAME=");
+    std::string command = std::string("make -C ../ assemble PROGRAM_NAME=");
     command.append(std::string(PROGRAM_NAME));
     command.append(std::string(" VBUDDY="));
     command.append(std::string(VBUDDY ? "1" : "0"));
@@ -27,8 +27,7 @@ int main(int argc, char **argv, char **env) {
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace (tfp, 99);
-    tfp->open ("risc_v.vcd");
-    top->address_to_view = 10;
+    tfp->open ("risc_v_pdf.vcd");
 
     if(VBUDDY) {
         if(vbdOpen() != 1) return -1;
@@ -46,6 +45,7 @@ int main(int argc, char **argv, char **env) {
     // initialize simulation inputs
     top->CLK = 1;
     top->RST = 1;
+    top->address_to_view = 10;
 
     bool started = false;
 

@@ -1,8 +1,8 @@
 module data_mem #(
     parameter ADDRESS_WIDTH = 17,
     parameter DATA_WIDTH    = 32,
-    parameter BYTE_WIDTH    = 8,
-    parameter string MEM_FILE = "data_mem.mem"
+    parameter BYTE_WIDTH    = 8
+
 )(
     input  logic                     CLK,
     input  logic                     WE0,
@@ -18,7 +18,7 @@ module data_mem #(
 
 initial begin
     $display("Loading ram.");
-    $readmemh(MEM_FILE, ram_array, 32'h10000);
+    $readmemh("data_mem.mem", ram_array, 32'h10000);
 end;
 // TODO: check if writing in between words is allowed.
 always_ff @(posedge CLK) begin
@@ -34,8 +34,7 @@ always_ff @(posedge CLK) begin
     if (WE3 == 1'b1)
         ram_array[A+3] <= WD[31:24];
 end
-
-
+    
 assign RD = {ram_array[A+3], ram_array[A+2], ram_array[A+1], ram_array[A]};
 
 endmodule
