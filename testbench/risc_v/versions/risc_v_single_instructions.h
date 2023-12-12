@@ -236,7 +236,7 @@ TEST_F(RiscVTest, BEQ) {
     reset();
 
     // check lw worked
-    n_clock_ticks(1);
+    n_clock_ticks(2);
     assert_reg(RiscVRegisters::a1, 1);
 
     // check the second lw
@@ -245,7 +245,7 @@ TEST_F(RiscVTest, BEQ) {
     
     //check the beq not taken
     n_clock_ticks(1);
-    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    ASSERT_EQ(top->pc_viewer, 0xBFC00010);
     
     // check next lw
     n_clock_ticks(1);
@@ -255,7 +255,7 @@ TEST_F(RiscVTest, BEQ) {
 
     // check the beq taken.
     n_clock_ticks(1); // do the beq
-    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    ASSERT_EQ(top->pc_viewer, 0xBFC00010);
     n_clock_ticks(1);
 }
 
@@ -266,7 +266,7 @@ TEST_F(RiscVTest, BNE) {
     reset();
 
     // check lw worked
-    n_clock_ticks(1);
+    n_clock_ticks(2);
     assert_reg(RiscVRegisters::a1, 1);
 
     // check the second lw
@@ -275,7 +275,7 @@ TEST_F(RiscVTest, BNE) {
     
     //check the bne not taken
     n_clock_ticks(1);
-    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    ASSERT_EQ(top->pc_viewer, 0xBFC00010);
     
     // check next lw
     n_clock_ticks(1);
@@ -285,7 +285,7 @@ TEST_F(RiscVTest, BNE) {
 
     // check the bne taken.
     n_clock_ticks(1); // do the bne
-    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    ASSERT_EQ(top->pc_viewer, 0xBFC00010);
     n_clock_ticks(1);
 }
 
@@ -296,7 +296,7 @@ TEST_F(RiscVTest, BGE) {
     reset();
 
     // check lw worked
-    n_clock_ticks(1);
+    n_clock_ticks(2);
     assert_reg(RiscVRegisters::a1, 1);
 
     // check the second lw
@@ -305,7 +305,7 @@ TEST_F(RiscVTest, BGE) {
     
     //check the bge not taken
     n_clock_ticks(1);
-    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    ASSERT_EQ(top->pc_viewer, 0xBFC00010);
     
     // check next lw
     n_clock_ticks(1);
@@ -315,7 +315,7 @@ TEST_F(RiscVTest, BGE) {
 
     // check the bge taken.
     n_clock_ticks(1); // do the bge
-    ASSERT_EQ(top->pc_viewer, 0xBFC0000C);
+    ASSERT_EQ(top->pc_viewer, 0xBFC00010);
     n_clock_ticks(1);
 }
 
