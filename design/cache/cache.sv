@@ -45,6 +45,7 @@ module cache #(
 
 always_ff @(posedge RST) begin
     hit <= 0;
+    WECache <= 0;
     WE0Cache <= 0;
     WE1Cache <= 0;
     WE2Cache <= 0;
@@ -60,7 +61,7 @@ always_ff @(posedge CLK) begin
     
      if(MemWrite) begin
         V0 = cache_array[set][CACHE_WIDTH-2];
-        D0 = cache_array[set][CACHE_WIDTH-1];
+        D1 = cache_array[set][(CACHE_WIDTH/2)-1];
         if(~V0) begin
             // Cache - {Dirty, Valid, Tag, Write data}
             cache_array[set] <= {2'b11, tag, 
@@ -70,19 +71,23 @@ always_ff @(posedge CLK) begin
             ({BYTE_WIDTH{WE0}} & WD[7:0]),
             {(CACHE_WIDTH/2){1'b0}}
             };
+            WECache <= 0;
         end
         else begin
             WDCache <= cache_array[set][DATA_WIDTH-1:0];
             ACache  <= {cache_array[set][tag1], set, 2'b00};
+            WECache <= D1;
+
             cache_array[set] <= ({2'b11, tag, 
-            ({BYTE_WIDTH{WE3}} & WD[31:24]), 
-            ({BYTE_WIDTH{WE2}} & WD[23:16]), 
-            ({BYTE_WIDTH{WE1}} & WD[15:8]), 
-            ({BYTE_WIDTH{WE0}} & WD[7:0]), 
-            {(CACHE_WIDTH/2){1'b0}}
-            }) | (cache_array[set]>>(CACHE_WIDTH/WAYS));
+                                ({BYTE_WIDTH{WE3}} & WD[31:24]), 
+                                ({BYTE_WIDTH{WE2}} & WD[23:16]), 
+                                ({BYTE_WIDTH{WE1}} & WD[15:8]), 
+                                ({BYTE_WIDTH{WE0}} & WD[7:0]), 
+                                {(CACHE_WIDTH/2){1'b0}}
+                                }) 
+                                | (cache_array[set]>>(CACHE_WIDTH/WAYS));
+
         end
-        WECache <= V0;
     end
 
 
@@ -96,7 +101,11 @@ end
 
 always_ff @(negedge CLK) begin
     if(MemRead) begin
-        cache_array[set] <= {2'b01, tag, ({BYTE_WIDTH{WE3}} & WD[31:24]), ({BYTE_WIDTH{WE2}} & WD[23:16]), ({BYTE_WIDTH{WE1}} & WD[15:8]), ({BYTE_WIDTH{WE0}} & WD[7:0])};
+        cache_array[set] <= {2'b01, tag, 
+        ({BYTE_WIDTH{WE3}} & WD[31:24]), 
+        ({BYTE_WIDTH{WE2}} & WD[23:16]), 
+        ({BYTE_WIDTH{WE1}} & WD[15:8]), 
+        ({BYTE_WIDTH{WE0}} & WD[7:0])};
     end
 end
 
