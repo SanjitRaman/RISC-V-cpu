@@ -132,7 +132,9 @@ TEST_F(RiscVTest, LB) {
     std::vector<uint32_t> expected_results = {0x67, 0x45, 0x23, 0x01,
                                               0xFFFFFF83, 0xFFFFFF82, 0xFFFFFF81, 0xFFFFFF80};
 
+    n_clock_ticks(1);
     for(int i = 0; i < 8; i++) {
+        std::cout << i << std::endl;
         n_clock_ticks(1); // LB
         assert_reg(RiscVRegisters::a0, expected_results[i]);
     }
@@ -146,7 +148,7 @@ TEST_F(RiscVTest, LH) {
 
     std::vector<uint32_t> expected_results = {0x4567, 0x2345, 0x0123, 0xFFFF8301, 
                                               0xFFFF8283, 0xFFFF8182, 0xFFFF8081, 0x00000080};
-    
+    n_clock_ticks(1);
     for(int i = 0; i < 8; i++) {
         n_clock_ticks(1); // LH
         assert_reg(RiscVRegisters::a0, expected_results[i]);
@@ -159,7 +161,7 @@ TEST_F(RiscVTest, LW) {
     set_tfp("risc_v_lw.vcd");
     reset();
 
-    n_clock_ticks(1);
+    n_clock_ticks(2);
     assert_reg(RiscVRegisters::a0, 0xFFFFFFFF);
 
     n_clock_ticks(3);
@@ -172,7 +174,7 @@ TEST_F(RiscVTest, LBU) {
 
     std::vector<uint32_t> expected_results = {0x67, 0x45, 0x23, 0x01, 
                                               0x83, 0x82, 0x81, 0x80};
-
+    n_clock_ticks(1);
     for(int i = 0; i < 8; i++) {
         n_clock_ticks(1); // LBU
         assert_reg(RiscVRegisters::a0, expected_results[i]);
@@ -187,7 +189,7 @@ TEST_F(RiscVTest, LHU) {
 
     std::vector<uint32_t> expected_results = {0x4567, 0x2345, 0x0123, 0x8301, 
                                               0x8283, 0x8182, 0x8081, 0x0080};
-    
+    n_clock_ticks(1);
     for(int i = 0; i < 8; i++) {
         n_clock_ticks(1); // LHU
         assert_reg(RiscVRegisters::a0, expected_results[i]);
