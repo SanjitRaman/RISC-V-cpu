@@ -62,9 +62,37 @@ always_ff @(posedge CLK) begin
     tag0 = cache_array[set][CACHE_WIDTH-3:CACHE_WIDTH-3-(TAG_WIDTH-1)];
     tag1 = cache_array[set][DATA_WIDTH+TAG_WIDTH-1:DATA_WIDTH];
     
-     if(MemWrite) begin
+    if(MemRead) begin
+        hit0 = (cache_array[set][CACHE_WIDTH-2] && (tag == tag0));
+        hit1 = (cache_array[set][(CACHE_WIDTH/2)-2] && (tag == tag0));
+        RD <= hit1 ? cache_array[set][(CACHE_WIDTH/2)+(DATA_WIDTH-1):CACHE_WIDTH/2] : cache_array[set][DATA_WIDTH-1:0];
+        hit <= hit0 | hit1;
+    end
+
+end
+
+always_ff @(negedge CLK) begin
+    tag0 = cache_array[set][CACHE_WIDTH-3:CACHE_WIDTH-3-(TAG_WIDTH-1)];
+    tag1 = cache_array[set][DATA_WIDTH+TAG_WIDTH-1:DATA_WIDTH];
+    D1 = cache_array[set][(CACHE_WIDTH/2)-1];
+
+    if(MemRead & ~hit) begin
+        WDCache <= cache_array[set][DATA_WIDTH-1:0];
+        ACache  <= {cache_array[set][tag1], set, 2'b00};
+        WECache <= D1;
+        cache_array[set] <= ({2'b01, tag, 
+                                ({BYTE_WIDTH{WE3}} & WD[31:24]), 
+                                ({BYTE_WIDTH{WE2}} & WD[23:16]), 
+                                ({BYTE_WIDTH{WE1}} & WD[15:8]), 
+                                ({BYTE_WIDTH{WE0}} & WD[7:0]), 
+                                {(CACHE_WIDTH/2){1'b0}}
+                                }) 
+                                | (cache_array[set]>>(CACHE_WIDTH/WAYS));
+        
+    end
+
+    if(MemWrite) begin
         V0 = cache_array[set][CACHE_WIDTH-2];
-        D1 = cache_array[set][(CACHE_WIDTH/2)-1];
         if(~V0) begin
             // Cache - {Dirty, Valid, Tag, Write data}
             cache_array[set] <= {2'b11, tag, 
@@ -93,33 +121,6 @@ always_ff @(posedge CLK) begin
         end
     end
 
-
-    if(MemRead) begin
-        hit0 = (cache_array[set][CACHE_WIDTH-2] && (tag == tag0));
-        hit1 = (cache_array[set][(CACHE_WIDTH/2)-2] && (tag == tag0));
-        RD <= hit1 ? cache_array[set][(CACHE_WIDTH/2)+(DATA_WIDTH-1):CACHE_WIDTH/2] : cache_array[set][DATA_WIDTH-1:0];
-        hit = hit0 | hit1;
-    end
-
-
-end
-
-always_ff @(negedge CLK) begin
-    if(MemRead & ~hit) begin
-        D1 = cache_array[set][(CACHE_WIDTH/2)-1];
-        WDCache <= cache_array[set][DATA_WIDTH-1:0];
-        ACache  <= {cache_array[set][tag1], set, 2'b00};
-        WECache <= D1;
-        cache_array[set] <= ({2'b01, tag, 
-                                ({BYTE_WIDTH{WE3}} & WD[31:24]), 
-                                ({BYTE_WIDTH{WE2}} & WD[23:16]), 
-                                ({BYTE_WIDTH{WE1}} & WD[15:8]), 
-                                ({BYTE_WIDTH{WE0}} & WD[7:0]), 
-                                {(CACHE_WIDTH/2){1'b0}}
-                                }) 
-                                | (cache_array[set]>>(CACHE_WIDTH/WAYS));
-        
-    end
 end
 
 endmodule
