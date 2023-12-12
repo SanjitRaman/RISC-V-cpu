@@ -11,5 +11,7 @@ will run a variety of test programs found in the `programs/` directory, by setti
     
 - `PROGRAM_NAME=counter` will run a program that increments the value in register `a0` until 255, and then resets to 0, and repeats. The value in `a0` is displayed on the TFT display.
 
-    Results:
+  Results:
+
+  https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/2492e76d-793d-4d1b-a8fe-2ea2dc4fc37d
 
