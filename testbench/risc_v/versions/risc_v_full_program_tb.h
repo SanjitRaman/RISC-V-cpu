@@ -1,6 +1,6 @@
 #define VBUDDY true
 #define MAX_SIM_CYC 1'000'000
-#define PROGRAM_NAME "pdf"
+#define PROGRAM_NAME "sinegen"
 #define DATASET "Gaussian"
 
 #include "verilated.h"
@@ -66,7 +66,7 @@ int main(int argc, char **argv, char **env) {
                 vbdCycle(simcyc);
             }
             else if (PROGRAM_NAME == "pdf") {
-                if(!started && top->pc_viewer == 0xBFC00058)    {
+                if(!started && top->pc_viewer == 0x60)    {
                     started = true;
                 }
                 else if (started) {

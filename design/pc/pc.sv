@@ -9,7 +9,7 @@ module pc #(
 );
 
     always_ff @ (posedge CLK, negedge RST) begin
-        if (RST) PC <= 32'hBFC00000;
+        if (RST) PC <= 32'h0;
         else if (!EN) PC <= PCNext;
     end
 endmodule
