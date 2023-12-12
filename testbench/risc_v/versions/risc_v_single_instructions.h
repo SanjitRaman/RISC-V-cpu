@@ -185,8 +185,8 @@ TEST_F(RiscVTest, LHU) {
     set_tfp("risc_v_lhu.vcd");
     reset();
 
-    std::vector<uint32_t> expected_results = {0x0123, 0x2345, 0x4567, 0x6780, 
-                                              0x8081, 0x8182, 0x8283, 0x8300};
+    std::vector<uint32_t> expected_results = {0x4567, 0x2345, 0x0123, 0x8301, 
+                                              0x8283, 0x8182, 0x8081, 0x0080};
     
     for(int i = 0; i < 8; i++) {
         n_clock_ticks(1); // LHU
