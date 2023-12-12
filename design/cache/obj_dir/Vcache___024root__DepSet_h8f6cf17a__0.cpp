@@ -34,10 +34,10 @@ VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__1(Vcache___024root* vlSe
     vlSelf->WE0Cache = 0U;
 }
 
-VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__4(Vcache___024root* vlSelf) {
+VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__3(Vcache___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vcache__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vcache___024root___nba_sequent__TOP__4\n"); );
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vcache___024root___nba_sequent__TOP__3\n"); );
     // Body
     if (vlSelf->MemRead) {
         vlSelf->__Vdlyvval__cache__DOT__cache_array__v2[0U] 
@@ -91,29 +91,30 @@ VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__4(Vcache___024root* vlSe
     }
 }
 
-VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__5(Vcache___024root* vlSelf) {
+VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__4(Vcache___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vcache__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vcache___024root___nba_sequent__TOP__5\n"); );
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vcache___024root___nba_sequent__TOP__4\n"); );
     // Body
     vlSelf->RD = 0U;
     vlSelf->WDCache = 0U;
     vlSelf->ACache = 0U;
+    vlSelf->WECache = 0U;
     vlSelf->hit = 0U;
 }
 
-VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__6(Vcache___024root* vlSelf) {
+VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__5(Vcache___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vcache__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vcache___024root___nba_sequent__TOP__6\n"); );
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vcache___024root___nba_sequent__TOP__5\n"); );
     // Init
     IData/*27:0*/ cache__DOT__tag0;
     cache__DOT__tag0 = 0;
     IData/*27:0*/ cache__DOT__tag1;
     cache__DOT__tag1 = 0;
-    VlWide<4>/*127:0*/ __Vtemp_5;
-    VlWide<4>/*127:0*/ __Vtemp_10;
+    VlWide<4>/*127:0*/ __Vtemp_6;
     VlWide<4>/*127:0*/ __Vtemp_11;
+    VlWide<4>/*127:0*/ __Vtemp_12;
     // Body
     cache__DOT__tag0 = (0xfffffffU & ((vlSelf->cache__DOT__cache_array
                                        [(3U & (vlSelf->A 
@@ -130,37 +131,42 @@ VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__6(Vcache___024root* vlSe
                                         [(3U & (vlSelf->A 
                                                 >> 2U))][3U] 
                                         >> 0x1aU));
+        vlSelf->cache__DOT__D1 = (1U & (vlSelf->cache__DOT__cache_array
+                                        [(3U & (vlSelf->A 
+                                                >> 2U))][1U] 
+                                        >> 0x1dU));
         if (vlSelf->cache__DOT__V0) {
             vlSelf->WDCache = vlSelf->cache__DOT__cache_array
                 [(3U & (vlSelf->A >> 2U))][0U];
-            __Vtemp_5[0U] = vlSelf->cache__DOT__cache_array
+            vlSelf->WECache = vlSelf->cache__DOT__D1;
+            __Vtemp_6[0U] = vlSelf->cache__DOT__cache_array
                 [(3U & (vlSelf->A >> 2U))][0U];
-            __Vtemp_5[1U] = vlSelf->cache__DOT__cache_array
+            __Vtemp_6[1U] = vlSelf->cache__DOT__cache_array
                 [(3U & (vlSelf->A >> 2U))][1U];
-            __Vtemp_5[2U] = vlSelf->cache__DOT__cache_array
+            __Vtemp_6[2U] = vlSelf->cache__DOT__cache_array
                 [(3U & (vlSelf->A >> 2U))][2U];
-            __Vtemp_5[3U] = vlSelf->cache__DOT__cache_array
+            __Vtemp_6[3U] = vlSelf->cache__DOT__cache_array
                 [(3U & (vlSelf->A >> 2U))][3U];
             vlSelf->ACache = ((((0x7bU >= (0x7fU & cache__DOT__tag1)) 
-                                & (__Vtemp_5[(3U & 
+                                & (__Vtemp_6[(3U & 
                                               (cache__DOT__tag1 
                                                >> 5U))] 
                                    >> (0x1fU & cache__DOT__tag1))) 
                                << 4U) | (0xcU & vlSelf->A));
-            __Vtemp_10[0U] = vlSelf->cache__DOT__cache_array
+            __Vtemp_11[0U] = vlSelf->cache__DOT__cache_array
                 [(3U & (vlSelf->A >> 2U))][0U];
-            __Vtemp_10[1U] = vlSelf->cache__DOT__cache_array
+            __Vtemp_11[1U] = vlSelf->cache__DOT__cache_array
                 [(3U & (vlSelf->A >> 2U))][1U];
-            __Vtemp_10[2U] = vlSelf->cache__DOT__cache_array
+            __Vtemp_11[2U] = vlSelf->cache__DOT__cache_array
                 [(3U & (vlSelf->A >> 2U))][2U];
-            __Vtemp_10[3U] = vlSelf->cache__DOT__cache_array
+            __Vtemp_11[3U] = vlSelf->cache__DOT__cache_array
                 [(3U & (vlSelf->A >> 2U))][3U];
-            VL_SHIFTR_WWI(124,124,32, __Vtemp_11, __Vtemp_10, 0x3eU);
+            VL_SHIFTR_WWI(124,124,32, __Vtemp_12, __Vtemp_11, 0x3eU);
             vlSelf->__Vdlyvval__cache__DOT__cache_array__v0[0U] 
-                = __Vtemp_11[0U];
+                = __Vtemp_12[0U];
             vlSelf->__Vdlyvval__cache__DOT__cache_array__v0[1U] 
                 = ((((- (IData)((IData)(vlSelf->WE0))) 
-                     & vlSelf->WD) << 0x1eU) | __Vtemp_11[1U]);
+                     & vlSelf->WD) << 0x1eU) | __Vtemp_12[1U]);
             vlSelf->__Vdlyvval__cache__DOT__cache_array__v0[2U] 
                 = (((0xc0000000U & (vlSelf->A << 0x1aU)) 
                     | (0x3fffffffU & ((0x3fc00000U 
@@ -182,16 +188,15 @@ VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__6(Vcache___024root* vlSe
                                                & (((- (IData)((IData)(vlSelf->WE0))) 
                                                    & vlSelf->WD) 
                                                   >> 2U))))))) 
-                   | __Vtemp_11[2U]);
+                   | __Vtemp_12[2U]);
             vlSelf->__Vdlyvval__cache__DOT__cache_array__v0[3U] 
                 = (0xfffffffU & (0xc000000U | ((0x3fffffffU 
                                                 & (vlSelf->A 
                                                    >> 6U)) 
-                                               | __Vtemp_11[3U])));
+                                               | __Vtemp_12[3U])));
             vlSelf->__Vdlyvset__cache__DOT__cache_array__v0 = 1U;
             vlSelf->__Vdlyvdim0__cache__DOT__cache_array__v0 
                 = (3U & (vlSelf->A >> 2U));
-            vlSelf->WECache = 1U;
         } else {
             vlSelf->__Vdlyvval__cache__DOT__cache_array__v1[0U] = 0U;
             vlSelf->__Vdlyvval__cache__DOT__cache_array__v1[1U] 
@@ -237,10 +242,10 @@ VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__6(Vcache___024root* vlSe
     }
 }
 
-VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__8(Vcache___024root* vlSelf) {
+VL_INLINE_OPT void Vcache___024root___nba_sequent__TOP__7(Vcache___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vcache__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vcache___024root___nba_sequent__TOP__8\n"); );
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vcache___024root___nba_sequent__TOP__7\n"); );
     // Body
     if (vlSelf->__Vdlyvset__cache__DOT__cache_array__v0) {
         vlSelf->cache__DOT__cache_array[vlSelf->__Vdlyvdim0__cache__DOT__cache_array__v0][0U] 
@@ -286,16 +291,16 @@ void Vcache___024root___eval_nba(Vcache___024root* vlSelf) {
         Vcache___024root___nba_sequent__TOP__1(vlSelf);
     }
     if ((4ULL & vlSelf->__VnbaTriggered.word(0U))) {
-        Vcache___024root___nba_sequent__TOP__4(vlSelf);
+        Vcache___024root___nba_sequent__TOP__3(vlSelf);
     }
     if ((1ULL & vlSelf->__VnbaTriggered.word(0U))) {
-        Vcache___024root___nba_sequent__TOP__5(vlSelf);
+        Vcache___024root___nba_sequent__TOP__4(vlSelf);
     }
     if ((2ULL & vlSelf->__VnbaTriggered.word(0U))) {
-        Vcache___024root___nba_sequent__TOP__6(vlSelf);
+        Vcache___024root___nba_sequent__TOP__5(vlSelf);
     }
     if ((0x10ULL & vlSelf->__VnbaTriggered.word(0U))) {
-        Vcache___024root___nba_sequent__TOP__8(vlSelf);
+        Vcache___024root___nba_sequent__TOP__7(vlSelf);
     }
 }
 

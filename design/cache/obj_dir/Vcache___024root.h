@@ -29,6 +29,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vcache___024root final : public VerilatedModu
     VL_OUT8(WE2Cache,0,0);
     VL_OUT8(WE3Cache,0,0);
     CData/*0:0*/ cache__DOT__V0;
+    CData/*0:0*/ cache__DOT__D1;
     CData/*1:0*/ __Vdlyvdim0__cache__DOT__cache_array__v0;
     CData/*0:0*/ __Vdlyvset__cache__DOT__cache_array__v0;
     CData/*1:0*/ __Vdlyvdim0__cache__DOT__cache_array__v1;

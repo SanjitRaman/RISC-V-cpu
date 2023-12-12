@@ -42,6 +42,9 @@ module cache #(
     logic [TAG_WIDTH-1:0] tag0;
     logic [TAG_WIDTH-1:0] tag1;
 
+    logic hit0;
+    logic hit1;
+
 
 always_ff @(posedge RST) begin
     hit <= 0;
@@ -92,20 +95,30 @@ always_ff @(posedge CLK) begin
 
 
     if(MemRead) begin
-        RD <= cache_array[set][DATA_WIDTH-1:0];
-        hit <= (cache_array[set][CACHE_WIDTH-1] && (tag == tag0)); //UPDATE 
+        hit0 = (cache_array[set][CACHE_WIDTH-2] && (tag == tag0));
+        hit1 = (cache_array[set][(CACHE_WIDTH/2)-2] && (tag == tag0));
+        RD <= hit1 ? cache_array[set][(CACHE_WIDTH/2)+(DATA_WIDTH-1):CACHE_WIDTH/2] : cache_array[set][DATA_WIDTH-1:0];
+        hit = hit0 | hit1;
     end
 
 
 end
 
 always_ff @(negedge CLK) begin
-    if(MemRead) begin
-        cache_array[set] <= {2'b01, tag, 
-        ({BYTE_WIDTH{WE3}} & WD[31:24]), 
-        ({BYTE_WIDTH{WE2}} & WD[23:16]), 
-        ({BYTE_WIDTH{WE1}} & WD[15:8]), 
-        ({BYTE_WIDTH{WE0}} & WD[7:0])};
+    if(MemRead & ~hit) begin
+        D1 = cache_array[set][(CACHE_WIDTH/2)-1];
+        WDCache <= cache_array[set][DATA_WIDTH-1:0];
+        ACache  <= {cache_array[set][tag1], set, 2'b00};
+        WECache <= D1;
+        cache_array[set] <= ({2'b01, tag, 
+                                ({BYTE_WIDTH{WE3}} & WD[31:24]), 
+                                ({BYTE_WIDTH{WE2}} & WD[23:16]), 
+                                ({BYTE_WIDTH{WE1}} & WD[15:8]), 
+                                ({BYTE_WIDTH{WE0}} & WD[7:0]), 
+                                {(CACHE_WIDTH/2){1'b0}}
+                                }) 
+                                | (cache_array[set]>>(CACHE_WIDTH/WAYS));
+        
     end
 end
 

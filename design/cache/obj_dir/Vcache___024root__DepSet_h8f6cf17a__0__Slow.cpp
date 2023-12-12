@@ -116,6 +116,7 @@ VL_ATTR_COLD void Vcache___024root___ctor_var_reset(Vcache___024root* vlSelf) {
         VL_RAND_RESET_W(124, vlSelf->cache__DOT__cache_array[__Vi0]);
     }
     vlSelf->cache__DOT__V0 = VL_RAND_RESET_I(1);
+    vlSelf->cache__DOT__D1 = VL_RAND_RESET_I(1);
     vlSelf->__Vdlyvdim0__cache__DOT__cache_array__v0 = 0;
     VL_RAND_RESET_W(124, vlSelf->__Vdlyvval__cache__DOT__cache_array__v0);
     vlSelf->__Vdlyvset__cache__DOT__cache_array__v0 = 0;
