@@ -8,7 +8,7 @@ The control unit takes the following inputs:
 
 - `op`: The opcode of the current instruction (7 bits).
 - `funct3`: The funct3 field of the current instruction (3 bits).
-- `funct7_5`: The top three bits of the funct7 field of the current instruction (1 bit).
+- `funct7_5`: Bit 5 of the funct7 field of the current instruction (1 bit).
 - `Zero`: A signal indicating whether the ALU result is zero (1 bit).
 - `N`: A signal indicating whether the ALU result is negative (1 bit).
 - `C`: A signal indicating whether a carry occurred in the ALU operation (1 bit).
@@ -31,7 +31,29 @@ The control unit decodes the opcode, funct3, and funct7 fields of the current in
 
 The `main_decoder` generates most of the control signals, including `Branch`, `ResultSrc`, `MemWrite`, `ALUSrc`, `ImmSrc`, `RegWrite`, `ALUOp`, and `Jump`.
 
-**TODO:** **[Draw Control Paths for each type of instruction]**
+### R-type Control Path
+![single-cycle-control-path-r-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/a12b2269-0568-4f00-8495-4f015e088ec4)
+
+### I-type Control Path
+![single-cycle-control-path-i-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/9f863812-9a50-4f98-ba87-2f1d307f4554)
+
+### S-type Control Path
+![single-cycle-control-path-s-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/a67ffe3f-5e8e-4845-8288-c3618aa77d40)
+
+### B-type Control Path
+![single-cycle-control-path-b-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/92810bb7-d4e9-4e0a-97cf-122005258d1d)
+
+### AUIPC Control Path
+![single-cycle-control-path-auipc](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/e8cb0ba4-eecf-41ab-8b9c-30666f603d00)
+
+### LUI Control Path
+![single-cycle-control-path-lui](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/873669a9-808f-4cbd-a2fe-06b4a38084c2)
+
+### JALR Control Path
+![single-cycle-control-path-jalr](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/c9bb65ba-358c-4447-b21f-9857b8cc1277)
+
+### J-type Control Path (JAL)
+![single-cycle-control-path-j-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/16799b5f-b6ca-4b00-b85f-c5b1861179e6)
 
 
 The `alu_decoder` generates the `ALUControl` signal based on the opcode, funct3, funct7_5, and `ALUOp` signals. 
