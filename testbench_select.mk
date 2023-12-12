@@ -1,6 +1,6 @@
 # Set the module or unit to run in this file.
 RUN = unit
-GTEST = 0
+GTEST = 1
 VBUDDY=0
 
 MODULE = reg_file
