@@ -82,7 +82,7 @@ module risc_v #(
     logic [DATA_WIDTH-1:0] FoundData;
 
 // Data Memory
-    logic [DATA_WIDTH-1:0]         ReadData;
+    // logic [DATA_WIDTH-1:0]         ReadData;
 
 // Reg File W 
     logic                          RegWriteW;
@@ -359,7 +359,7 @@ module risc_v #(
         .CLK         (CLK),
         .A           (ACache[16:0]),
         .WD          (WDCache),
-        .RD          (ReadData),
+        .RD          (RDMem),
         .WE0         (WECache),
         .WE1         (WECache),
         .WE2         (WECache),
@@ -370,7 +370,7 @@ module risc_v #(
         .DATA_WIDTH(32)
     )
     riscLd_decoder(
-        .RD (ReadData),
+        .RD (FoundData),
         .funct3 (funct3M),
         .RDOut (ReadDataM)
     );
