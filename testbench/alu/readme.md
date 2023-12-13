@@ -12,7 +12,7 @@ The main function initializes the Google Test framework, runs all the defined te
 
 ## Test Cases
 
-The following testcases are calculated by hand based on the specification of the ALU module found [here](/design/alu/readme.md).
+The following testcases are calculated by hand based on the specification of the ALU module found [here](/rtl/alu/readme.md).
 
 | Testcase Name | Operation                  | Expected ALUResult | Expected Zero | Expected N | Expected C | Expected V |
 |--------------|----------------------------|--------------------|---------------|------------|------------|------------|
