@@ -338,8 +338,10 @@ module risc_v #(
         .WE1(WE1),
         .WE2(WE2),
         .WE3(WE3),
-        .A(ALUResult),
-        .WD(WD),
+        .MemRead(MemReadM), // pipeline
+        .MemWrite(MemWriteM),
+        .A(ALUResultM),
+        .WD(WriteDataM),
         // outputs
         .RD(RDCache),
         .hit(hit),
@@ -355,8 +357,8 @@ module risc_v #(
     )
     riscDataMem (
         .CLK         (CLK),
-        .A           (ALUResultM[16:0]),
-        .WD          (WriteDataM),
+        .A           (ACache[16:0]),
+        .WD          (WDCache),
         .RD          (ReadData),
         .WE0         (WECache),
         .WE1         (WECache),
