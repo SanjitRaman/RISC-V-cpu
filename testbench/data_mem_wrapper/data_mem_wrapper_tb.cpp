@@ -22,6 +22,7 @@ protected:
 
     void SetUp( ) {
     top = new data_mem_wrapper;
+    int ret = system("make -C ../ copy_unit_test_data_mem 1> /dev/null");
     //top->CLK = 1;
     //top->rst = 0;
     top->eval();
@@ -152,7 +153,7 @@ TEST_F(DataMemWrapperTest, LHU) { //Check that signed is read in as unsigned?
         top->MemWrite = 0;
         top->eval(); // evaluate
         a = i - 65536;
-        std::cout << a << std::endl;
+        //std::cout << a << std::endl;
         // check read data
         //std::cout << "i: " << i << std::endl;
         ASSERT_EQ(top->RDOut, ((a + 1) << 8) | a);

@@ -3,7 +3,7 @@ module data_mem_wrapper #(
     parameter MEM_ADDRESS_WIDTH = 17,
     parameter FUNCT3_WIDTH = 3,
     parameter BYTE_WIDTH   = 8,
-    parameter string MEM_FILE = "data_mem_wrapper.mem"
+    parameter string MEM_FILE = "data_mem.mem"
 )(
     input logic                  CLK,
     input logic [DATA_WIDTH-1:0] ALUResult,
