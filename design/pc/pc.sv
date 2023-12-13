@@ -8,8 +8,8 @@ module pc #(
     output logic [DATA_WIDTH-1:0] PC
 );
 
-    always_ff @ (negedge CLK, posedge RST) begin
-        if (RST) PC <= 32'hBFC00000;
+    always_ff @ (posedge CLK, negedge RST) begin
+        if (RST) PC <= 32'h0;
         else if (!EN) PC <= PCNext;
     end
 endmodule

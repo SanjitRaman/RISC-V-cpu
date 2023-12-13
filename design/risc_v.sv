@@ -10,8 +10,9 @@ module risc_v #(
 )(
 // interface signals
     input  logic                   CLK, RST, 
-    input  logic [DATA_WIDTH-1:0]  address_to_view,
-    output logic [DATA_WIDTH-1:0]  a0, reg_output
+    input  logic [ADDRESS_WIDTH-1:0]  address_to_view,
+    output logic [DATA_WIDTH-1:0]  a0, reg_output,
+    output logic [DATA_WIDTH-1:0]  pc_viewer
 );
 
 // Hazard Unit
@@ -411,5 +412,6 @@ module risc_v #(
     assign ResultW  = ResultSrcW[1] ? PCPlus4W : (ResultSrcW[0] ? ReadDataW : ALUResultW);
     assign WD = (MemReadM & ~hit) ? FoundData : WriteDataM;
     assign FoundData = (hit) ? RDCache : RDMem;
+    assign pc_viewer = PCF;
 
 endmodule

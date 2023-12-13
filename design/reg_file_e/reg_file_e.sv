@@ -71,7 +71,7 @@ always_ff @(posedge CLK) begin
         RegWriteE    <= RegWriteD;
         ResultSrcE   <= ResultSrcD;
         MemWriteE    <= MemWriteD;
-        MemReadE     <= MemReadE;
+        MemReadE     <= MemReadD;
         JumpE        <= JumpD;
         BranchE      <= BranchD;
         ALUControlE  <= ALUControlD;

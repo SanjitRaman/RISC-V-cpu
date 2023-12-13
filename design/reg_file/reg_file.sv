@@ -25,7 +25,7 @@ always_comb begin
     RD1 = registers[A1];
     RD2 = registers[A2];
     reg_output = registers[address_to_view];
-    a0 = registers[5'b01010];
+    a0 = registers[5'hA];
 end
 
 endmodule

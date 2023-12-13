@@ -41,7 +41,7 @@ module cache #(
     logic hit0;
     logic hit1;
 
-always_ff @(posedge CLK, posedge RST) begin
+always_ff @(posedge CLK, posedge RST, negedge CLK) begin
     if(RST) begin
         hit <= 0;
         WECache <= 0;
@@ -50,24 +50,24 @@ always_ff @(posedge CLK, posedge RST) begin
         RD <= 0;
     end
     else if (CLK) begin
-        tag0 = cache_array[set][CACHE_WIDTH-3:CACHE_WIDTH-3-(TAG_WIDTH-1)];
-        tag1 = cache_array[set][DATA_WIDTH+TAG_WIDTH-1:DATA_WIDTH];
+        tag0 <= cache_array[set][CACHE_WIDTH-3:CACHE_WIDTH-3-(TAG_WIDTH-1)];
+        tag1 <= cache_array[set][DATA_WIDTH+TAG_WIDTH-1:DATA_WIDTH];
 
         if(MemRead) begin
-            hit0 = (cache_array[set][CACHE_WIDTH-2] && (tag == tag0));
-            hit1 = (cache_array[set][(CACHE_WIDTH/2)-2] && (tag == tag0));
+            hit0 <= (cache_array[set][CACHE_WIDTH-2] && (tag == tag0));
+            hit1 <= (cache_array[set][(CACHE_WIDTH/2)-2] && (tag == tag0));
             RD <= hit1 ? cache_array[set][(CACHE_WIDTH/2)+(DATA_WIDTH-1):CACHE_WIDTH/2] : cache_array[set][DATA_WIDTH-1:0];
             hit <= hit0 | hit1;
         end
     end
     else begin
-        tag0 = cache_array[set][CACHE_WIDTH-3:CACHE_WIDTH-3-(TAG_WIDTH-1)];
-        tag1 = cache_array[set][DATA_WIDTH+TAG_WIDTH-1:DATA_WIDTH];
-        D1 = cache_array[set][(CACHE_WIDTH/2)-1];
+        tag0 <= cache_array[set][CACHE_WIDTH-3:CACHE_WIDTH-3-(TAG_WIDTH-1)];
+        tag1 <= cache_array[set][DATA_WIDTH+TAG_WIDTH-1:DATA_WIDTH];
+        D1 <= cache_array[set][(CACHE_WIDTH/2)-1];
 
         if(MemRead & ~hit) begin
             WDCache <= cache_array[set][DATA_WIDTH-1:0];
-            ACache  <= {cache_array[set][tag1], set, 2'b00};
+            ACache  <= {tag1, set, 2'b00};
             WECache <= D1;
             cache_array[set] <= ({2'b01, tag, 
                                     ({BYTE_WIDTH{WE3}} & WD[31:24]), 
@@ -77,11 +77,10 @@ always_ff @(posedge CLK, posedge RST) begin
                                     {(CACHE_WIDTH/2){1'b0}}
                                     }) 
                                     | (cache_array[set]>>(CACHE_WIDTH/WAYS));
-
         end
 
         if(MemWrite) begin
-            V0 = cache_array[set][CACHE_WIDTH-2];
+            V0 <= cache_array[set][CACHE_WIDTH-2];
             if(~V0) begin
                 // Cache - {Dirty, Valid, Tag, Write data}
                 cache_array[set] <= {2'b11, tag, 
@@ -95,7 +94,7 @@ always_ff @(posedge CLK, posedge RST) begin
             end
             else begin
                 WDCache <= cache_array[set][DATA_WIDTH-1:0];
-                ACache  <= {cache_array[set][tag1], set, 2'b00};
+                ACache  <= {tag1, set, 2'b00};
                 WECache <= D1;
 
                 cache_array[set] <= ({2'b11, tag, 
