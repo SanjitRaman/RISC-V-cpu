@@ -74,6 +74,7 @@ module risc_v #(
     logic [DATA_WIDTH-1:0]         ALUResultM, WriteDataM, ReadDataM, PCPlus4M;
     logic [ADDRESS_WIDTH-1:0]      RdM;
     logic [FUNCT3_WIDTH-1:0]       funct3M;
+    logic [OP_WIDTH-1:0]           opM;
 
 // Cache 
     logic WE0, WE1, WE2, WE3;
@@ -315,6 +316,7 @@ module risc_v #(
         .RdE(RdE),
         .PCPlus4E(PCPlus4E),
         .funct3E(funct3E),
+        .opE (opE),
 
         .RegWriteM(RegWriteM),
         .ResultSrcM(ResultSrcM),
@@ -324,7 +326,8 @@ module risc_v #(
         .WriteDataM(WriteDataM),
         .RdM(RdM),
         .PCPlus4M(PCPlus4M),
-        .funct3M(funct3M)
+        .funct3M(funct3M),
+        .opM (opM)
     );
 
     we_decoder riscWe_decoder (
@@ -334,7 +337,8 @@ module risc_v #(
         .WE0 (WE0),
         .WE1 (WE1),
         .WE2 (WE2),
-        .WE3 (WE3)
+        .WE3 (WE3),
+        .op(opM)
     );
 
     cache #(

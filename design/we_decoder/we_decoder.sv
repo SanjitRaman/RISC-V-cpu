@@ -1,18 +1,21 @@
-module we_decoder #()
+module we_decoder #(
+    parameter OP_WIDTH = 7
+)
 (
     input  logic [2:0]               funct3,
+    input  logic [OP_WIDTH-1:0]      op,
     input  logic                     MemWrite, MemRead,
-    output logic                        WE0,
-    output logic                        WE1,
-    output logic                        WE2,
-    output logic                        WE3
+    output logic                     WE0,
+    output logic                     WE1,
+    output logic                     WE2,
+    output logic                     WE3
 );
 
 logic EN;
 assign EN = MemWrite | MemRead;
 
 always_comb
-    if (EN) begin
+    if (EN && (op == 7'd35)) begin
         case (funct3)
             //store byte (sb)
             3'b000:
@@ -50,6 +53,12 @@ always_comb
                     WE0 = 1'b0;
                 end
         endcase
+    end
+    else if (EN && (op == 7'd3)) begin
+        WE3 = 1'b1;
+        WE2 = 1'b1;
+        WE1 = 1'b1;
+        WE0 = 1'b1;
     end
     else begin
         WE3 = 1'b0;
