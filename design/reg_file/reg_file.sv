@@ -11,7 +11,8 @@ module reg_file #(
     input  logic [DATA_WIDTH-1:0]    WD3, // write data 
     output logic [DATA_WIDTH-1:0]    RD1, // read out 1
     output logic [DATA_WIDTH-1:0]    RD2, // read out 2
-    output logic [DATA_WIDTH-1:0]    reg_output   // register 10
+    output logic [DATA_WIDTH-1:0]    reg_output,   // register 10
+    output logic [DATA_WIDTH-1:0]    a0
 );
 
 logic [DATA_WIDTH-1:0] registers [2**ADDRESS_WIDTH-1:0];
@@ -24,6 +25,7 @@ always_comb begin
     RD1 = registers[A1];
     RD2 = registers[A2];
     reg_output = registers[address_to_view];
+    a0 = registers[5'b01010];
 end
 
 endmodule

@@ -1,15 +1,18 @@
 module we_decoder #()
 (
     input  logic [2:0]               funct3,
-    input  logic                   MemWrite, 
+    input  logic                     MemWrite, MemRead,
     output logic                        WE0,
     output logic                        WE1,
     output logic                        WE2,
     output logic                        WE3
 );
 
+logic EN;
+assign EN = MemWrite | MemRead;
+
 always_comb
-    if (MemWrite) begin
+    if (EN) begin
         case (funct3)
             //store byte (sb)
             3'b000:

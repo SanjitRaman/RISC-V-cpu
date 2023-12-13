@@ -8,7 +8,7 @@ module main_decoder #(
     output logic                      RegWrite,
     output logic [IMM_SRC_WIDTH-1:0]  ImmSrc,
     output logic                      ALUSrc,
-    output logic                      MemWrite,
+    output logic                      MemWrite, MemRead,
     output logic [1:0]                ResultSrc,
     output logic                      Branch,
     output logic [ALU_OP_WIDTH-1:0]   ALUOp,
@@ -23,6 +23,7 @@ module main_decoder #(
                     ImmSrc    = 3'b000;
                     ALUSrc    = 1'b1;
                     MemWrite  = 1'b0;
+                    MemRead   = 1'b1;
                     ResultSrc = 2'b01;
                     Branch    = 1'b0;
                     ALUOp     = 3'b000;

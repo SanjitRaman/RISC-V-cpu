@@ -10,7 +10,8 @@ module risc_v #(
 )(
 // interface signals
     input  logic                   CLK, RST, 
-    output logic [DATA_WIDTH-1:0]  a0
+    input  logic [DATA_WIDTH-1:0]  address_to_view,
+    output logic [DATA_WIDTH-1:0]  a0, reg_output
 );
 
 // Hazard Unit
@@ -33,7 +34,7 @@ module risc_v #(
     logic [RES_SRC_WIDTH-1:0]      ResultSrcD;
     logic [ALU_CTRL_WIDTH-1:0]     ALUControlD;
     logic [IMM_SRC_WIDTH-1:0]      ImmSrcD;
-    logic                          MemWriteD, ALUSrcD, RegWriteD, BranchD, JumpD;
+    logic                          MemWriteD, MemReadD, ALUSrcD, RegWriteD, BranchD, JumpD;
     logic                          funct7_5D;
 
 // Register File
@@ -44,7 +45,7 @@ module risc_v #(
     logic [DATA_WIDTH-1:0]         ImmExtD;
 
 // Reg File E
-    logic                          RegWriteE, MemWriteE, JumpE, BranchE, ALUSrcE;
+    logic                          RegWriteE, MemWriteE, MemReadE, JumpE, BranchE, ALUSrcE;
     logic [ALU_CTRL_WIDTH-1:0]     ALUControlE;
     logic [RES_SRC_WIDTH-1:0]      ResultSrcE;
     logic [DATA_WIDTH-1:0]         RD1E, RD2E, PCE, ImmExtE, PCPlus4E;
@@ -67,7 +68,7 @@ module risc_v #(
     logic [DATA_WIDTH-1:0]         ResultW;
 
 // Reg File M 
-    logic                          RegWriteM, MemWriteM;
+    logic                          RegWriteM, MemWriteM, MemReadM;
     logic [RES_SRC_WIDTH-1:0]      ResultSrcM;
     logic [DATA_WIDTH-1:0]         ALUResultM, WriteDataM, ReadDataM, PCPlus4M;
     logic [ADDRESS_WIDTH-1:0]      RdM;
@@ -177,6 +178,7 @@ module risc_v #(
         .funct7_5   (funct7_5D),
         .ResultSrc  (ResultSrcD),
         .MemWrite   (MemWriteD),
+        .MemRead    (MemReadD),
         .ALUControl (ALUControlD),
         .ALUSrc     (ALUSrcD),
         .ImmSrc     (ImmSrcD),
@@ -193,12 +195,14 @@ module risc_v #(
         .CLK        (CLK),
         .A1         (A1),
         .A2         (A2),
+        .address_to_view (address_to_view),
         .A3         (RdW), 
         .WE3        (RegWriteW), 
         .RD1        (RD1),
         .RD2        (RD2),
         .WD3        (ResultW),
-        .a0         (a0)
+        .a0         (a0),
+        .reg_output (reg_output)
     );
 
     sign_extend # (
@@ -222,7 +226,8 @@ module risc_v #(
         .CLR(FlushE), 
         .RegWriteD(RegWriteD),
         .ResultSrcD(ResultSrcD), 
-        .MemWriteD(MemWriteD), 
+        .MemWriteD(MemWriteD),
+        .MemReadD (MemReadD), 
         .JumpD(JumpD), 
         .BranchD(BranchD), 
         .ALUControlD(ALUControlD), 
@@ -241,6 +246,7 @@ module risc_v #(
         .RegWriteE(RegWriteE),
         .ResultSrcE(ResultSrcE),
         .MemWriteE(MemWriteE), 
+        .MemReadE (MemReadE),
         .JumpE(JumpE), 
         .BranchE(BranchE), 
         .ALUControlE(ALUControlE), 
@@ -302,6 +308,7 @@ module risc_v #(
         .RegWriteE(RegWriteE),
         .ResultSrcE(ResultSrcE),
         .MemWriteE(MemWriteE),
+        .MemReadE (MemReadE),
         .ALUResultE(ALUResultE),
         .WriteDataE(WriteDataE), 
         .RdE(RdE),
@@ -310,6 +317,7 @@ module risc_v #(
 
         .RegWriteM(RegWriteM),
         .ResultSrcM(ResultSrcM),
+        .MemReadM (MemReadM),
         .MemWriteM(MemWriteM),
         .ALUResultM(ALUResultM),
         .WriteDataM(WriteDataM),
@@ -321,6 +329,7 @@ module risc_v #(
     we_decoder riscWe_decoder (
         .funct3(funct3M),
         .MemWrite(MemWriteM),
+        .MemRead (MemReadM),
         .WE0 (WE0),
         .WE1 (WE1),
         .WE2 (WE2),
@@ -341,7 +350,7 @@ module risc_v #(
         .MemRead(MemReadM), // pipeline
         .MemWrite(MemWriteM),
         .A(ALUResultM),
-        .WD(WriteDataM),
+        .WD(WD),
         // outputs
         .RD(RDCache),
         .hit(hit),
@@ -400,7 +409,7 @@ module risc_v #(
     );
 
     assign ResultW  = ResultSrcW[1] ? PCPlus4W : (ResultSrcW[0] ? ReadDataW : ALUResultW);
-    assign WD = (MemRead & ~hit) ? FoundData : WriteData;
+    assign WD = (MemReadM & ~hit) ? FoundData : WriteDataM;
     assign FoundData = (hit) ? RDCache : RDMem;
 
 endmodule
