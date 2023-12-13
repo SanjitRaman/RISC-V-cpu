@@ -61,6 +61,10 @@ DATA_MEMORY  = $(PROGRAMS_DIR)/$(PROGRAM_NAME)/data_mem.mem
 # Set makefile targets
 TARGET = $(BIN_DIR)/$(NAME)
 
+copy_unit_test_data_mem:
+	cp $(dir $(TB_SOURCE))/data_mem.mem $(MEM_DIR)/data_mem.mem
+
+
 include_vbuddy:
 # Copy VBuddy files to the bin directory
 	@echo "Including VBuddy Files..."
