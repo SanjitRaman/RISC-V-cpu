@@ -29,10 +29,10 @@ jobs:
       run: make runtest RUN=module GTEST=1 MODULE=sign_extend MODULE.INCLUDE_DIRS="" && make clean
 
     - name: Build and Run Data Memory Wrapper
-      run: make runtest RUN=module GTEST=1 MODULE=data_mem_wrapper MODULE.INCLUDE_DIRS="-y design/data_mem -y design/we_decoder -y design/ld_decoder" && make clean
+      run: make runtest RUN=module GTEST=1 MODULE=data_mem_wrapper MODULE.INCLUDE_DIRS="-y rtl/data_mem -y rtl/we_decoder -y rtl/ld_decoder" && make clean
 
     - name: Build and Run Control Unit
-      run: make runtest RUN=module GTEST=1 MODULE=control_unit MODULE.INCLUDE_DIRS="-y design/control_unit/decoders" && make clean
+      run: make runtest RUN=module GTEST=1 MODULE=control_unit MODULE.INCLUDE_DIRS="-y rtl/control_unit/decoders" && make clean
       
     - name: Build and Run Top Level Testbench
       run: make runtest RUN=unit GTEST=0
