@@ -333,7 +333,7 @@ module risc_v #(
     riscCache (
         // inputs
         .CLK(CLK),
-        .RST(),
+        .RST(RST),
         .WE0(WE0),
         .WE1(WE1),
         .WE2(WE2),
