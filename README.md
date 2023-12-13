@@ -7,7 +7,13 @@ There is a single-cycle implementation, as well as a 5-stage pipeline implementa
 The course is designed to work with a piece of hardware developed by Imperial College called the VBuddy. This is a board containing a microprocessor and a number of peripherals that allow for SystemVerilog designs to be simulated in Verilator and simultaneously outputing to peripherals such as the TFT Screen and NeoPixel LEDs. You can read more about the VBuddy [here](http://www.ee.ic.ac.uk/pcheung/teaching/EIE2-IAC/Lecture%203%20-%20Verilator%20&%20Testbenches%20(notes).pdf)
 
 ## Contributions
-Group Members: Sanjit Raman, Sriyesh Bogadapati, Dhyey Trivedi, Arav Swati-Abhay
+
+| Group Members       | GitHub Username     | Individual Statements |
+|---------------------|---------------------|-----------------------|
+| Sanjit Raman        | [@SanjitRaman](https://github.com/SanjitRaman) | [Statement](/statements/sanjit.md) |
+| Sriyesh Bogadapati  | [@sri-yeah](https://github.com/sri-yeah) | [Statement](/statements/sriyesh.md) |
+| Dhyey Trivedi       | [@Cheesypasta1](https://github.com/Cheesypasta1) | [Statement](/statements/dhyey.md) |
+| Arav Swati-Abhay    | [@as9322](https://github.com/as9322) | [Statement](/statements/arav.md) |
 
 We assigned different people to write the design and testbench of each module to:
 -  maximise the number of people who would be able to understand the codebase,
@@ -15,7 +21,7 @@ We assigned different people to write the design and testbench of each module to
 
 To allow parallel development in extending the CPU from the [Reduced RISC-V Lab](https://github.com/SanjitRaman/Team-10-Reduced-RISC-V) we split up implementation of each instruction type to different people. This would also mean group members need to understand and modify the design of the modules they did not initially write.
 
-The table below shows the modules that each person was responsible for. A detailed breakdown of the contributions of each person can be found in the [individual statements](TODOINSERTLINK).
+The table below shows the modules that each person was responsible for. A detailed breakdown of the contributions of each person can be found in the [individual statements](/statements/).
 
 
 Furthermore, to ensure that everyone was able to understand the codebase, we had a rule that pull requests could not be merged without review by another person. 
