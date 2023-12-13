@@ -73,11 +73,28 @@ TEST_F(RegFileTest, SYNCWRITE) {
     }
 }
 
+// test property cannot change register 0
+TEST_F(RegFileTest, REG0) {
+    // Perform register write operations
+    for(int i = 0; i < 32; i++) {
+        // Set write enable
+        top->WE3 = 1;
+        // Set write address
+        top->A3 = 0;
+        // Set read address
+        top->A1 = 0;
+        // Set write data
+        top->WD3 = i;
+        clock_ticks(1);
+        ASSERT_EQ(top->RD1, 0);
+    }
+}
+
 int main(int argc, char **argv) {
-  Verilated::commandArgs(argc, argv);
-  testing::InitGoogleTest(&argc, argv);
-  auto res = RUN_ALL_TESTS();
-  Verilated::mkdir("logs");
-  VerilatedCov::write("logs/coverage_reg_file.dat");
-  return res;
+    Verilated::commandArgs(argc, argv);
+    testing::InitGoogleTest(&argc, argv);
+    auto res = RUN_ALL_TESTS();
+    Verilated::mkdir("logs");
+    VerilatedCov::write("logs/coverage_reg_file.dat");
+    return res;
 }

@@ -240,20 +240,20 @@ TEST_F(ControlUnitTest, BNEZeroFlag1) {
     assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
 }
 // blt
-TEST_F(ControlUnitTest, BLT0) {
+TEST_F(ControlUnitTest, BLTNoBranch) { // Z = 0, C = 0, V = 1, N = 1 // NVZ = 110
     setInputsAndEvaluate(0x0010C463, 0b0, 0b0, 0b1, 0b1); 
     assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
 }
-TEST_F(ControlUnitTest, BLT1) {
+TEST_F(ControlUnitTest, BLTBranch) {
     setInputsAndEvaluate(0x0010C463, 0b0, 0b0, 0b0, 0b1);
     assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
 }
 // bge
-TEST_F(ControlUnitTest, BGE0) {
+TEST_F(ControlUnitTest, BGENoBranch) {
     setInputsAndEvaluate(0x0010D463, 0b0, 0b0, 0b0, 0b1);
     assertControlSignals(0, 0b10, 0, 0, -1, 0, 0b001, 0);
 }
-TEST_F(ControlUnitTest, BGE1) {
+TEST_F(ControlUnitTest, BGEBranch) {
     setInputsAndEvaluate(0x0010D463, 0b0, 0b0, 0b1, 0b1);
     assertControlSignals(0, 0b10, 0, 0, -1, 1, 0b001, 0);
 }
@@ -293,7 +293,7 @@ TEST_F(ControlUnitTest, LUI) {
 // jalr
 TEST_F(ControlUnitTest, JALR) {
     setInputsAndEvaluate(0x032605e7, 0b0); // jalr a1, a2, 50
-    assertControlSignals(1, 0b100, 1, 0, 0b10, 1, -1, 1);
+    assertControlSignals(1, 0b000, 1, 0, 0b10, 1, -1, 1);
 }
 // jal
 TEST_F(ControlUnitTest, JAL) {
