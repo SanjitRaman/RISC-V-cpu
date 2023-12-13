@@ -7,7 +7,7 @@ module cache #(
     CACHE_WIDTH = (2 + TAG_WIDTH + DATA_WIDTH) * WAYS
 ) (
     input logic CLK,
-    input logic RST, 
+    input logic RST,
     input logic WE0,
     input logic WE1,
     input logic WE2,
