@@ -23,7 +23,7 @@ VERILATOR_FLAGS = -Wall --coverage --cc --trace
 VERILATOR_COVERAGE_FLAGS = --annotate logs/annotate --annotate-all --annotate-min 1
 
 # Set additional flags for compiling C++ files
-CXX_FLAGS = -std=c++17
+CXX_FLAGS = -std=c++17 -DVBD=$(VBUDDY) -DPROGRAM_NAME=$(PROGRAM_NAME) -DSINGLE_INSTRUCTION_TESTS=$(SINGLE_INSTRUCTION_TESTS)
 
 # Set Google Test library paths
 GTEST_LIB_DIR = ../../googletest/build/lib
@@ -35,7 +35,7 @@ ifeq ($(GTEST), 1)
 				  -CFLAGS "$(CXX_FLAGS)" \
 				  -CFLAGS "-I$(GTEST_INCLUDE_DIR)"
 else
-	GTEST_FLAGS = ""
+	GTEST_FLAGS = -CFLAGS "$(CXX_FLAGS)"
 endif
 
 # Set makefile directories

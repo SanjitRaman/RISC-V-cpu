@@ -2,6 +2,7 @@
 RUN = unit
 GTEST = 1
 VBUDDY=0
+SINGLE_INSTRUCTION_TESTS = 0
 
 MODULE = reg_file
 MODULE.INCLUDE_DIRS = -y design/control_unit/decoders

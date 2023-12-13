@@ -1,22 +1,34 @@
-#define VBUDDY false
-#define MAX_SIM_CYC 1'000'000
-#define PROGRAM_NAME "counter"
-#define DATASET "Triangle"
-
+#include <string>
+#include <iostream>
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "risc_v.h"
 #include "vbuddy.cpp"
-#include <string>
-#include <iostream>
+
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+#if VBD == 1
+#define VBUDDY true
+#else
+#define VBUDDY false
+#endif
+
+#ifndef PROGRAM_NAME
+#define PROGRAM_NAME counter
+#endif
+
+
+#define MAX_SIM_CYC 1'000'000
+#define DATASET "Gaussian"
 
 int main(int argc, char **argv, char **env) {
+    std::string program_name = std::string(TOSTRING(PROGRAM_NAME));
     int simcyc;     // simulation clock count
     int tick;       // each CLK cycle has two ticks for two edges
 
     Verilated::commandArgs(argc, argv);
-    std::string command = std::string("make -C .. / assemble PROGRAM_NAME=");
-    command.append(std::string(PROGRAM_NAME));
+    std::string command = std::string("make -C ../ assemble PROGRAM_NAME=");
+    command.append(program_name);
     command.append(std::string(" VBUDDY="));
     command.append(std::string(VBUDDY ? "1" : "0"));
     const char* commandArray = command.c_str(); // Convert command string to char array
@@ -32,14 +44,15 @@ int main(int argc, char **argv, char **env) {
 
     if(VBUDDY) {
         if(vbdOpen() != 1) return -1;
-        if(PROGRAM_NAME == "pdf") {
-            std::string header = std::string(PROGRAM_NAME) + std::string(": ") + std::string(DATASET);
-            const char* headerArray = header.c_str();
-            vbdHeader(headerArray);
+        std::string header;
+        if(program_name == "pdf") {
+            header = program_name + std::string(": ") + std::string(DATASET);
         }
         else {
-            vbdHeader(PROGRAM_NAME);
+            header = program_name;
         }
+        const char* headerArray = header.c_str();
+        vbdHeader(headerArray);
     }
 
 
@@ -61,11 +74,11 @@ int main(int argc, char **argv, char **env) {
         if (Verilated::gotFinish() || vbdGetkey()=='q') break;
         
         if(VBUDDY) {
-            if(PROGRAM_NAME == "f1_starting_light") {
+            if(program_name == "f1_starting_light") {
                 vbdBar(int(top->reg_output));
                 vbdCycle(simcyc);
             }
-            else if (PROGRAM_NAME == "pdf") {
+            else if (program_name == "pdf") {
                 if(!started && top->pc_viewer == 0xBFC00058)    {
                     started = true;
                 }
@@ -76,7 +89,7 @@ int main(int argc, char **argv, char **env) {
                     }
                 }
             }
-            else if (PROGRAM_NAME == "sinegen") {
+            else if (program_name == "sinegen") {
                 if(simcyc % 4 == 0) {
                     vbdPlot(top->reg_output, 0, 255);
                     vbdCycle(simcyc);
