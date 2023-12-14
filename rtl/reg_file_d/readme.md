@@ -26,9 +26,8 @@ The `reg_file_d` module serves as a Decode Register for a RISC-V processor. Its 
 | `PCPlus4D`| `DATA_WIDTH` | Decoded next Program Counter (PC + 4) output.            |
 
 ## Functionality
-The `reg_file_d` module utilizes an `always_ff` block to handle register decoding. On the rising edge of the clock (`posedge CLK`), the module performs the following operations:
+On the rising edge of the clock (`posedge CLK`), the module performs the following operations:
 
 - If the clear signal (`CLR`) is asserted, the module flushes its outputs, setting them to zero.
 - If the enable signal (`EN`) is de-asserted, the module passes the inputs through to the outputs for decoding.
 
-This module is designed to be integrated into a RISC-V processor to handle the decoding of registers during the execution of instructions. It provides flexibility with the `DATA_WIDTH` parameter to accommodate different data bus widths. Refer to the module instantiation example and parameters for proper usage. Adjust the parameters as needed for your specific application.

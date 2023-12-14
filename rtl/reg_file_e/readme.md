@@ -57,9 +57,8 @@ The `reg_file_e` module serves as an Execute Register for a RISC-V processor. It
 | `opE`           | 7            | Operation code signal for the Execute stage.             |
 
 ## Functionality
-The `reg_file_e` module utilizes an `always_ff` block to handle register operations during the execution stage. On the rising edge of the clock (`posedge CLK`), the module performs the following operations:
+On the rising edge of the clock (`posedge CLK`), the module performs the following operations:
 
 - If the clear signal (`CLR`) is asserted, the module flushes its outputs, setting them to zero.
 - Otherwise, it passes the relevant signals from the Decode stage to the Execute stage.
 
-This module is designed to be integrated into a RISC-V processor to handle register-related operations during the execution of instructions. It provides flexibility with various parameterized widths to accommodate different data bus and control signal configurations. Refer to the module instantiation example and parameters for proper usage. Adjust the parameters as needed for your specific application.
