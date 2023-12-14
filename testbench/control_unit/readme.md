@@ -20,7 +20,7 @@ This class inherits from the Google Test class `::testing::Test`. It contains me
 
 ## Test Cases
 
-The test cases are written using the `TEST_F` macro from Google Test. Each test case sets the inputs and evaluates the control unit, then asserts the expected control signals. The test cases cover R-type, I-type, S-type, B-type, U-type, and J-type instructions. Below are their respective datapaths: 
+The test cases are written using the `TEST_F` macro from Google Test. Each test case sets the inputs and evaluates the control unit, then asserts the expected control signals according to the [specification](/rtl/control_unit/readme.md). The test cases cover R-type, I-type, S-type, B-type, U-type, and J-type instructions. Below are their respective datapaths: 
 
 | R-Type | I-Type |
 :--:|:--:
