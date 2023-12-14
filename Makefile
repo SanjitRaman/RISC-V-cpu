@@ -6,12 +6,12 @@ include testbench_select.mk
 ifeq ($(RUN), module)
 	NAME = $(MODULE)
 	INCLUDE_DIRS = $(MODULE.INCLUDE_DIRS)
-	SOURCES = design/$(NAME)/$(NAME).sv
+	SOURCES = $(RTL_DIR)/$(NAME)/$(NAME).sv
 
 else
 	NAME = $(UNIT)
 	INCLUDE_DIRS = $(UNIT.INCLUDE_DIRS)
-	SOURCES = design/$(NAME).sv
+	SOURCES = $(RTL_DIR)/$(NAME).sv
 
 endif
 
@@ -23,7 +23,7 @@ VERILATOR_FLAGS = -Wall --coverage --cc --trace
 VERILATOR_COVERAGE_FLAGS = --annotate logs/annotate --annotate-all --annotate-min 1
 
 # Set additional flags for compiling C++ files
-CXX_FLAGS = -std=c++17
+CXX_FLAGS = -std=c++17 -DVBD=$(VBUDDY) -DPROGRAM_NAME=$(PROGRAM_NAME) -DSINGLE_INSTRUCTION_TESTS=$(SINGLE_INSTRUCTION_TESTS)
 
 # Set Google Test library paths
 GTEST_LIB_DIR = ../../googletest/build/lib
@@ -35,7 +35,7 @@ ifeq ($(GTEST), 1)
 				  -CFLAGS "$(CXX_FLAGS)" \
 				  -CFLAGS "-I$(GTEST_INCLUDE_DIR)"
 else
-	GTEST_FLAGS = ""
+	GTEST_FLAGS = -CFLAGS "$(CXX_FLAGS)"
 endif
 
 # Set makefile directories
@@ -47,6 +47,8 @@ LOGS_DIR = logs
 TESTBENCH_DIR = testbench
 PROGRAMS_DIR = programs
 VBUDDY_DIR = vbuddy
+RTL_DIR = rtl
+SCRIPTS_DIR = scripts
 
 # Set testbench source and testbench executable
 TB_SOURCE = $(TESTBENCH_DIR)/$(NAME)/$(NAME)_tb.cpp
@@ -79,7 +81,7 @@ assemble: $(PROGRAMS_DIR)/$(PROGRAM_NAME)/$(notdir $(PROGRAM_NAME)).s
 	@rm "$?.out"
 	@riscv64-unknown-elf-objcopy -O binary -j .text "$?.out.reloc" "$?.bin"
 	@rm "$?.out.reloc"
-	@./format_mem.sh "$?"
+	@./$(SCRIPTS_DIR)/format_mem.sh "$?"
 	@rm "$?.bin"
 	cp $(PROGRAMS_DIR)/$(PROGRAM_NAME)/instr_mem.mem $(MEM_DIR)/instr_mem.mem
 ifneq ($(wildcard $(dir $(PROGRAM))/data_mem.mem),)
