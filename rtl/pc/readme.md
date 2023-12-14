@@ -4,15 +4,22 @@
 The pc module is a Program Counter (PC) for a RISC-V processor. It is designed to hold the address of the current instruction being executed.
 
 ## Parameters
-- `DATA_WIDTH`: The width of the data bus. Default is 32.
+| Parameter   | Description                           | Default |
+|-------------|---------------------------------------|---------|
+| DATA_WIDTH  | The width of the data bus.            | 32      |
 
 ## Inputs
-- `CLK`: The clock signal.
-- `RST`: The reset signal.
-- `PCNext`: The next program counter value.
+| Signal | Width | Description                   |
+|--------|-------|-------------------------------|
+| CLK    |     1 | The clock signal.             |
+| RST    |     1 | The reset signal.             |
+| PCNext | DATA_WIDTH | The next program counter value.|
 
 ## Outputs
-- `PC`: The current program counter value.
+
+| Signal | Width | Description                   |
+|--------|-------|-------------------------------|
+| PC     |   DATA_WIDTH   | The current program counter value. |
 
 ## Functionality
 The `pc` module uses a resettable register in an `always_ff` block to hold the current program counter value.
