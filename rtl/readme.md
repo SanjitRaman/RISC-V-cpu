@@ -47,7 +47,7 @@ The CPU is composed of several modules, each of which performs a specific functi
 | [**Register file W**](/rtl/reg_file_w/) | Writeback register added  |
 | [**Hazard unit**](/rtl/hazard_unit/) | Hazard unit added  |
 
-Multiplexers added for extra logic. 
+Multiplexers added for new logic. 
 
 
 ## Operation
