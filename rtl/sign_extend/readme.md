@@ -17,8 +17,8 @@ The input signals for the sign extend module are as follows:
 
 |  Signal           | Width           | Description                                                |
 |-------------------|-----------------|------------------------------------------------------------|
-| `Instr`           | `DATA_WIDTH`    | A `DATA_WIDTH`-bit input instruction.                       |
-| `ImmSrc`          | `IMM_SRC_WIDTH` | A `IMM_SRC_WIDTH`-bit immediate source.                     |
+| `Instr`           | 32    | A `DATA_WIDTH`-bit input instruction.                       |
+| `ImmSrc`          | 3 | A `IMM_SRC_WIDTH`-bit immediate source.                     |
 
 **Outputs** 
 
@@ -26,7 +26,7 @@ The output signals for the sign extend module are as follows:
 
 | Signal            | Width           | Description                                                |
 |-------------------|-----------------|------------------------------------------------------------|
-| `ImmOp`           | `DATA_WIDTH`    | A `DATA_WIDTH`-bit output after sign extension.             |
+| `ImmOp`           | 32    | A `DATA_WIDTH`-bit output after sign extension.             |
 
 
 ## Operation
