@@ -29,7 +29,17 @@ This test verifies that the `sign_extend` module correctly pads J-type instructi
 This test verifies that the `sign_extend` module correctly extends other instructions. The test inputs a random instruction to the `sign_extend` module with `ImmSrc` set to a value other than 000, 001, 010, 011, or 100 and checks that the output is the sign extension of `Instr[31]` concatenated with `Instr[31:20]`.
 
 ## Test Execution
-The tests are executed using the Google Test framework. The test results are logged and can be viewed in the console or in the log file.
+The tests are executed using the Google Test framework. The test results are logged and can be viewed in the console or in the log file. 
+
+The command to run these tests is: ```make runtest RUN=module GTEST=1 MODULE=sign_extend MODULE.INCLUDE_DIRS=""```
+
+# Test Results 
+
+The outcome of the tests is as follows: 
+![Alt text](/images/sign_extend_test_results.png)
+
+And we can see the line coverage by exporting the file. 
+![Alt text](/images/sign_extend_line_coverage.png)
 
 ## Conclusion
 These tests provide comprehensive coverage of the `sign_extend` module functionality as described in the specification. By passing these tests, we can be confident that the `sign_extend` module is working as expected.
