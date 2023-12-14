@@ -29,6 +29,8 @@ The control unit generates the following outputs:
 ## Functionality
 The control unit decodes the opcode, funct3, and funct7 fields of the current instruction (where they exist) and generates the appropriate control signals. It uses two submodules, `main_decoder` and `alu_decoder`, to perform this decoding.
 
+## Main Decoder
+
 The `main_decoder` generates most of the control signals, including `Branch`, `ResultSrc`, `MemWrite`, `ALUSrc`, `ImmSrc`, `RegWrite`, `ALUOp`, and `Jump`.
 
 ### R-type Control Path
@@ -56,9 +58,11 @@ The `main_decoder` generates most of the control signals, including `Branch`, `R
 ![single-cycle-control-path-j-type](/images/JAL_control_path.png)
 
 
+## ALU Decoder
+
 The `alu_decoder` generates the `ALUControl` signal based on the opcode, funct3, funct7_5, and `ALUOp` signals. 
 
-**TODO:** **[Insert link to ALU operations table.]**
+![](/images/ALU_decoder.png)
 
 The control unit also contains logic to generate the `PCSrc` signal, which determines the source of the next program counter value. This logic handles jump and branch instructions.
 
