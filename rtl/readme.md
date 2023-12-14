@@ -11,8 +11,13 @@ The RISC-V32I CPU is a 32-bit processor that implements the base integer instruc
 - Single-cycle execution: Each instruction is executed in a single cycle, which simplifies the CPU design and allows for high performance.
 - All instructions except CSR are implemented.
 
-## Schematic
+## Single Cycle schematic
 ![Single Cycle CPU Schematic](/images/single-cycle-schematic.png)
+
+## Pipelined schematic
+Changes were made to get the pipelined schematic: 
+
+![Pipelined CPU Schematic](/images/pipelined_schematic.png)
 
 
 ## Interfaces
