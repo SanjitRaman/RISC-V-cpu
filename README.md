@@ -99,7 +99,7 @@ Furthermore, to ensure that everyone was able to understand the codebase, we had
 | **sign_extend**        | Design    | x        |      |       |      |
 |                    | Testbench |          | p    |       |      |
 | **risc_v**             | Design    | p        |      |       | p    |
-|                    | Testbench | X        |      |       |      |
+|                    | Testbench | x        |      |       |      |
 | **Testbench**          |           | x        |      |       | x    |
 | **R-type**             |           | (tb)     | x    |       |      |
 | **I-type**             |           | (tb)     |      | p     | p    |
