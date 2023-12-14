@@ -2,18 +2,32 @@
 ## Overview
 The `sign_extend` module in SystemVerilog is designed to perform sign extension on a given input instruction (`Instr`) based on the immediate source (`ImmSrc`). The sign extension is a process of increasing the number of bits of a binary number while preserving the number's sign (positive/negative) and value.
 
-## Parameters
-`DATA_WIDTH`: The width of the data. Default is 32.
+**Parameters** 
 
-`IMM_SRC_WIDTH`: The width of the immediate source. Default is 3 as there are 5 ways of addressing the immediate input. 
+The parameters for the sign extend module are as follows: 
 
-## Inputs
-`Instr`: A `DATA_WIDTH`-bit input instruction.
+| Signal  | Default | Description                                                |
+|-------------------|---------|------------------------------------------------------------|
+| `DATA_WIDTH`      | 32      | The width of the data.                                     |
+| `IMM_SRC_WIDTH`   | 3       | The width of the immediate source. Default is 3 as there are 5 ways of addressing the immediate input. |
 
-`ImmSrc`: A `IMM_SRC_WIDTH`-bit immediate source.
+**Inputs**  
 
-## Outputs
-`ImmOp`: A `DATA_WIDTH`-bit output after sign extension.
+The input signals for the sign extend module are as follows: 
+
+|  Signal           | Width           | Description                                                |
+|-------------------|-----------------|------------------------------------------------------------|
+| `Instr`           | `DATA_WIDTH`    | A `DATA_WIDTH`-bit input instruction.                       |
+| `ImmSrc`          | `IMM_SRC_WIDTH` | A `IMM_SRC_WIDTH`-bit immediate source.                     |
+
+**Outputs** 
+
+The output signals for the sign extend module are as follows: 
+
+| Signal            | Width           | Description                                                |
+|-------------------|-----------------|------------------------------------------------------------|
+| `ImmOp`           | `DATA_WIDTH`    | A `DATA_WIDTH`-bit output after sign extension.             |
+
 
 ## Operation
 The module performs different operations based on the value of ImmSrc:
