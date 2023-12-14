@@ -64,9 +64,23 @@ The `alu_decoder` generates the `ALUControl` signal based on the opcode, funct3,
 
 ![](/images/ALU_decoder.png)
 
-The control unit also contains logic to generate the `PCSrc` signal, which determines the source of the next program counter value. This logic handles jump and branch instructions.
+## Control unit 
 
-**TODO:** **[Insert logic table using flags for this]**
+The control unit also contains logic to generate the `PCSrc` signal, which determines the source of the next program counter value. This logic handles jump and branch instructions and is derived using the flags N (negative), C (carry), Z (zero), V (signed error) and B (branch) in junction with the intermediary signal: S (signed_greater_than).
+
+The logic for S is: (~N & ~V) | Z | (N & V), effectively checking for a zero, or a positive result in from signed subtraction. 
+
+| Instruction type | Instruction | Function                                   | PCSrc  |
+|------------------|-------------|--------------------------------------------|--------|
+| J-Type           | JAL         | Jump and Link                              | 1      |
+| J-Type           | JALR        | Jump and Link Register                     | 1      |
+| B-Type           | BEQ         | Branch if equal                            | B & Z  |
+| B-Type           | BNE         | Branch if not equal                        | B & ~Z |
+| B-Type           | BLT         | Branch if less than                        | B & ~S |
+| B-Type           | BGE         | Branch if greater than or equal            | B & S  |
+| B-Type           | BLTU        | Branch if less than (unsigned)             | B & C  |
+| B-Type           | BGEU        | Branch if greater than or equal (unsigned) | B & ~C |
+| -                | -           | Default/Other case                         | 0      |
 
 ## Constraints and Assumptions
 The control unit is designed for a RISC-V 32I processor and assumes that instructions are 32 bits wide. It also assumes that the processor uses a little-endian memory system.
