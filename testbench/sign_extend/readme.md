@@ -4,7 +4,7 @@
 This document outlines the test methodology for the `sign_extend` module in the `rtl/sign_extend/` directory. The tests are implemented in the `sign_extend_tb.cpp` file in the `testbench/` directory. The specification for the `sign_extend` module is provided in the `readme.md` file.
 
 ## Test Environment
-The test environment is set up using the Google Test framework. The `sign_extend` module is instantiated in the testbench, and its inputs and outputs are connected to the testbench signals.
+The test environment is set up using the [Google Test framework](/testbench/readme.md). The `sign_extend` module is instantiated in the testbench, and its inputs and outputs are connected to the testbench signals.
 
 ## Test Cases
 

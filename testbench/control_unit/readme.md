@@ -1,6 +1,6 @@
 # Test Methodology for ALU
 
-This testbench is written in C++ and uses the Google Test framework to test a control unit in a RISC-V processor. The control unit is responsible for generating control signals based on the instruction type and opcode.
+This testbench is written in C++ and uses the [Google Test framework](/testbench/readme.md) to test a control unit in a RISC-V processor. The control unit is responsible for generating control signals based on the instruction type and opcode.
 
 ## Class: ControlUnitTest
 

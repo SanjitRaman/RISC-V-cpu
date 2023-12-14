@@ -4,7 +4,7 @@
 This document describes the test methodology used by the register file testbench located in [testbench/reg_file/reg_file_tb.cpp](TODOINSERTLINK) to validate the functionality of the register file as per the specification in [rtl/reg_file/readme.md](TODOINSERTLINK).
 
 ## Testbench Overview
-The testbench uses the Google Test framework to define and run tests. It includes three test cases: ASYNCREAD, SYNCWRITE, and REG0. Each test case is designed to test a specific aspect of the register file's functionality.
+The testbench uses the [Google Test framework](/testbench/readme.md) to define and run tests. It includes three test cases: ASYNCREAD, SYNCWRITE, and REG0. Each test case is designed to test a specific aspect of the register file's functionality.
 
 ## Test Cases
 ### ASYNCREAD
