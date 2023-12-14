@@ -1,4 +1,4 @@
-# Design Specification for the `pc` Module
+# Program Counter Design Specification
 
 ## Overview
 The pc module is a Program Counter (PC) for a RISC-V processor. It is designed to hold the address of the current instruction being executed.

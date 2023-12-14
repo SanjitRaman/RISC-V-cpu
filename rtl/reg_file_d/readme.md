@@ -1,4 +1,4 @@
-# Design Specification for the `reg_file_d` Module
+# Decode Register File Design Specification
 
 ## Overview
 The `reg_file_d` module serves as a Decode Register for a RISC-V processor. Its purpose is to hold fetched information and provide outputs for the control unit and decode stage.
