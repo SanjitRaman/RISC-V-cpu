@@ -7,6 +7,7 @@ The unit tests are lightweight tests that do not simulate the whole RISC-V CPU s
 The unit tests are run in a CI-pipeline, defined in the `.github/workflows/c-cpp.yml` file. The CI-pipeline runs on a locally-hosted runner which is a remote linux-server running Ubuntu 22:04 LTS. The unit tests run on every push and pull request to `master` branch.
 
 ## Table of Contents
+- [Google Test Framework](#google-test-framework)
 - [Running the unit tests locally](#running-the-unit-tests-locally)
 - [Unit Test Results](#unit-test-results)
     - [1. Register File](#1-register-file)
@@ -24,7 +25,15 @@ The unit tests are run in a CI-pipeline, defined in the `.github/workflows/c-cpp
         - [5. Jump Instructions](#jump-instructions)
         - [6. R-type Instructions](#r-type-instructions)
 
+## Google Test Framework
+In this file, Google Test is used to implement unit tests for the DUT. The `<module>_tb.cpp` file contains a test fixture class `ModuleNameTest` that inherits from `::testing::Test`. This fixture class provides a set of common setup and teardown methods that are executed before and after each test case. In this case, `Setup()` is overridden to initialize the `<module>` instance (`top`) and `Teardown()` is overridden to delete the `<module>` instance.
 
+Each test case is defined as a member function of the `ModuleNameTest` class and is prefixed with the TEST_F macro, which indicates that it is a test case associated with the ModuleNameTest fixture. Each test case verifies the behavior of the module by setting the input values of the module instance (`top`), calling the `eval()` method to evaluate the output, and then using the `ASSERT_EQ` or `EXPECT_EQ` macro to check the expected values of the output signals.
+
+For example, in the ALU:
+For example, the `ADDFlags0` test case sets the `ALUControl` input to `0b0000`, `SrcA` to `0x0000003F`, and `SrcB` to `0x0000014A`. It then evaluates the alu instance and asserts that the `ALUResult` output should be `0x00000189`, and the `Zero, N, V, and C` outputs should be `0b0`.
+
+The main function initializes the Google Test framework, runs all the defined test cases using ```RUN_ALL_TESTS()```, and generates a coverage report using ```VerilatedCov::write()```.
 
 ## Running the unit tests locally
 
