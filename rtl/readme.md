@@ -33,15 +33,23 @@ The design includes the following I/O ports for the purposes of debugging:
 
 The CPU is composed of several modules, each of which performs a specific function:
 
-| Module           | Description                                                     |
+| Module           | Summary of changes                                              |
 |------------------|-----------------------------------------------------------------|
-| PC               | Generates the address of the next instruction to be executed.    |
-| Instruction memory | Fetches the instruction at the address provided by the PC.       |
-| Control unit     | Decodes the instruction and constructs the control path.         |
-| Register file    | Reads and writes data to the registers as directed by the control signals. |
-| ALU              | Performs arithmetic and logical operations as directed by the control signals. |
-| Data memory      | Reads and writes data to memory as directed by the control signals. |
+| [**PC**](/rtl/pc/)| Stall F input signal added  |
+| [Instruction memory](/rtl/instr_mem/) | |
+| [Control unit](/rtl/control_unit/)    | |
+| [Register file](/rtl/reg_file/)    |  |
+| [ALU](/rtl/alu/)              | |
+| [Data memory](/rtl/data_mem/)      | |
+| [**Register file D**](/rtl/reg_file_d/) | Decode register added |
+| [**Register file E**](/rtl/reg_file_e/) | Execute register added  |
+| [**Register file M**](/rtl/reg_file_m/) | Memory register added  |
+| [**Register file W**](/rtl/reg_file_w/) | Writeback register added  |
+| [**Hazard unit**](/rtl/hazard_unit/) | Hazard unit added  |
+
+Multiplexers added for extra logic. 
+
 
 ## Operation
 
-The operation of the CPU is driven by the clock signal. On each rising edge of the clock, the CPU fetches and decodes an instruction, reads data from the register file, performs an operation in the ALU, and writes data to the register file or memory as specified by the instruction. The CPU then updates the PC to the address of the next instruction, and the process repeats.
+The operation of the CPU is driven by the clock signal. On each rising edge of the clock, the CPU fetches and decodes an instruction, reads data from the register file, performs an operation in the ALU, and writes data to the register file or memory as specified by the instruction. The CPU then updates the PC to the address of the next instruction, and the process repeats. 
