@@ -68,7 +68,7 @@ The `alu_decoder` generates the `ALUControl` signal based on the opcode, funct3,
 
 The control unit also contains logic to generate the `PCSrc` signal, which determines the source of the next program counter value. This logic handles jump and branch instructions and is derived using the flags N (negative), C (carry), Z (zero), V (signed error) and B (branch) in junction with the intermediary signal: S (signed_greater_than).
 
-The logic for S is: (~N & ~V) | Z | (N & V), effectively checking for a zero, or a positive result in from signed subtraction. 
+The logic for S is: `(~N & ~V) | Z | (N & V)`, effectively checking for a zero, or a positive result in from signed subtraction. 
 
 | Instruction type | Instruction | Function                                   | PCSrc  |
 |------------------|-------------|--------------------------------------------|--------|
