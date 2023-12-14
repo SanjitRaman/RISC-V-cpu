@@ -1,6 +1,6 @@
 # Test Methodology for Control Unit
 
-This testbench is written in C++ and uses the [Google Test framework](/testbench/readme.md) to test a control unit in a RISC-V processor. The control unit is responsible for generating control signals based on the instruction type and opcode.
+This testbench is written in C++ and uses the [Google Test framework](/testbench/readme.md) to test a control unit [(specification found here)](/rtl/control_unit/readme.md) in a RISC-V processor. The control unit is responsible for generating control signals based on the instruction type and opcode.
 
 ## Class: ControlUnitTest
 
