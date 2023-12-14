@@ -6,7 +6,7 @@ module reg_file #(
     input  logic [ADDRESS_WIDTH-1:0] A1,  // read adr 1
     input  logic [ADDRESS_WIDTH-1:0] A2,  // read adr 2
     input  logic [ADDRESS_WIDTH-1:0] A3,  // write adr 
-    input logic  [ADDRESS_WIDTH-1:0] address_to_view,
+    input  logic [ADDRESS_WIDTH-1:0] address_to_view,
     input  logic                     WE3, // write enable 
     input  logic [DATA_WIDTH-1:0]    WD3, // write data 
     output logic [DATA_WIDTH-1:0]    RD1, // read out 1
