@@ -32,28 +32,28 @@ The control unit decodes the opcode, funct3, and funct7 fields of the current in
 The `main_decoder` generates most of the control signals, including `Branch`, `ResultSrc`, `MemWrite`, `ALUSrc`, `ImmSrc`, `RegWrite`, `ALUOp`, and `Jump`.
 
 ### R-type Control Path
-![single-cycle-control-path-r-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/a12b2269-0568-4f00-8495-4f015e088ec4)
+![single-cycle-control-path-r-type](/images/r-type_control_path.png)
 
 ### I-type Control Path
-![single-cycle-control-path-i-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/9f863812-9a50-4f98-ba87-2f1d307f4554)
+![single-cycle-control-path-i-type](/images/i-type_control_path.png)
 
 ### S-type Control Path
-![single-cycle-control-path-s-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/a67ffe3f-5e8e-4845-8288-c3618aa77d40)
+![single-cycle-control-path-s-type](/images/s-type_control_path.png)
 
 ### B-type Control Path
-![single-cycle-control-path-b-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/92810bb7-d4e9-4e0a-97cf-122005258d1d)
+![single-cycle-control-path-b-type](/images/b-type_control_path.png)
 
 ### AUIPC Control Path
-![single-cycle-control-path-auipc](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/e8cb0ba4-eecf-41ab-8b9c-30666f603d00)
+![single-cycle-control-path-auipc](/images/AUIPC_control_path.png)
 
 ### LUI Control Path
-![single-cycle-control-path-lui](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/873669a9-808f-4cbd-a2fe-06b4a38084c2)
+![single-cycle-control-path-lui](/images/LUI_control_path.png)
 
 ### JALR Control Path
-![single-cycle-control-path-jalr](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/c9bb65ba-358c-4447-b21f-9857b8cc1277)
+![single-cycle-control-path-jalr](/images/JALR_control_path.png)
 
 ### J-type Control Path (JAL)
-![single-cycle-control-path-j-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/16799b5f-b6ca-4b00-b85f-c5b1861179e6)
+![single-cycle-control-path-j-type](/images/JAL_control_path.png)
 
 
 The `alu_decoder` generates the `ALUControl` signal based on the opcode, funct3, funct7_5, and `ALUOp` signals. 

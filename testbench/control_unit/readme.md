@@ -24,10 +24,16 @@ The test cases are written using the `TEST_F` macro from Google Test. Each test 
 
 | R-Type | I-Type |
 :--:|:--:
-| ![single-cycle-control-path-r-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/a12b2269-0568-4f00-8495-4f015e088ec4) | ![single-cycle-control-path-i-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/9f863812-9a50-4f98-ba87-2f1d307f4554) |
+| ![single-cycle-control-path-r-type](/images/r-type_control_path.png) | ![single-cycle-control-path-i-type](/images/i-type_control_path.png) |
 | S-Type | B-Type |
 :--:|:--:
-| ![single-cycle-control-path-s-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/a67ffe3f-5e8e-4845-8288-c3618aa77d40) | ![single-cycle-control-path-b-type](https://github.com/SanjitRaman/Team-10-RISC-V/assets/51057192/92810bb7-d4e9-4e0a-97cf-122005258d1d) |
+| ![single-cycle-control-path-s-type](/images/s-type_control_path.png) | ![single-cycle-control-path-b-type](/images/b-type_control_path.png) |
+| AUIPC | LUI |
+:--:|:--:
+| ![](/images/AUIPC_control_path.png) | ![](/images/LUI_control_path.png) |
+| JALR | JAL |
+:--:|:--:
+| ![](/images/JALR_control_path.png) | ![](/images/JAL_control_path.png) |
 
 
 ## How to Run
