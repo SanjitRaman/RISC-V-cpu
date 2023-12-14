@@ -23,5 +23,16 @@ Each test case follows a similar procedure:
 3. Read the value or values from the register or registers.
 4. Compare the read value or values with the expected value or values using the `ASSERT_EQ` function.
 
+## How to Run:
+``` make runtest RUN=module GTEST=1 MODULE=reg_file MODULE.INCLUDE_DIRS=""```
+
+## Test Results
+
+![Alt text](/images/reg_file_test_results.png)
+
+#### Line Coverage:
+The register file unit tests hit all of the lines, except for the debug view lines, which do not affect the functionality of the module.
+![Alt text](/images/reg_file_line_coverage.png)
+
 ## Conclusion
 This testbench provides comprehensive coverage of the register file's functionality as per the specification. It verifies that the register file correctly implements asynchronous read, synchronous write, and the hardwiring of register 0.

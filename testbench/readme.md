@@ -51,6 +51,7 @@ Note: Be sure to run `make clean` after running each test to clean up the genera
 ``` make runtest RUN=module GTEST=1 MODULE=reg_file MODULE.INCLUDE_DIRS=""```
 
 Details about the tests can be found [here](/testbench/reg_file/readme.md).
+
 ![Alt text](/images/reg_file_test_results.png)
 
 #### Line Coverage:
@@ -61,6 +62,7 @@ The register file unit tests hit all of the lines, except for the debug view lin
 ``` make runtest RUN=module GTEST=1 MODULE=alu MODULE.INCLUDE_DIRS=""```
 
 Details about the tests can be found [here](/testbench/alu/readme.md).
+
 ![Alt text](/images/gtest-results-alu-testbench.png)
 
 #### Line Coverage:
@@ -99,6 +101,8 @@ We hope to fix this issue in the future. Pull requests are welcome!
 ### 5. Control Unit:
 
 ```make runtest GTEST=1 VBUDDY=0 RUN=module MODULE=control_unit MODULE.INCLUDE_DIRS="-y rtl/control_unit/decoders"```
+
+Details about the tests can be found [here](/testbench/control_unit/readme.md).
 
 ![Alt text](/images/control_unit_test_results_excerpt.png)
 
