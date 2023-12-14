@@ -26,18 +26,16 @@ The ALU generates the following outputs:
 
 The `ALUResult` is the result of the ALU operation and represents the outcome of the arithmetic or logical operation performed on the input operands. The table below shows the supported ALU operations and its encoding as a `ALUControl` signal:
 
-**[TODO: Add 4:0 subscript for rs2 in shift operations]**
-
 | ALU Control | Instruction | Operation              | English Translation | Description                                                     |
 |-------------|-------------|------------------------|---------------------|-----------------------------------------------------------------|
 | 0000        | ADD         | rd = rs1 + rs2         | Addition            | Performs addition of rs1 and rs2 and stores the result in rd.    |
 | 0001        | SUB         | rd = rs1 - rs2         | Subtraction         | Performs subtraction of rs2 from rs1 and stores the result in rd.|
-| 0010        | SLL         | rd = rs1 << rs2        | Logical Shift Left  | Performs logical shift left of rs1 by rs2 bits and stores the result in rd. |
+| 0010        | SLL         | rd = rs1 << rs2<sub>[4:0]</sub>         | Logical Shift Left  | Performs logical shift left of rs1 by rs2 bits and stores the result in rd. |
 | 0011        | SLT         | rd = rs1 < rs2         | Set Less Than       | Sets rd to 1 if rs1 is less than rs2, otherwise sets rd to 0.    |
 | 0100        | SLTU        | rd = rs1 < rs2         | Set Less Than Unsigned | Sets rd to 1 if rs1 is less than rs2 (unsigned comparison), otherwise sets rd to 0. |
 | 0101        | XOR         | rd = rs1 ^ rs2         | XOR                 | Performs bitwise XOR of rs1 and rs2 and stores the result in rd.|
-| 0110        | SRL         | rd = rs1 >> rs2        | Logical Shift Right | Performs logical shift right of rs1 by rs2 bits and stores the result in rd. |
-| 0111        | SRA         | rd = rs1 >>> rs2        | Arithmetic Shift Right | Performs arithmetic shift right of rs1 by rs2 bits and stores the result in rd. |
+| 0110        | SRL         | rd = rs1 >> rs2<sub>[4:0]</sub>        | Logical Shift Right | Performs logical shift right of rs1 by rs2 bits and stores the result in rd. |
+| 0111        | SRA         | rd = rs1 >>> rs2<sub>[4:0]</sub>         | Arithmetic Shift Right | Performs arithmetic shift right of rs1 by rs2 bits and stores the result in rd. |
 | 1000        | OR          | rd = rs1 \| rs2        | OR                  | Performs bitwise OR of rs1 and rs2 and stores the result in rd. |
 | 1001        | AND         | rd = rs1 & rs2         | AND                 | Performs bitwise AND of rs1 and rs2 and stores the result in rd. |
 | 1010        | LUI         | rd = rs1 \| (rs2 << 12) | Load Upper Immediate | Loads the upper 20 bits of rs2, left-shifted by 12 bits, and ORs it with rs1. The result is stored in rd. |
