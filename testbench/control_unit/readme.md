@@ -1,6 +1,6 @@
-# Control Unit Testbench Documentation
+# Test Methodology for Control Unit
 
-This testbench is written in C++ and uses the Google Test framework to test a control unit in a RISC-V processor. The control unit is responsible for generating control signals based on the instruction type and opcode.
+This testbench is written in C++ and uses the [Google Test framework](/testbench/readme.md) to test a control unit [(specification found here)](/rtl/control_unit/readme.md) in a RISC-V processor. The control unit is responsible for generating control signals based on the instruction type and opcode.
 
 ## Class: ControlUnitTest
 
@@ -20,12 +20,39 @@ This class inherits from the Google Test class `::testing::Test`. It contains me
 
 ## Test Cases
 
-The test cases are written using the `TEST_F` macro from Google Test. Each test case sets the inputs and evaluates the control unit, then asserts the expected control signals. The test cases cover R-type, I-type, S-type, B-type, U-type, and J-type instructions.
+The test cases are written using the `TEST_F` macro from Google Test. Each test case sets the inputs and evaluates the control unit, then asserts the expected control signals according to the [specification](/rtl/control_unit/readme.md). The test cases cover R-type, I-type, S-type, B-type, U-type, and J-type instructions. Below are their respective datapaths: 
 
-## Main Function
+| R-Type | I-Type |
+:--:|:--:
+| ![single-cycle-control-path-r-type](/images/r-type_control_path.png) | ![single-cycle-control-path-i-type](/images/i-type_control_path.png) |
+| S-Type | B-Type |
+:--:|:--:
+| ![single-cycle-control-path-s-type](/images/s-type_control_path.png) | ![single-cycle-control-path-b-type](/images/b-type_control_path.png) |
+| AUIPC | LUI |
+:--:|:--:
+| ![](/images/AUIPC_control_path.png) | ![](/images/LUI_control_path.png) |
+| JALR | JAL |
+:--:|:--:
+| ![](/images/JALR_control_path.png) | ![](/images/JAL_control_path.png) |
 
-The main function initializes the Google Test framework, runs all tests, and writes the coverage data to a file.
 
 ## How to Run
 
-To run the testbench, compile it with a C++ compiler that supports the C++11 standard or later, and link it with the Google Test library. Then, run the resulting executable. The test results will be printed to the console, and the coverage data will be written to `logs/coverage_control_unit.dat`.
+To run the testbench, in the terminal run the command: ```make runtest GTEST=1 VBUDDY=0 RUN=module MODULE=control_unit MODULE.INCLUDE_DIRS="-y rtl/control_unit/decoders"```
+
+The main function initializes the Google Test framework, runs all tests, and writes the coverage data to a file.
+
+## Results 
+
+From running the command, we can see the outcome of each test case below:  
+
+![](/images/control_unit_test_results_excerpt.png)
+
+And the code coverage report can be viewed externally from exporting the file:
+
+![](/images/control_unit_line_coverage.png)
+
+With this we can be confident that the control unit is working as intended. 
+
+## Further Work:
+It is not possible to test the control unit with all the possible combinations of inputs. Hence, it is recommended to test with random inputs in a UVM-style methodology to ensure that the module works as expected, defining covergroups to ensure that all functional coverage points are have been sufficiently tested. Given the limited time for this project, this was not possible to implement.
