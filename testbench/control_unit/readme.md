@@ -53,3 +53,6 @@ And the code coverage report can be viewed externally from exporting the file:
 ![](/images/control_unit_line_coverage.png)
 
 With this we can be confident that the control unit is working as intended. 
+
+## Further Work:
+It is not possible to test the control unit with all the possible combinations of inputs. Hence, it is recommended to test with random inputs in a UVM-style methodology to ensure that the module works as expected, defining covergroups to ensure that all functional coverage points are have been sufficiently tested. Given the limited time for this project, this was not possible to implement.
