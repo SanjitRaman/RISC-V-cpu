@@ -49,19 +49,13 @@ The `Zero`, `N`, `C`, and `V` signals are generated based on the result of the A
 
 The logical expressions to generate these flags within the ALU using SrcA, SrcB, and ALUResult are as follows:
 
-**[TODO double check these expressions]**
-
 Zero: `Zero = (ALUResult == 0)`
 
 N: `N = (ALUResult < 0)`
 
-C (for addition): `C = (ALUResult < SrcA)`
+C: `C = Overflow bit from SrcA±SrcB`
 
-C (for subtraction): `C = (SrcB > SrcA)`
-
-V (for addition): `V = ((SrcA < 0 && SrcB < 0 && ALUResult >= 0) || (SrcA >= 0 && SrcB >= 0 && ALUResult < 0))`
-
-V (for subtraction): `V = ((SrcA >= 0 && SrcB < 0 && ALUResult >= 0) || (SrcA < 0 && SrcB >= 0 && ALUResult < 0))`
+V: `V = ((SrcA < 0 & SrcB < 0 & ALUResult >= 0) | (SrcA >= 0 & SrcB >= 0 & ALUResult < 0))`
 
 
 
