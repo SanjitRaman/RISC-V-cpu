@@ -7,14 +7,20 @@ The `ld_decoder` module is a load instruction decoder for a RISC-V processor. It
 ![ld_decoder schematic](/images/ld_decoder_schematic.png)
 
 ## Parameters
-- `DATA_WIDTH`: The width of the data bus. Default is 32.
-
+| Parameter   | Description                          | Default |
+|-------------|--------------------------------------|---------|
+| `DATA_WIDTH` | The width of the data bus.           | 32      |
 ## Inputs
-- `RD`: The data read from memory.
-- `funct3`: The `funct3` field of the load instruction.
+
+| Signal    | Width | Description                                |
+|-----------|-------|--------------------------------------------|
+| `RD`      |   `DATA_WIDTH`    | The data read from memory.                  |
+| `funct3`  |   3    | The `funct3` field of the load instruction. |
 
 ## Outputs
-- `RDOut`: The output data after decoding the load instruction.
+| Signal  | Width | Description                            |
+|---------|-------|----------------------------------------|
+| `RDOut` |   DATA_WIDTH   | The output data after decoding the load instruction. |
 
 ## Functionality
 The `ld_decoder` module uses a combinational always block to decode the load instruction based on the `funct3` field.

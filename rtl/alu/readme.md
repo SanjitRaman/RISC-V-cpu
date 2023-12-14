@@ -4,23 +4,35 @@
 
 The Arithmetic Logic Unit (ALU) is a fundamental component of a RISC-V 32I processor. It performs various arithmetic and logical operations based on the control signals it receives.
 
+## Parameters
+
+| Parameter           | Default Value | Description                                        |
+|---------------------|-------|----------------------------------------------------|
+| `DATA_WIDTH`        | 32    | The width of the input and output data (in bits)    |
+| `ALU_CTRL_WIDTH`    | 4     | The width of the ALU control signal (in bits)       |
+| `SHIFT_WIDTH`       | 5     | The width of the shift amount (in bits)             |
+
 ## Inputs
 
 The ALU takes the following inputs:
 
-- `SrcA`: The first operand for the ALU operation (32 bits).
-- `SrcB`: The second operand for the ALU operation (32 bits).
-- `ALUControl`: A control signal that determines the operation to be performed by the ALU (4 bits).
+| Signal        | Width  | Description                                        |
+|--------------|-------|------------------------------------------------------|
+| `SrcA`       |   `DATA_WIDTH`  | The first operand for the ALU operation               |
+| `SrcB`       | `DATA_WIDTH`  | The second operand for the ALU operation              |
+| `ALUControl` | `ALU_CONTROL_WIDTH`  | A control signal that determines the ALU operation   |
 
 ## Outputs
 
 The ALU generates the following outputs:
 
-- `ALUResult`: The result of the ALU operation (32 bits).
-- `Zero`: A signal indicating whether the ALU result is zero (1 bit).
-- `N`: A signal indicating whether the ALU result is negative (1 bit).
-- `C`: A signal indicating whether a carry occurred in the ALU operation (1 bit).
-- `V`: A signal indicating whether an overflow occurred in the ALU operation (1 bit).
+| Signal     | Width | Description                                            |
+|------------|-------|--------------------------------------------------------|
+| `ALUResult`| `DATA_WIDTH`    | The result of the ALU operation                         |
+| `Zero`     | 1     | A signal indicating whether the ALU result is zero      |
+| `N`        | 1     | A signal indicating whether the ALU result is negative |
+| `C`        | 1     | A signal indicating whether a unsigned overflow occurred            |
+| `V`        | 1     | A signal indicating whether a signed overflow occurred        |
 
 ### `ALUResult`
 
@@ -47,13 +59,14 @@ The `Zero`, `N`, `C`, and `V` signals are generated based on the result of the A
 
 The logical expressions to generate these flags within the ALU using SrcA, SrcB, and ALUResult are as follows:
 
-Zero: `Zero = (ALUResult == 0)`
 
-N: `N = (ALUResult < 0)`
+| Signal   | Expression                                   |
+|----------|----------------------------------------------|
+| Zero     | `(ALUResult == 0)`                     |
+| N        | `(ALUResult < 0)`                         |
+| C        | `Overflow bit from SrcA±SrcB`             |
+| V        | `((SrcA < 0 & SrcB < 0 & ALUResult >= 0) \| (SrcA >= 0 & SrcB >= 0 & ALUResult < 0))` |
 
-C: `C = Overflow bit from SrcA±SrcB`
-
-V: `V = ((SrcA < 0 & SrcB < 0 & ALUResult >= 0) | (SrcA >= 0 & SrcB >= 0 & ALUResult < 0))`
 
 
 

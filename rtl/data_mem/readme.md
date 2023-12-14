@@ -4,19 +4,30 @@
 The `data_mem` module is a data memory module for a RISC-V processor. It is designed to store and retrieve data during the execution of a program. The module is parameterized by the address width, data width, byte width, and a memory file.
 
 ## Parameters
-- `ADDRESS_WIDTH`: The width of the address bus. Default is 17.
-- `DATA_WIDTH`: The width of the data bus. Default is 32.
-- `BYTE_WIDTH`: The width of a byte. Default is 8.
-- `MEM_FILE`: The file from which to load initial memory contents. Default is "data_mem.mem".
+
+| Parameter       | Default Value    | Description                                            |
+|-----------------|------------------|--------------------------------------------------------|
+| `ADDRESS_WIDTH` | 17               | The width of the address bus.                          |
+| `DATA_WIDTH`    | 32               | The width of the data bus.                             |
+| `BYTE_WIDTH`    | 8                | The width of a byte.                                   |
+| `MEM_FILE`      | "data_mem.mem"   | The file from which to load initial memory contents.    |
+
 
 ## Inputs
-- `CLK`: The clock signal.
-- `WE0`, `WE1`, `WE2`, `WE3`: Write enable signals for each byte of the data word.
-- `A`: The address at which to write or from which to read data.
-- `WD`: The data to write to memory.
+| Signal  | Width | Description                                      |
+|---------|-------|--------------------------------------------------|
+| `CLK`   |   1   | The clock signal.                                |
+| `WE0`   |   1   | Write enable signal for the least significant byte of the data word. |
+| `WE1`   |   1   | Write enable signal for the second least significant byte of the data word. |
+| `WE2`   |   1   | Write enable signal for the second most significant byte of the data word. |
+| `WE3`   |   1   | Write enable signal for the most significant byte of the data word. |
+| `A`     |   `DATA_WIDTH`   | The address at which to write or from which to read data. |
+| `WD`    | `DATA_WIDTH`      | The data to write to memory.                      |
 
 ## Outputs
-- `RD`: The data read from memory.
+| Signal  | Width | Description                                      |
+|---------|-------|--------------------------------------------------|
+| `RD`    | `DATA_WIDTH`    | The data read from memory.                        |
 
 ## Functionality
 The `data_mem` module uses an array `ram_array` to simulate RAM. The array is indexed by the address `A` and each element is a byte of data.
