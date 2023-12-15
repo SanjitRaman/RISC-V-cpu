@@ -4,9 +4,9 @@ This repository contains design and testing work for a RISC-V CPU by a group of 
 
 There is a single-cycle implementation, as well as a 5-stage pipeline implementation of the CPU.
 
-## TODO: UPDATE THIS SECTION, MENTION CACHE IS NOT STABLE 
-
 The course is designed to work with a piece of hardware developed by Imperial College called the VBuddy. This is a board containing a microprocessor and a number of peripherals that allow for SystemVerilog designs to be simulated in Verilator and simultaneously outputing to peripherals such as the TFT Screen and NeoPixel LEDs. You can read more about the VBuddy [here](http://www.ee.ic.ac.uk/pcheung/teaching/EIE2-IAC/Lecture%203%20-%20Verilator%20&%20Testbenches%20(notes).pdf)
+
+Note: this is only a partial implementation of cache to a 5 stage pipelined RISC-V processor
 
 ## Folder Structure
 * [rtl](/rtl/) contains the SystemVerilog code for the CPU. Each module has its own folder, containing any sub-modules.
