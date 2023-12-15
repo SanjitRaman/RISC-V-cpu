@@ -72,7 +72,12 @@ We assigned different people to write the design and testbench of each module to
 
 To allow parallel development in extending the CPU from the [Reduced RISC-V Lab](https://github.com/SanjitRaman/Team-10-Reduced-RISC-V) we split up implementation of each instruction type to different people. This would also mean group members need to understand and modify the design of the modules they did not initially write.
 
-The table below shows the modules that each person was responsible for. A detailed breakdown of the contributions of each person can be found in the [individual statements](/statements/).
+The table below shows the modules that each person was responsible for. A detailed breakdown of the challenges we faced:
+
+|||
+|------|------|
+|As a Team| [Joint Statement](/statements/)|
+|Individually|[Individual Statements](/statements/)|
 
 
 Furthermore, to ensure that everyone was able to understand the codebase, we had a rule that pull requests could not be merged without review by another person. 

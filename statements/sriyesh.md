@@ -35,6 +35,7 @@ In the control unit I helped write part of the ALU decoder, to produce the afore
 
 As for the testbench, I wrote the tests for the all the branch instructions, considering a case where a branch was to be taken and one where it was not for each instruction. This was done by setting the flags and instruction and asseting the control signals. More information on the testing of the control unit can be found [here](/testbench/control_unit/readme.md). 
 
+
 ### Register file
 
 I wrote the register file for this processor, the specification for which can be found [here](/rtl/reg_file/readme.md). 
@@ -95,7 +96,7 @@ The three stall signals `NotHitStall`, `MainMemRetreiveStall`, `WBStall` were `O
 
 ### Updated hazard unit 
 
-The protype updated hazard unit included the `CacheStall` signal as an input to account for the stalls required by writing back from main memory. In the final [hazard unit](/rtl/hazard_unit/), `CacheStall` is an internal signal and logic similar to the multiplexers added in the top level were moved into this unit to support the new logic. 
+The prototype updated hazard unit included the `CacheStall` signal as an input to account for the stalls required by writing back from main memory. In the final [hazard unit](/rtl/hazard_unit/), `CacheStall` is an internal signal and logic similar to the multiplexers added in the top level were moved into this unit to support the new logic. 
 
 ## Reflection
 

@@ -46,6 +46,7 @@ MEM_DIR = memory
 LOGS_DIR = logs
 TESTBENCH_DIR = testbench
 PROGRAMS_DIR = programs
+RTL_DIR = rtl
 VBUDDY_DIR = vbuddy
 RTL_DIR = rtl
 SCRIPTS_DIR = scripts
@@ -87,6 +88,9 @@ assemble: $(PROGRAMS_DIR)/$(PROGRAM_NAME)/$(notdir $(PROGRAM_NAME)).s
 ifneq ($(wildcard $(dir $(PROGRAM))/data_mem.mem),)
 	cp $(dir $(PROGRAM))/data_mem.mem $(MEM_DIR)/data_mem.mem
 endif
+
+copy_unit_test_data_mem:
+	cp $(dir $(TB_SOURCE))/data_mem.mem $(MEM_DIR)/data_mem.mem
 
 
 $(TARGET): $(TB_SOURCE)

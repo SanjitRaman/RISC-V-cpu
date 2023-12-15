@@ -89,8 +89,8 @@ sign_extend * sgn_ext;
     sgn_ext->Instr = Instr;
     sgn_ext->ImmSrc = ImmSrc;
     sgn_ext->eval();
-    std::cout << (sgn_ext->ImmOp);
-    std::cout << (expected_value(Instr, ImmSrc));
+    //std::cout << (sgn_ext->ImmOp);
+    //std::cout << (expected_value(Instr, ImmSrc));
     ASSERT_EQ(sgn_ext->ImmOp, expected_value(Instr, ImmSrc));
   }
 
