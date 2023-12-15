@@ -21,7 +21,7 @@
    	- Wrote F1 light code - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/253b0befefa0293b3ab837c1599b318cc26dc482)
    	- Wrote b-type, j-type and u-type single instruction tests - Debugged these with Sanjit and Dhyey - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/991bcd032fbab5b5c8cdf697092155b1145bfd39)
    	  
-2. **Pipelinined:**
+3. **Pipelinined:**
    - Tested and debugged pipeline top level: Top level made by Sri with help from me - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/958d043b2ce32c2cf5880e0456c0ce58bbd49636)
      ![](/images/pipelined_schematic.png) 
    - **Errors:**
@@ -30,7 +30,7 @@
    	- JAL didn't work - Issue due to sign_extend being wrong for jumps and ResultSrcE causing a Forward
    ![](/images/pipelinedebug.png)
 
-3. **Cached:**
+4. **Cached:**
    - Helped to write directly mapped cache
    - Debugged and Tested cache - Program almost worked but cache was sometimes outputting incorrect values - problem was to do with hit timing being wrong but didn't have enough time to fix
     ![](/images/DebuggingCache.png)  
