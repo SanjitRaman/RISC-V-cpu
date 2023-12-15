@@ -3,6 +3,10 @@
 ## Overview
 The `reg_file_e` module serves as an Execute Register for a RISC-V processor. It is designed to handle register-related operations during the execution stage of the processor, providing outputs for ALU, flags unit and related multiplexers.
 
+## Schematic
+![reg_file_e](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/RegFileE.png)
+
+
 ## Parameters
 | Parameter         | Description                           | Default |
 |-------------------|---------------------------------------|---------|
