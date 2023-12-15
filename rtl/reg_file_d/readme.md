@@ -3,6 +3,11 @@
 ## Overview
 The `reg_file_d` module serves as a Decode Register for a RISC-V processor. Its purpose is to hold fetched information and provide outputs for the control unit and decode stage.
 
+## Schematics
+
+![reg_file_d](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/RegFileD.png)
+
+
 ## Parameters
 | Parameter   | Description                           | Default |
 |-------------|---------------------------------------|---------|
