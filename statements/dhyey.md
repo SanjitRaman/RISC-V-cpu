@@ -129,7 +129,26 @@ The team decided to implement a **write through, write around** directly mapped 
 
 | Instruction type | Cache Hit | Description |
 | ---------------- | --------- | ----------- |
-| Read | Cache Hit | The 
+| Read | Cache Hit | The data is fetched from cache |
+| Read | Cache Miss | The data is fetched from data memory, and written into cache for temporal locaity |
+| Write | Cache Hit | Update both data memory and cache |
+| Write | Cache Hit | Update data memory **only** |
+
+
+
+As evidenced in the tests, the cache works as expected in data mem wrapper.
+
+
+### Personal comments and improvements
+
+In conclusion, the project was a success. Our team successfully implemented a pipelined RISC-V processor with hazard handling, and a directly mapped cache. While the directly mapped cache was not successfully implemented in the final pipelined processor, working closely with a team of talented individuals enabled me to learn about collaborative development and design. Our testing was 
+
+
+
+### Additional contributions
+
+- 
+
 
 
 

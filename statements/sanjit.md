@@ -192,3 +192,11 @@ I drafted an initial change to the top-level to incorporate cache:
 Then we worked as a group to try and implement this change. 
 
 We designed and developed a directly mapped write-through cache. While this was not implemented into the pipelined RISC-V processor, we were able to implement the cache into data mem wrapper, where all the testcases passed. See the [joint statement](/statements/readme.md#cache) for more details.
+
+## Reflections
+
+Our group got along very well together, and each person was able to play to their strengths in their individual tasks, and I am proud of the work we have achieved. If I were to do this project again:
+- I would be clear on writing specifications for each module before implementation to eliminate design flaws even earlier than the unit tests. This would have helped particularly for the cache.
+- We followed a Test-Driven Development approach, which was very effective in ensuring that our code was correct. However, we could have done constrained random-inputs testing to improve our functional coverage.
+- We chose to do a lot of pair-coding as the primary purpose of this repo was for learning as much as we can about the RISC-V architecture in a hands on manner. In a practical work setting, we would have used a Gantt chart assigning very specific tasks to each member of the team (such as a verification-only engineer and a separate design-only engineer) to implement parallellism in our work more effectively.
+- I would make our port inputs and outputs follow `_i, _o` suffix convention, as this is more consistent with the industry standard.
