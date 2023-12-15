@@ -25,7 +25,8 @@ UNIT.INCLUDE_DIRS = -y $(RTL_DIR)/ \
 				-y $(RTL_DIR)/reg_file_w            \
 				-y $(RTL_DIR)/hazard_unit           \
 				-y $(RTL_DIR)/hazard_unit/subunits  \
-				-y $(RTL_DIR)/flags
+				-y $(RTL_DIR)/flags \
+				-y $(RTL_DIR)/cache 
 
 
 NAME=""

@@ -6,12 +6,14 @@ module risc_v #(
     parameter                      IMM_SRC_WIDTH  = 3,
     parameter                      ALU_CTRL_WIDTH = 4,
     parameter                      RES_SRC_WIDTH = 2,
-    parameter                      FORWARD_WIDTH = 2
+    parameter                      FORWARD_WIDTH = 2,
+    parameter                      MEM_ADDRESS_WIDTH = 17,
+    parameter                      BYTE_WIDTH = 8
 )(
 // interface signals
     input  logic                   CLK, RST, 
-    input  logic [ADDRESS_WIDTH-1:0] address_to_view,
-    output logic [DATA_WIDTH-1:0]  reg_output,
+    input  logic [ADDRESS_WIDTH-1:0]  address_to_view,
+    output logic [DATA_WIDTH-1:0]  a0, reg_output,
     output logic [DATA_WIDTH-1:0]  pc_viewer
 );
 
@@ -75,9 +77,13 @@ module risc_v #(
     logic [ADDRESS_WIDTH-1:0]      RdM;
     logic [FUNCT3_WIDTH-1:0]       funct3M;
 
+// Cache 
+    logic WE0, WE1, WE2, WE3, hit;
+    logic [DATA_WIDTH-1:0] RDCache, FoundData;
+
 // Data Memory
-    logic                          WE0, WE1, WE2, WE3;
-    logic [DATA_WIDTH-1:0]         ReadData;
+    // logic [DATA_WIDTH-1:0]         ReadData;
+    logic [DATA_WIDTH-1:0]         RDMem;
 
 // Reg File W 
     logic                          RegWriteW;
@@ -187,12 +193,13 @@ module risc_v #(
         .CLK        (CLK),
         .A1         (A1),
         .A2         (A2),
+        .address_to_view (address_to_view),
         .A3         (RdW), 
         .WE3        (RegWriteW), 
         .RD1        (RD1),
         .RD2        (RD2),
         .WD3        (ResultW),
-        .address_to_view (address_to_view),
+        .a0         (a0),
         .reg_output (reg_output)
     );
 
@@ -217,7 +224,7 @@ module risc_v #(
         .CLR(FlushE), 
         .RegWriteD(RegWriteD),
         .ResultSrcD(ResultSrcD), 
-        .MemWriteD(MemWriteD), 
+        .MemWriteD(MemWriteD),
         .JumpD(JumpD), 
         .BranchD(BranchD), 
         .ALUControlD(ALUControlD), 
@@ -313,43 +320,65 @@ module risc_v #(
         .funct3M(funct3M)
     );
 
-    we_decoder riscWe_decoder (
+    we_decoder #()
+    we_decoder (
         .funct3(funct3M),
         .MemWrite(MemWriteM),
-        .WE0 (WE0),
-        .WE1 (WE1),
-        .WE2 (WE2),
-        .WE3 (WE3)
+        .WE0(WE0),
+        .WE1(WE1),
+        .WE2(WE2),
+        .WE3(WE3)
     );
 
-    data_mem #(
-        .ADDRESS_WIDTH (17),
-        .BYTE_WIDTH    (8),
-        .DATA_WIDTH    (32)
+    cache #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .ADDRESS_WIDTH(MEM_ADDRESS_WIDTH) //May need to specify additional params
     )
-    riscDataMem (
-        .CLK         (CLK),
-        .A           (ALUResultM[16:0]),
-        .WD          (WriteDataM),
-        .RD          (ReadData),
-        .WE0         (WE0),
-        .WE1         (WE1),
-        .WE2         (WE2),
-        .WE3         (WE3)
+    riscCache (
+        // inputs
+        .CLK(CLK),
+        .WE0(WE0),
+        .WE1(WE1),
+        .WE2(WE2),
+        .WE3(WE3),
+        .A(ALUResultM[16:0]),
+        .WD(WriteDataM),
+        .FoundData(RDMem),
+        // outputs
+        .RD(RDCache),
+        .hit_o(hit)
+        //.set_to_view(set_to_view),
+        //.cache_array_viewer(cache_array_viewer)
+    );
+
+    data_mem  #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .ADDRESS_WIDTH(MEM_ADDRESS_WIDTH),
+        .BYTE_WIDTH(BYTE_WIDTH)
+    )
+    data_mem (
+        .CLK(CLK),
+        .A(ALUResultM[16:0]),
+        .WD(WriteDataM),
+        .WE0(WE0),
+        .WE1(WE1),
+        .WE2(WE2),
+        .WE3(WE3),
+        .RD(RDMem)
     );
 
     ld_decoder #(
-        .DATA_WIDTH(32)
+        .DATA_WIDTH(DATA_WIDTH)
     )
-    riscLd_decoder(
-        .RD (ReadData),
-        .funct3 (funct3M),
-        .RDOut (ReadDataM)
+    ld_decoder(
+        .RD(FoundData),
+        .funct3(funct3M),
+        .RDOut(ReadDataM)
     );
 
     reg_file_w #(
         .ADDRESS_WIDTH (5),
-        .DATA_WIDTH    (32)
+        .DATA_WIDTH    (32),
     )
     reg_file_w (
         .CLK(CLK),
@@ -371,6 +400,7 @@ module risc_v #(
     );
 
     assign ResultW  = ResultSrcW[1] ? PCPlus4W : (ResultSrcW[0] ? ReadDataW : ALUResultW);
-    
+    assign FoundData = (hit) ? RDCache : RDMem;
     assign pc_viewer = PCF;
+
 endmodule
