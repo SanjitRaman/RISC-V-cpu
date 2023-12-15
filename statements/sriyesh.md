@@ -45,7 +45,7 @@ I wrote the register file for this processor, the specification for which can be
 
 While implementing U and J type instructions, I had to update the sign extend module. My initial approach was to simply sign extend `Instr[31:12]` and pass on the extended 32-bit immediate to their respective modules to be decoded as they would never happen simultaneously in single cycle. This change allowed for only 4 cases to consider, and a smaller ImmSrc width. However, to account for pipelining in future, this had to be changed to 3 bits and the cases where split. The full specification for the sign extend module can be found [here](/rtl/sign_extend/readme.md). 
 
-I wrote the testebench for the sign extend module. This was done through asserting the output of the module with an expected value, calculated with a switch case. The full test methodolgy can be found [here](/testbench/sign_extend/readme.md). 
+I wrote the testebench for the sign extend module. This was done through asserting the output of the module with an expected value, calculated with a switch case. I think this was a good method for testing as it was exhaustive and makes use of randomly generated immediates to test every case. The full test methodolgy can be found [here](/testbench/sign_extend/readme.md). 
 
 ## Pipelining 
 
@@ -63,3 +63,7 @@ All the pipeline registers were written by me according to the schematic seen in
 Along with the new registers, we had to add new multiplexers to incorporate the changes to logic for the next PC value. This also involved moving the PCSrc logic determined by flags fed by the ALU into the control unit into a new module. This is as the control unit and ALU were in different stages of the pipeline. Alongside this, there was an additional mux implemented for selecting SrcB between immediates and register outputs. Which can be seen in the schematic below: 
 
 ![Pipeline Schematic](/images/pipelined_schematic.png)
+
+## Reflection
+
+I think overall the pipelined implementation went well. In future however, I would like to trace through each stage and try spot any optimisations for the system. 
