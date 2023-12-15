@@ -3,6 +3,9 @@
 ## Overview
 The `reg_file_m` module serves as a Memory Register for a RISC-V processor. It is responsible for holding signals in the memory stage and providing outputs into the writen enable decoder and memory. 
 
+## Schematic
+![](/images/RegFilem.png)
+
 ## Parameters
 | Parameter         | Description                           | Default |
 |-------------------|---------------------------------------|---------|
