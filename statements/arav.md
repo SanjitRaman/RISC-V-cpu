@@ -10,7 +10,7 @@
    	  ![](/images/ld_decoder_schematic.png)
    - Implemented jump and upper instruction logic in the control unit - JALR required a MUX to add the register value to the PC and we made the choice to implement upper instructions in the sign extend block so the control unit for this was very basic.
    - Implemented risc_v top_level: Worked with Sanjit - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/0a82bcc4988f2e8f48330b726470f37e9c3749ba)
-     ![](/images/single_cycle-schematic.png) 
+     ![](/images/single-cycle-schematic.png) 
    - Testing and Debugging: Worked with Sanjit with input from Sri and Dhyey on their specific blocks
    	- Wrote PC testbench: Verification done by Sri using testbench - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/729030a22c16d17d55056e1d6e444a3a56609637)
    	- Wrote Control Unit testbench: Worked with Sanjit and Sri - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/effa93acdc25a545cf146b3369eccb2bd4304473)
