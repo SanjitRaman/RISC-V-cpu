@@ -11,6 +11,7 @@ module control_unit #(
 
     output logic [1:0]                ResultSrc,
     output logic                      MemWrite,
+    output logic                      MemRead,
     output logic [ALU_CTRL_WIDTH-1:0] ALUControl,
     output logic                      ALUSrc,
     output logic [IMM_SRC_WIDTH-1:0]  ImmSrc,
@@ -30,6 +31,7 @@ module control_unit #(
         .Branch         (Branch),
         .ResultSrc      (ResultSrc),
         .MemWrite       (MemWrite),
+        .MemRead        (MemRead),
         .ALUSrc         (ALUSrc),
         .ImmSrc         (ImmSrc),
         .RegWrite       (RegWrite),

@@ -18,7 +18,7 @@ module risc_v #(
 );
 
 // Hazard Unit
-    logic                          StallF, StallD;
+    logic                          StallF, StallD, StallE, StallM, StallW;
     logic                          FlushD, FlushE;
     logic [FORWARD_WIDTH-1:0]      ForwardAE, ForwardBE;
 
@@ -37,7 +37,7 @@ module risc_v #(
     logic [RES_SRC_WIDTH-1:0]      ResultSrcD;
     logic [ALU_CTRL_WIDTH-1:0]     ALUControlD;
     logic [IMM_SRC_WIDTH-1:0]      ImmSrcD;
-    logic                          MemWriteD, ALUSrcD, RegWriteD, BranchD, JumpD;
+    logic                          MemWriteD, MemReadD, ALUSrcD, RegWriteD, BranchD, JumpD;
     logic                          funct7_5D;
 
 // Register File
@@ -48,7 +48,7 @@ module risc_v #(
     logic [DATA_WIDTH-1:0]         ImmExtD;
 
 // Reg File E
-    logic                          RegWriteE, MemWriteE, JumpE, BranchE, ALUSrcE;
+    logic                          RegWriteE, MemWriteE, MemReadE, JumpE, BranchE, ALUSrcE;
     logic [ALU_CTRL_WIDTH-1:0]     ALUControlE;
     logic [RES_SRC_WIDTH-1:0]      ResultSrcE;
     logic [DATA_WIDTH-1:0]         RD1E, RD2E, PCE, ImmExtE, PCPlus4E;
@@ -71,7 +71,7 @@ module risc_v #(
     logic [DATA_WIDTH-1:0]         ResultW;
 
 // Reg File M 
-    logic                          RegWriteM, MemWriteM;
+    logic                          RegWriteM, MemWriteM, MemReadM;
     logic [RES_SRC_WIDTH-1:0]      ResultSrcM;
     logic [DATA_WIDTH-1:0]         ALUResultM, WriteDataM, ReadDataM, PCPlus4M;
     logic [ADDRESS_WIDTH-1:0]      RdM;
@@ -112,10 +112,15 @@ module risc_v #(
         .RegWriteW   (RegWriteW),
         .StallF      (StallF),
         .StallD      (StallD),
+        .StallE      (StallE),
+        .StallM      (StallM),
+        .StallW      (StallW),
         .FlushD      (FlushD),
         .FlushE      (FlushE),
         .ForwardAE   (ForwardAE),
-        .ForwardBE   (ForwardBE)
+        .ForwardBE   (ForwardBE),
+        .HitM        (hit),
+        .MemReadM     (MemReadM)
     );
 
     pc #(
@@ -177,6 +182,7 @@ module risc_v #(
         .funct7_5   (funct7_5D),
         .ResultSrc  (ResultSrcD),
         .MemWrite   (MemWriteD),
+        .MemRead    (MemReadD),
         .ALUControl (ALUControlD),
         .ALUSrc     (ALUSrcD),
         .ImmSrc     (ImmSrcD),
@@ -222,9 +228,11 @@ module risc_v #(
     reg_file_e (
         .CLK(CLK),
         .CLR(FlushE), 
+        .EN(StallE),
         .RegWriteD(RegWriteD),
         .ResultSrcD(ResultSrcD), 
         .MemWriteD(MemWriteD),
+        .MemReadD(MemReadD),
         .JumpD(JumpD), 
         .BranchD(BranchD), 
         .ALUControlD(ALUControlD), 
@@ -243,6 +251,7 @@ module risc_v #(
         .RegWriteE(RegWriteE),
         .ResultSrcE(ResultSrcE),
         .MemWriteE(MemWriteE), 
+        .MemReadE(MemReadE),
         .JumpE(JumpE), 
         .BranchE(BranchE), 
         .ALUControlE(ALUControlE), 
@@ -301,9 +310,11 @@ module risc_v #(
     )
     reg_file_m (
         .CLK(CLK),
+        .EN(StallM),
         .RegWriteE(RegWriteE),
         .ResultSrcE(ResultSrcE),
         .MemWriteE(MemWriteE),
+        .MemReadE(MemReadE),
         .ALUResultE(ALUResultE),
         .WriteDataE(WriteDataE), 
         .RdE(RdE),
@@ -313,6 +324,7 @@ module risc_v #(
         .RegWriteM(RegWriteM),
         .ResultSrcM(ResultSrcM),
         .MemWriteM(MemWriteM),
+        .MemReadM(MemReadM),
         .ALUResultM(ALUResultM),
         .WriteDataM(WriteDataM),
         .RdM(RdM),
@@ -344,6 +356,7 @@ module risc_v #(
         .A(ALUResultM[16:0]),
         .WD(WriteDataM),
         .FoundData(RDMem),
+        .MemRead(MemReadM),
         // outputs
         .RD(RDCache),
         .hit_o(hit)
@@ -382,6 +395,7 @@ module risc_v #(
     )
     reg_file_w (
         .CLK(CLK),
+        .EN(StallW),
         .RegWriteM(RegWriteM),
         .ResultSrcM(ResultSrcM),
         .ALUResultM(ALUResultM),

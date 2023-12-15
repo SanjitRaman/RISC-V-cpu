@@ -7,6 +7,7 @@ module cache #(
 )(
     input logic CLK,
     input logic WE0, WE1, WE2, WE3,
+    input logic MemRead,
     input logic [ADDRESS_WIDTH-1:0] A,
     input logic [DATA_WIDTH-1:0] WD,
     input logic [DATA_WIDTH-1:0] FoundData,
@@ -38,20 +39,20 @@ module cache #(
             RD = 0;
         end
     end
-    always_ff @ (posedge CLK, negedge CLK) begin
-        if (hit & CLK) begin
+    always_ff @ (posedge CLK) begin
+        if (hit) begin
             //Write to cache
             cache_array[A_set] <= {1'b1, A_tag, WE3 ? WD[31:24] : cache_existing_data[31:24],
                                                WE2 ? WD[23:16] : cache_existing_data[23:16], 
                                                WE1 ? WD[15:8] : cache_existing_data[15:8], 
                                                WE0 ? WD[7:0] : cache_existing_data[7:0]};
         end
-        else if (!CLK & !hit) begin
+        else begin
             //Write and not in cache then bypass cache
             //Don't care about WE3, WE2, WE1, WE0
 
             //Write the read data from data memory into cache
-            if ({WE3, WE2, WE1, WE0} == 4'b0) begin
+            if (MemRead) begin
                 cache_array[A_set] <= {1'b1, A_tag, FoundData};
             end
         end
