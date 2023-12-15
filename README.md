@@ -48,7 +48,7 @@ The makefile supports multiple tasks:
 
     ```make runtest GTEST=0 VBUDDY=1 PROGRAM_NAME=pdf```
     
-    **Note**: the contents of [data_mem.mem](/programs/pdf/data_mem.mem) must be manually replaced with the data set you would like to run the pdf program on. Sample data sets can be found in the [programs/pdf](/programs/pdf/) directory.
+    **Note**: the contents of [programs/pdf/data_mem.mem](/programs/pdf/data_mem.mem) must be manually replaced with the data set you would like to run the pdf program on. Sample data sets can be found in the [programs/pdf](/programs/pdf/) directory.
 
 2. Run a simulation of the entire CPU for each instruction and generate a waveform
     
