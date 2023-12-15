@@ -49,7 +49,7 @@ The `hazard_unit` module uses an `lwstall` sub-module to detect load-use hazards
 ### Forwarding logic
 - The `forward` sub-module controls the select signals for both multiplexers which selects the value of SrcA and SrcB. This depends on if the dependent instruction in the execute stage requires a result from the memory or writeback stage - in this case, data is **forwarded** from the memory or writeback stage.
 
-Forwarding multiplexers are required as below
+![Forwarding MUX](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/ForwardingMultiplexers.png)
 
 
 #### Hazard Summary:
