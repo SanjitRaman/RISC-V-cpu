@@ -5,9 +5,24 @@
 ## Deciding the top level schematic, control paths for each instruction type 
 ### Authors: Sanjit, Sriyesh, Dhyey, Arav
 
-In order to account for all the instructions and their datapaths, we had to reconsider the top level design. Building from our design in lab 4, we drew a new schematic in ISSIE to finalise our design. With this came the addition of a multiplexer to account for jump instructions and a 4-way multiplexer to computer the result based on the `ResultSrc` signal. This schematic also helped us visualise our respective [control paths](/rtl/control_unit/) when implementing different instruction types. 
+In order to account for all the instructions and their datapaths, we had to reconsider the top level design. Building from our design in lab 4, we drew a new schematic in ISSIE to finalise our design. With this came the addition of a multiplexer to account for jump instructions and a 4-way multiplexer to computer the result based on the `ResultSrc` signal. This schematic also helped us visualise our respective [control paths](/rtl/control_unit/readme.md#r-type-control-path) when implementing different instruction types. 
 
 ![Single Cycle Schematic](/images/single-cycle-schematic.png)
+
+We produced the following set of control paths for each instruction type:
+
+| R-Type | I-Type |
+:--:|:--:
+| ![single-cycle-control-path-r-type](/images/r-type_control_path.png) | ![single-cycle-control-path-i-type](/images/i-type_control_path.png) |
+| S-Type | B-Type |
+:--:|:--:
+| ![single-cycle-control-path-s-type](/images/s-type_control_path.png) | ![single-cycle-control-path-b-type](/images/b-type_control_path.png) |
+| AUIPC | LUI |
+:--:|:--:
+| ![](/images/AUIPC_control_path.png) | ![](/images/LUI_control_path.png) |
+| JALR | JAL |
+:--:|:--:
+| ![](/images/JALR_control_path.png) | ![](/images/JAL_control_path.png) |
 
 ## Load Decoder and WE Decoder added
 ### Authors: Sanjit, Dhyey, Arav
