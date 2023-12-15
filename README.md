@@ -112,3 +112,11 @@ Furthermore, to ensure that everyone was able to understand the codebase, we had
 | **Make file**          |           | x        |      |       |      |
 | **lw**                 |           | p        |      |       | p    |
 | **Github CI Pipeline** |           | x        |      |       |      |
+| | | **Pipelining** | | | | 
+| **New top level schematic** | | | x | | | 
+| **Update registers** | | | x | | | 
+|  **Hazard unit** | | | | x | p | 
+| **Updated top level** | |  | x | | | 
+|  **Testing hazard unit** | | | | x | | 
+|  **Integration testing** | | x | x | x | x | 
+
