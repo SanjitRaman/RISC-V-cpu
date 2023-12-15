@@ -32,7 +32,7 @@
 
 4. **Cached:**
    - Helped to write directly mapped cache
-   - Debugged and Tested cache - Program almost worked but cache was sometimes outputting incorrect values - problem was to do with hit timing being wrong but didn't have enough time to fix
+   - Debugged and Tested cache - Program almost worked but cache was sometimes outputting incorrect values - problem was to do with hit timing being wrong but didn't have enough time to fix it
     ![](/images/DebuggingCache.png)  
    
 ## Testing Methodology
