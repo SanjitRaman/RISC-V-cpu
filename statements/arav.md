@@ -75,10 +75,12 @@
 	
  	oddcase:
     		andi a0, a0, 0x0
+This code implements the finite state machine that controls the NEOPIXEL bar on the VBuddy so that it it gradually increases and then turns off after a random delay. THe clock loop determines the time between each state and the main is responsible for changing the states using left shifts and addis. The rng implements a 10 bit linear feedback shift register and the plan was to input a random seed based on the time when compiling so that the delay would be a random number each time but we did not get time to implement that in the makefile.
 
 ### Future Improvements
 - 4 way cache to exploit spatial locality better
 - I personally would add random number generation hardware because I am interested in cryptography
+- Jump return address stack
 
 ## Reflection
 I think that we did well as a team and everyone did their jobs to a high standard. For completeness, we implemented the entire RISC-V 32-bit base instruction set which wasn't entirely necessary but it meant that we understood what we were doing better and learnt a lot more. The drawback of this was that everything took a lot longer which meant that we were short on time at the end of the project. We tested our designs very rigorously including using the UVM methodology and code coverage analysers. We even wrote a testbench that tested whether each intruction was executing correctly. Given more time we would have modified this to work for the pipelined processor as well. If this was a real project then we would have had to make compromises about where we spent our time and efforts and would probably have to cut down on the testing and split up the work better but as this project is about learning we made the decision that rather than splitting the work we would work together more on individual parts so that everyone knew what was going on. I have a much better understanding of computer architecture now and not only understand what each component does and how they are linked together but also the choices between complexity and functionality that have to be made to build a general purpose processor compared with an ASIC that would have been highly optimised for 1 task.
