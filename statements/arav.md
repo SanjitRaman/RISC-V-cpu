@@ -4,10 +4,10 @@
    - Implementing data_mem, we_decoder and ld_decoder: Worked with Sanjit
     - we_decoder - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/30580f67b0f426a6d60ad5d37643752995436fc8)
    		- Uses funct3 to choose which data mem write enables to set high which enables individual changing of bytes, halves and words.
-       ![](/images/we_decoder.png)  
+       ![](/images/we_decoder_schematic.png)  
    	- ld_decoder - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/4012217fc36a53068556f6b54cbb3c0e2712ae9e)
    	  - Uses funct3 to choose how to display and sign extend the bytes
-   	  ![](/images/ld_decoder.png)  
+   	  ![](/images/ld_decoder_schematic.png)  
    - Implementing risc_v top_level: Worked with Sanjit - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/0a82bcc4988f2e8f48330b726470f37e9c3749ba)
      ![](/images/single_cycle-schematic.png) 
    - Testing and Debugging: Worked with Sanjit with input from Sri and Dhyey on their specific blocks
@@ -17,7 +17,7 @@
         	- ALU Debugging - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/6d3f41905d0783726a24fecd44d7bb624322946e)
    	- Wrote risc_v_tb and debugged risc_v toplevel: Worked with Sanjit - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/6aa9bf33563dc8a23db23740f8e3b7725d6e2843)
    	- Wrote F1 light code - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/253b0befefa0293b3ab837c1599b318cc26dc482)
-   	- Wrote b-type, j-type and u-type single instruction tests - Debugged these with Sanjit and Dhyey - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/    	991bcd032fbab5b5c8cdf697092155b1145bfd39)
+   	- Wrote b-type, j-type and u-type single instruction tests - Debugged these with Sanjit and Dhyey - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/991bcd032fbab5b5c8cdf697092155b1145bfd39)
  
 2. **Pipelinined:**
    - Tested and debugged pipeline top level: Top level made by Sri with help from me - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/958d043b2ce32c2cf5880e0456c0ce58bbd49636)#
