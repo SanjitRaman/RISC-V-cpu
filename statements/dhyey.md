@@ -16,7 +16,13 @@ The program counter has the same functionality as from lab 4. The only change ma
 
 ## Hazard Unit
 
-  
+I was responsible for developing the hazard unit and its testbench.
+
+### Relevant commits
+
+[Created top level hazard unit and dependencies](https://github.com/SanjitRaman/Team-10-RISC-V/commit/d220dd8ec95f9fa5c3f4ea1d7625c2596e89c057)
+[Created hazard unit testbench](https://github.com/SanjitRaman/Team-10-RISC-V/commit/6f2984581dcf496e55b423bbf7fa2278c819dad4)
+
 
 The hazard unit detects hazards and computes control signals for pipelining, so the processor can solve data and control hazards through stalling and forwarding. 
 
@@ -71,17 +77,25 @@ lwStall = ResultSrcE0 & (Rs1D == RdE
 I was responsible for creating a Data Mem Wrapper testbench, [Test Methodology Document for Data Memory Wrapper Testbench](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/testbench/data_mem_wrapper/readme.md), to debug load and store instructions for both the single cycle and pipelined implementation. The data mem wrapper was later amended  to test the directly mapped write-through cache. [Data Mem Wrapper](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/rtl/data_mem_wrapper/readme.md) allows for the data memory and cache to be tested before it is integrated into the RISC-V processor, resulting in easier debugging.
 
 ### Relevant Commits
-[Store/Load instruction tb]([https://www.example.com](https://github.com/SanjitRaman/Team-10-RISC-V/commit/7560907f9a24d305b654416bff91a21cc6fd8566))
-[Cache tb](https://github.com/SanjitRaman/Team-10-RISC-V/commit/60f67f90e8442673966cab315851d6b4f4a4f32d)
+[Store/Load instruction Testbench]((https://github.com/SanjitRaman/Team-10-RISC-V/commit/7560907f9a24d305b654416bff91a21cc6fd8566)
+[Cache Testbench](https://github.com/SanjitRaman/Team-10-RISC-V/commit/60f67f90e8442673966cab315851d6b4f4a4f32d)
 
 ### Using Google Test for testing cache
 
+The following image shows the tests passing for directly mapped write-through cache.
+
+![GoogleTestCache](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/DataMemWrapperCacheTests.png)
 
 
 
 
 
 ### Main issues faced when debugging the data memory and cache
+
+ - 
+
+
+
 
 
 
