@@ -25,8 +25,6 @@ module cache #(
     logic [DATA_WIDTH-1:0] cache_existing_data;
 
     always_comb begin
-        A_tag = A[ADDRESS_WIDTH-1:SET_ADDRESS_WIDTH+2]; //2 for the byte offset
-        A_set = A[1+SET_ADDRESS_WIDTH:2];
         valid = cache_array[A_set][BLOCK_WIDTH-1];
         hit_o = hit;
         cache_existing_data = cache_array[A_set][DATA_WIDTH-1:0];
@@ -39,7 +37,9 @@ module cache #(
         end
     end
     always_ff @ (posedge CLK) begin
-        hit <= (A_tag == cache_array[A_set][BLOCK_WIDTH-2:DATA_WIDTH]) & valid; //May not need to be asynch
+        hit <= (A_tag == cache_array[A_set][BLOCK_WIDTH-2:DATA_WIDTH]) & valid; //May not need to be asynch#
+        A_tag <= A[ADDRESS_WIDTH-1:SET_ADDRESS_WIDTH+2]; //2 for the byte offset
+        A_set <= A[1+SET_ADDRESS_WIDTH:2];
         if (hit) begin
             //Write to cache
             if (WE3 | WE2 | WE1| WE0) begin
