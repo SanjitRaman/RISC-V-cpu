@@ -6,11 +6,15 @@
 
   
 
-The program counter has the same functionality as from lab 4. The only change made was to the offset according to the memory map so when PC is reset, it is reset to the value of the offset rather than 0.
+The program counter has the same functionality as from lab 4. The only change made was to the offset according to the memory map so when PC is reset, it is reset to the value of the offset rather than 0. In the pipelined implementation, the program counter register was stalled when StallF was asserted to handle hazards.
 
 ![Program Counter Schematic](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/PCRegister.png)
 
-In the pipelined implementation, the program counter register was stalled when StallF was asserted to handle hazards.
+
+### PC Wrapper
+
+The functionality of program counter didn't need to be vastly changed throughout the project, so we decided that the PC Wrapper testbench was a sufficient unit test to check that PC is updated correctly by the relevant multiplexers. The multiplexer selects between PC + 4 (Next instruction) and PCTarget (Branch to this instruction), and this functionality is tested using PC Wrapper.
+
 
 ## Hazard Unit
 
