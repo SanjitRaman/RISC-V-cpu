@@ -100,6 +100,36 @@ The following image shows the tests passing for directly mapped write-through ca
 
 
 
+## Directly mapped write-through cache
+
+### Relevant Commits
+
+[Directly mapped cache](https://github.com/SanjitRaman/Team-10-RISC-V/commit/7d10e4b83c8cd62e0ea041ae0f15c47c1b87777c)
+
+### Overview of cache
+
+As our RISC-V processor is single cycle, a cache will not speed up operation while in reality, a cache allows for data memory to be accessed less frequently. Since accessing cache is faster than accessing main memory, this will speed up data accesss overall.
+
+Our implementation takes advantage of temporal locality, which means that any memory address that has been recently **read** from data memory will be written to cache. A directly mapped cache consists of many **sets**, where many memory addresses may map to a single set. Each set contains 1 **block**, which contains a unique tag (for a given set), a valid bit (indicating that the block is used), and the data.
+
+Increasing the block size of each set (i.e. 2 way set associative cache) will reduce our cache miss rate, as we can store more tags in each set.
+
+
+
+### Reading from cache
+
+The diagram illustrates how data is read from cache.
+
+![ReadCache Schematic](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/ReadingDirectlyMappedCache.png)
+
+
+### Writing from cache
+
+The team decided to implement a **write through, write around** directly mapped cache. 
+
+| Instruction type | Cache Hit | Description |
+| ---------------- | --------- | ----------- |
+| Read | Cache Hit | The 
 
 
 
