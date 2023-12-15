@@ -28,7 +28,6 @@ module cache #(
         A_tag = A[ADDRESS_WIDTH-1:SET_ADDRESS_WIDTH+2]; //2 for the byte offset
         A_set = A[1+SET_ADDRESS_WIDTH:2];
         valid = cache_array[A_set][BLOCK_WIDTH-1];
-        hit = (A_tag == cache_array[A_set][BLOCK_WIDTH-2:DATA_WIDTH]) & valid; //May not need to be asynch
         hit_o = hit;
         cache_existing_data = cache_array[A_set][DATA_WIDTH-1:0];
         if (hit) begin
@@ -40,12 +39,15 @@ module cache #(
         end
     end
     always_ff @ (posedge CLK) begin
+        hit <= (A_tag == cache_array[A_set][BLOCK_WIDTH-2:DATA_WIDTH]) & valid; //May not need to be asynch
         if (hit) begin
             //Write to cache
-            cache_array[A_set] <= {1'b1, A_tag, WE3 ? WD[31:24] : cache_existing_data[31:24],
-                                               WE2 ? WD[23:16] : cache_existing_data[23:16], 
-                                               WE1 ? WD[15:8] : cache_existing_data[15:8], 
-                                               WE0 ? WD[7:0] : cache_existing_data[7:0]};
+            if (WE3 | WE2 | WE1| WE0) begin
+                cache_array[A_set] <= {1'b1, A_tag, WE3 ? WD[31:24] : cache_existing_data[31:24],
+                                                   WE2 ? WD[23:16] : cache_existing_data[23:16], 
+                                                   WE1 ? WD[15:8] : cache_existing_data[15:8], 
+                                                   WE0 ? WD[7:0] : cache_existing_data[7:0]};
+            end
         end
         else begin
             //Write and not in cache then bypass cache
