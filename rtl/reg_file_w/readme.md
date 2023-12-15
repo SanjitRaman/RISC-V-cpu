@@ -3,6 +3,9 @@
 ## Overview
 The `reg_file_w` module serves as a Write Back Register for a RISC-V processor. It is designed to hold memory data for the write-back stage, and provides outputs to the ALU, PC and register file. 
 
+## Schematic
+![](/images/RegFileW.png)
+
 ## Parameters
 | Parameter         | Description                           | Default |
 |-------------------|---------------------------------------|---------|
