@@ -141,13 +141,12 @@ As evidenced in the tests, the cache works as expected in data mem wrapper.
 
 ### Personal comments and improvements
 
-In conclusion, the project was a success. Our team successfully implemented a pipelined RISC-V processor with hazard handling, and a directly mapped cache. While the directly mapped cache was not successfully implemented in the final pipelined processor, working closely with a team of talented individuals enabled me to learn about collaborative development and design. Our testing was 
-
+In conclusion, the project was a success. Our team successfully implemented a pipelined RISC-V processor with hazard handling, and a directly mapped cache. While the directly mapped cache was not successfully implemented in the final pipelined processor, working closely with a team of talented individuals enabled me to learn about collaborative development and design. Our testing process was rigorous, however I could've followed more meaningful design principles to reduce the time taken to debug our design.
 
 
 ### Additional contributions
 
-- 
+Our team utilised pair programming throughout the project, so my additional contributions included debugging our pipelined implementation, developing and testing a directly mapped cache, and creating testbenches for various modules.
 
 
 
