@@ -75,7 +75,7 @@
 	
  	oddcase:
     		andi a0, a0, 0x0
-This code implements the finite state machine that controls the NEOPIXEL bar on the VBuddy so that it it gradually increases and then turns off after a random delay. THe clock loop determines the time between each state and the main is responsible for changing the states using left shifts and addis. The rng implements a 10 bit linear feedback shift register and the plan was to input a random seed based on the time when compiling so that the delay would be a random number each time but we did not get time to implement that in the makefile.
+This code implements the finite state machine that controls the NEOPIXEL bar on the VBuddy so that it it gradually increases and then turns off after a random delay. The clock loop determines the time between each state and the main is responsible for changing the states using left shifts and addis. The rng loop implements a 10 bit linear feedback shift register and we had planned to input a random seed based on the time when compiling so that the delay would be a random number each time but we did not get time to implement that in the makefile.
 
 ### Future Improvements
 - 4 way cache to exploit spatial locality better
