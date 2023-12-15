@@ -6,12 +6,12 @@ include testbench_select.mk
 ifeq ($(RUN), module)
 	NAME = $(MODULE)
 	INCLUDE_DIRS = $(MODULE.INCLUDE_DIRS)
-	SOURCES = rtl/$(NAME)/$(NAME).sv
+	SOURCES = $(RTL_DIR)/$(NAME)/$(NAME).sv
 
 else
 	NAME = $(UNIT)
 	INCLUDE_DIRS = $(UNIT.INCLUDE_DIRS)
-	SOURCES = rtl/$(NAME).sv
+	SOURCES = $(RTL_DIR)/$(NAME).sv
 
 endif
 
@@ -48,7 +48,8 @@ TESTBENCH_DIR = testbench
 PROGRAMS_DIR = programs
 RTL_DIR = rtl
 VBUDDY_DIR = vbuddy
-SCRIPTS_DIR = scripts/
+RTL_DIR = rtl
+SCRIPTS_DIR = scripts
 
 # Set testbench source and testbench executable
 TB_SOURCE = $(TESTBENCH_DIR)/$(NAME)/$(NAME)_tb.cpp
@@ -81,7 +82,7 @@ assemble: $(PROGRAMS_DIR)/$(PROGRAM_NAME)/$(notdir $(PROGRAM_NAME)).s
 	@rm "$?.out"
 	@riscv64-unknown-elf-objcopy -O binary -j .text "$?.out.reloc" "$?.bin"
 	@rm "$?.out.reloc"
-	@$(SCRIPTS_DIR)/format_mem.sh "$?"
+	@./$(SCRIPTS_DIR)/format_mem.sh "$?"
 	@rm "$?.bin"
 	cp $(PROGRAMS_DIR)/$(PROGRAM_NAME)/instr_mem.mem $(MEM_DIR)/instr_mem.mem
 ifneq ($(wildcard $(dir $(PROGRAM))/data_mem.mem),)

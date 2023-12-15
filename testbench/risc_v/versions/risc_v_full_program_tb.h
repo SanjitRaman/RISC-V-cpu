@@ -39,10 +39,9 @@ int main(int argc, char **argv, char **env) {
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace (tfp, 99);
-    tfp->open ("risc_v.vcd");
-    top->address_to_view = 10;
+    tfp->open ("risc_v_pdf.vcd");
 
-    if(VBUDDY) {
+     if(VBUDDY) {
         if(vbdOpen() != 1) return -1;
         std::string header;
         if(program_name == "pdf") {
@@ -59,6 +58,7 @@ int main(int argc, char **argv, char **env) {
     // initialize simulation inputs
     top->CLK = 1;
     top->RST = 1;
+    top->address_to_view = 10;
 
     bool started = false;
 
@@ -79,7 +79,7 @@ int main(int argc, char **argv, char **env) {
                 vbdCycle(simcyc);
             }
             else if (program_name == "pdf") {
-                if(!started && top->pc_viewer == 0xBFC00058)    {
+                if(!started && top->pc_viewer == 0x60)    {
                     started = true;
                 }
                 else if (started) {
@@ -104,7 +104,10 @@ int main(int argc, char **argv, char **env) {
     
     }
 
-    if(VBUDDY) vbdClose();
+    if(VBUDDY) { 
+        vbdBar(0);
+        vbdClose();
+    }
     tfp->close(); 
     exit(0);
 }

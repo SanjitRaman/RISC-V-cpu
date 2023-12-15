@@ -5,9 +5,24 @@
 ## Deciding the top level schematic, control paths for each instruction type 
 ### Authors: Sanjit, Sriyesh, Dhyey, Arav
 
-In order to account for all the instructions and their datapaths, we had to reconsider the top level design. Building from our design in lab 4, we drew a new schematic in ISSIE to finalise our design. With this came the addition of a multiplexer to account for jump instructions and a 4-way multiplexer to computer the result based on the `ResultSrc` signal. This schematic also helped us visualise our respective [control paths](/rtl/control_unit/) when implementing different instruction types. 
+In order to account for all the instructions and their datapaths, we had to reconsider the top level design. Building from our design in lab 4, we drew a new schematic in ISSIE to finalise our design. With this came the addition of a multiplexer to account for jump instructions and a 4-way multiplexer to computer the result based on the `ResultSrc` signal. This schematic also helped us visualise our respective [control paths](/rtl/control_unit/readme.md#r-type-control-path) when implementing different instruction types. 
 
 ![Single Cycle Schematic](/images/single-cycle-schematic.png)
+
+We produced the following set of control paths for each instruction type:
+
+| R-Type | I-Type |
+:--:|:--:
+| ![single-cycle-control-path-r-type](/images/r-type_control_path.png) | ![single-cycle-control-path-i-type](/images/i-type_control_path.png) |
+| S-Type | B-Type |
+:--:|:--:
+| ![single-cycle-control-path-s-type](/images/s-type_control_path.png) | ![single-cycle-control-path-b-type](/images/b-type_control_path.png) |
+| AUIPC | LUI |
+:--:|:--:
+| ![](/images/AUIPC_control_path.png) | ![](/images/LUI_control_path.png) |
+| JALR | JAL |
+:--:|:--:
+| ![](/images/JALR_control_path.png) | ![](/images/JAL_control_path.png) |
 
 ## Load Decoder and WE Decoder added
 ### Authors: Sanjit, Dhyey, Arav
@@ -74,3 +89,15 @@ Once we fixed this, the addi instruction worked correctly:
 There were several more examples of this, including incorrect control unit signal values for certain instruction-types, which we fixed in the same manner.
 
 We learnt a lot about debugging large systems throughout this process.
+
+## Pipelining 
+#### Authors: Arav, Sanjit
+Pipelining isn't that much of a step up from single-cycle when it comes to implementation but when it comes to debugging it is a totally different challenge. The loss in synchronisation is difficult to get used to but once we did it was quite enjoyable to debug but until that point, progress was excruciatingly slow. There were many mistakes in the top level due to a lax naming convention so the first challenge was cleaning up the top level so that all signals had appropriate and unique names. 
+
+#### Pipelining Registers
+The next set of problems came in the pipelining registers as the sensitivity lists were only updated on CLK edges so there were cases when stalls and flushes were not occurring when they should have been which led to problems in branches and jumps. Initially we believed this to be a flaw in the flags block which we added to compute whether the branch conditions had been met so the error took longer to debug than it should have. There was an error in the hazard block where reg_file_e should have been flushed when a stall was meant to happen as no computation or forwarding should be done in the execute stage during a stall.
+
+#### Top Level Issues
+Due to the multitude of signals the top level was difficult to debug but after the cleanup it turned out only one instruction was failing and that was JAL. This was extremely difficult to debug because our implementation worked in single-cycle and we did not think about the fact that it would break in pipelining. We were using the Result MUX to write PC+4 back to the register which was interfering with our forwarding and flush logic. It was a very simple fix where we just had to change the control unit and the Result MUX but it took a long time to diagnose.
+
+
