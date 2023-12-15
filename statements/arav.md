@@ -1,14 +1,15 @@
 # Individual Statement: Arav
 ## Contributions
 1. **Single Cycle:**
-   - Implementing data_mem, we_decoder and ld_decoder: Worked with Sanjit
+   - Implemented data_mem, we_decoder and ld_decoder: Worked with Sanjit
      	- we_decoder - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/30580f67b0f426a6d60ad5d37643752995436fc8)
    	 	- Uses funct3 to choose which data mem write enables to set high which when combined with the address allows a specific byte to be chosen and the number of bytes corresponds to the number of enables which further corresponds to the instruction. \
        	  ![](/images/we_decoder_schematic.png)  
    	- ld_decoder - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/4012217fc36a53068556f6b54cbb3c0e2712ae9e)
    	   	- Uses funct3 to choose how to display and sign extend the bytes
-   	  ![](/images/ld_decoder_schematic.png)  
-   - Implementing risc_v top_level: Worked with Sanjit - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/0a82bcc4988f2e8f48330b726470f37e9c3749ba)
+   	  ![](/images/ld_decoder_schematic.png)
+   - Implemented jump and upper instruction logic in the control unit - JALR required a MUX to add the register value to the PC and we made the choice to implement upper instructions in the sign extend block so the control unit for this was very basic.
+   - Implemented risc_v top_level: Worked with Sanjit - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/0a82bcc4988f2e8f48330b726470f37e9c3749ba)
      ![](/images/single_cycle-schematic.png) 
    - Testing and Debugging: Worked with Sanjit with input from Sri and Dhyey on their specific blocks
    	- Wrote PC testbench: Verification done by Sri using testbench - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/729030a22c16d17d55056e1d6e444a3a56609637)
