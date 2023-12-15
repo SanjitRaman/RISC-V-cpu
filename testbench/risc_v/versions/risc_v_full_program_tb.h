@@ -90,10 +90,12 @@ int main(int argc, char **argv, char **env) {
                 }
             }
             else if (program_name == "sinegen") {
-                if(simcyc % 4 == 0) {
-                    vbdPlot(top->reg_output, 0, 255);
-                    vbdCycle(simcyc);
-                }
+                vbdPlot(top->reg_output, 0, 255);
+                vbdCycle(simcyc);
+                // if(simcyc % 4 == 0) {
+                //     vbdPlot(top->reg_output, 0, 255);
+                //     vbdCycle(simcyc);
+                // }
             }
             else {
                 vbdPlot(top->reg_output, 0, 255);

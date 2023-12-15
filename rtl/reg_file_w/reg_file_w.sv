@@ -4,6 +4,7 @@ module reg_file_w #(
     parameter FUNCT3_WIDTH = 3
 )(
     input  logic                            CLK, 
+    input  logic                            EN,
     
     input  logic                            RegWriteM,
     input  logic [1:0]                      ResultSrcM, 
@@ -25,6 +26,7 @@ module reg_file_w #(
 );
 
 always_ff @(posedge CLK) begin
+    if (!EN) begin
     RegWriteW <= RegWriteM;
     ResultSrcW <= ResultSrcM;
     ALUResultW <= ALUResultM;
@@ -32,6 +34,7 @@ always_ff @(posedge CLK) begin
     RdW <= RdM;
     PCPlus4W <= PCPlus4M;
     funct3W <= funct3M;
+    end
 end
 
 endmodule

@@ -14,7 +14,9 @@ module hazard_unit #(
     input logic                     RegWriteM,
     input logic [ADDRESS_WIDTH-1:0] RdW,
     input logic                     RegWriteW,
-    output logic                    StallF, StallD,
+    input logic                     MemReadM,
+    input logic                     HitM,
+    output logic                    StallF, StallD, StallE, StallM, StallW,
     output logic                    FlushD,
     output logic                    FlushE,
     output logic [FORWARD_WIDTH-1:0] ForwardAE,
@@ -22,6 +24,7 @@ module hazard_unit #(
 );
 
     logic lwstall;
+    logic CacheStall;
 
     lwstall # (
         .ADDRESS_WIDTH (ADDRESS_WIDTH)
@@ -60,9 +63,13 @@ module hazard_unit #(
         .ForwardE (ForwardBE)
     );
 
+assign CacheStall = MemReadM & !HitM;
 assign FlushD = PCSrcE;
 assign FlushE = PCSrcE | lwstall;
-assign StallF = lwstall;
-assign StallD = lwstall;
+assign StallF = lwstall | CacheStall;
+assign StallD = lwstall | CacheStall;
+assign StallE = CacheStall;
+assign StallM = CacheStall;
+assign StallW = CacheStall;
 
 endmodule

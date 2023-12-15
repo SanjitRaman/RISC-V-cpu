@@ -35,7 +35,6 @@ In the control unit I helped write part of the ALU decoder, to produce the afore
 
 As for the testbench, I wrote the tests for the all the branch instructions, considering a case where a branch was to be taken and one where it was not for each instruction. This was done by setting the flags and instruction and asseting the control signals. More information on the testing of the control unit can be found [here](/testbench/control_unit/readme.md). 
 
-### PC
 
 ### Register file
 
@@ -64,6 +63,41 @@ Along with the new registers, we had to add new multiplexers to incorporate the 
 
 ![Pipeline Schematic](/images/pipelined_schematic.png)
 
+## Cache
+
+### Cache module 
+
+I produced the inital prototype for our direct mapped write back cache. I did this based on the lecture notes and included synchronous write and read signals. Initially, writing was done on the `negative CLK` edge, including writeback from a `load` instruction, and reading was done on the `positive CLK` edge. Each set was comprised of a `Dirty Bit`, followed by a `Valid bit`, followed by the `tag` and then finally the `data`. 
+
+When writing this, I noticed that additional stalls were needed to account for the write back and read instruction whenever there was not a hit. This logic persists in the updated [cache](/rtl/cache/) module written as a group and hit is sent as an output. 
+
+We instead decided to try implement 2-way set associative cache. A prototype for this was also made by me. In this module, I used a queue style system to write to the ways. Every time there was a collision of sets and there was data to be written; the current cache would be pushed back so that way0 -> way1 and the data stored in way1 (if any and dirty) will get pushed out and stored in main memory. The new incoming data will be stored in way0. 
+
+Now the sets were `{D0, V0, tag0, data0, D1, V1, tag1, data1}`. Where the number following indicated the way. The set width was also reduced from 3 bits to 2 bits, meaning we had 4 sets as opposed to 8 but supported storing two differently tagged pieces of data in the same set, meaning memory can be accessed less frequently in certain cases. 
+
+By switching the order of the ways to be ascedinging, it is more scalable so that way0 is always the most recently used data and if we were to update to 4-way set associative, it would persist.
+
+By implementing a queue system, it also simplifies the code of externally computing and retaining the order of most recently used cache ways. 
+
+Due to confilcts and complexity issues with the stalls and top unit, we reverted to direct mapped write through cache together to try get a complete working model. 
+
+### Updated top level schematic 
+
+In order to implement the prototype direct mapped cache, I had to make some changes to the top level. 
+
+This involved creating a flip flop for the `MemReadM` value so that it could be used as a control signal for a multiplexer along with `~hit`. The output of the flip flop was called `MemReadOld`. This would signify that the last instruction executed was a memory read, but the data was not found in cache. Therefore, we need to stall the CPU to retreive the data from main memory. This signal was called `NotHitStall`. 
+
+After this is done, another stall signal is required to feed this data back into a multiplexer for the input data of cache. This signal was called `MainMemRetreiveStall` and was just `NotHitStall` passing through a D-type flip flop. 
+
+And after this, one final stall was required to multiplex the potential input write data of the next instruction with the output read data from main memory. This signal was called `WBStall` (Write Back Stall) and was this time `MainMemRetreiveStall` passing through a flip flop. 
+
+The three stall signals `NotHitStall`, `MainMemRetreiveStall`, `WBStall` were `OR`'d together to produce the signal `CacheStall` which was then fed into the Hazard Unit. 
+
+
+### Updated hazard unit 
+
+The prototype updated hazard unit included the `CacheStall` signal as an input to account for the stalls required by writing back from main memory. In the final [hazard unit](/rtl/hazard_unit/), `CacheStall` is an internal signal and logic similar to the multiplexers added in the top level were moved into this unit to support the new logic. 
+
 ## Reflection
 
-I think overall the pipelined implementation went well. In future however, I would like to trace through each stage and try spot any optimisations for the system. 
+I think overall I have developed a deep understanding of each of the components and how they work and moreover, this module has greatly improved my testing methodology. I think if given more time I would like to update the cache files and take a full deep dive into the data path of the system and trace through to implement a more efficeint cache system. 
