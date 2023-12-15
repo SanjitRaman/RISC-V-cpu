@@ -38,7 +38,9 @@
 ## Testing Methodology
 - Each person wrote a google test testbench for either an entire module or part of a module that they hadn't worked on previously. This meant that when doing top level testing I could treat the 		various blocks kind of like black boxes and so was quicker to debug.
 - My top level testing methodology was to first run counter, sinegen, F1light and finally pdf and I then know which instruction type is failing and can then open up the relevant waveforms.
-- Worked backwards through the top level schematic to catch errors so if a register was not writing correctly then I would check Result, then all the inputs to the final MUX and keep going back until I find the error
+- Worked backwards through the top level schematic to catch errors so if a register was not writing correctly then I would check Result, then all the inputs to the final MUX and keep going back until I find the error.
+- When it looked like everything worked, we ran the simulations on VBuddy.
+![](/images/Gaussian-photo.png)
 	
 ### Special Design Decisions
 - Added we_decoder and ld_decoder to simulate using interchangeable DRAM rather than changing the RAM logic as that is unrealistic
@@ -80,6 +82,7 @@
  	oddcase:
     		andi a0, a0, 0x0
 This code implements the finite state machine that controls the NEOPIXEL bar on the VBuddy so that it it gradually increases and then turns off after a random delay. The clock loop determines the time between each state and the main is responsible for changing the states using left shifts and addis. The rng loop implements a 10 bit linear feedback shift register and we had planned to input a random seed based on the time when compiling so that the delay would be a random number each time but we did not get time to implement that in the makefile.
+![](/images/F1Light.png)
 
 ### Future Improvements
 - 4 way cache to exploit spatial locality better
