@@ -33,7 +33,7 @@
 4. **Cached:**
    - Helped to write directly mapped cache
    - Debugged and Tested cache - Program almost worked but cache was sometimes outputting incorrect values - problem was to do with hit timing being wrong but didn't have enough time to fix it.
-    ![](/images/DebuggingCache.png)  
+   - ![](/images/DebuggingCache.png)  
    
 ## Testing Methodology
 - Each person wrote a google test testbench for either an entire module or part of a module that they hadn't worked on previously. This meant that when doing top level testing I could treat the 		various blocks kind of like black boxes and so was quicker to debug.
