@@ -32,22 +32,22 @@
    - Debugged and Tested cache - Program almost worked but cache was sometimes outputting incorrect values   
    
 ## Testing Methodology
-	- Each person wrote a google test testbench for either an entire module or part of a module that they hadn't worked on previously. This meant that when doing top level testing I could treat the 		various blocks kind of like black boxes and so was quicker to debug.
-	- My top level testing methodology was to first run counter, sinegen, F1light and finally pdf and I then know which instruction type is failing and can then open up the relevant waveforms.
-	- Worked backwards through the top level schematic to catch errors so if a register was not writing correctly then I would check Result, then all the inputs to the final MUX and keep going back until I hit the error
+- Each person wrote a google test testbench for either an entire module or part of a module that they hadn't worked on previously. This meant that when doing top level testing I could treat the 		various blocks kind of like black boxes and so was quicker to debug.
+- My top level testing methodology was to first run counter, sinegen, F1light and finally pdf and I then know which instruction type is failing and can then open up the relevant waveforms.
+- Worked backwards through the top level schematic to catch errors so if a register was not writing correctly then I would check Result, then all the inputs to the final MUX and keep going back until I find the error
 	
 ### Special Design Decisions
-	 - Added we_decoder and ld_decoder to simulate using interchangeable DRAM rather than changing the RAM logic as that is unrealistic
-	 - Added mux before PC target to choose between immediate and register value so that JALR could be implemented.
-	 - Result MUX has 4 outputs so that AUIPC can be implemented
-	 - Upper imediate processing done in sign extend block and then just buffered through ALU which simplifies ALU logic.
+- Added we_decoder and ld_decoder to simulate using interchangeable DRAM rather than changing the RAM logic as that is unrealistic
+- Added mux before PC target to choose between immediate and register value so that JALR could be implemented.
+- Result MUX has 4 outputs so that AUIPC can be implemented
+- Upper imediate processing done in sign extend block and then just buffered through ALU which simplifies ALU logic.
 
 ## Future Improvements
-	- 4 way cache to exploit spatial locality better
-	- I personally would add random number generation hardware because I am interested in cryptography
+- 4 way cache to exploit spatial locality better
+- I personally would add random number generation hardware because I am interested in cryptography
 
 ## Reflection
-	- I think that we did well as a team and everyone did their jobs to a high standard. For completeness, we implemented the entire RISC-V 32-bit base instruction set which wasn't entirely necessary but it meant that we understood what we were doing better and learnt a lot more. The drawback of this was that everything took a lot longer which meant that we were short on time at the end of the project. We tested our designs very rigorously including using the UVM methodology and code coverage analysers. We even wrote a testbench that tested whether each intruction was executing correctly. Given more time we would have modified this to work for the pipelined processor as well. If this was a real project then we would have had to make compromises about where we spent our time and efforts and would probably have to cut down on the testing and split up the work better but as this project is about learning we made the decision that rather than splitting the work we would work together more on individual parts so that everyone knew what was going on. I have a much better understanding of computer architecture now and not only understand what each component does and how they are linked together but also the choices between complexity and functionality that have to be made to build a general purpose processor compared with an ASIC that would have been highly optimised for 1 task.
+- I think that we did well as a team and everyone did their jobs to a high standard. For completeness, we implemented the entire RISC-V 32-bit base instruction set which wasn't entirely necessary but it meant that we understood what we were doing better and learnt a lot more. The drawback of this was that everything took a lot longer which meant that we were short on time at the end of the project. We tested our designs very rigorously including using the UVM methodology and code coverage analysers. We even wrote a testbench that tested whether each intruction was executing correctly. Given more time we would have modified this to work for the pipelined processor as well. If this was a real project then we would have had to make compromises about where we spent our time and efforts and would probably have to cut down on the testing and split up the work better but as this project is about learning we made the decision that rather than splitting the work we would work together more on individual parts so that everyone knew what was going on. I have a much better understanding of computer architecture now and not only understand what each component does and how they are linked together but also the choices between complexity and functionality that have to be made to build a general purpose processor compared with an ASIC that would have been highly optimised for 1 task.
 
 
 
