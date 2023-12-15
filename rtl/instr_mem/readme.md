@@ -4,6 +4,9 @@
 
 The instruction memory is an asynchronous ROM which will fetch the instruction corresponding to the Program Counter. The first instruction stored in the instruction memory is at address 0xBFC00000 according to the memory map.
 
+## Instruction Memory Schematic
+
+![Instruction Memory](https://github.com/SanjitRaman/Team-10-RISC-V/blob/master/images/InstructionMemory.png)
 
 ## Parameters
 
@@ -30,7 +33,6 @@ The instruction memory is an asynchronous ROM which will fetch the instruction c
 
 The instruction memory reads the program counter and fetches the corresponding instruction from memory. The file "instr_mem.mem" is written to instruction memory when the module is instantiated.
 
-## Instruction Memory Schematic
 
 
 
