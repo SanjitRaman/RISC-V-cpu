@@ -5,7 +5,7 @@ The `hazard_unit` module is a part of a RISC-V processor designed to handle data
 
 ## Schematic
 
-## TODO Insert Schematics @Cheesypasta1.
+![Hazard Unit Design](images/HazardUnit.png)
 
 ## Parameters
 
