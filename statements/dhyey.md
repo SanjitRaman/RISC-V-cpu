@@ -28,19 +28,29 @@ In software, a potential solution could be to insert nop instructions so the dep
 
 ### Forwarding
 
+In hardware, some data hazards can be solved by forwarding a result in a later pipeline stage to the dependent instruction in the execute stage. A multiplexer would be required to select SrcA and SrcB from either a later pipeline stage, or from the register file. 
+
+If the source register in the Execute stage matches the destination register of an instruction in the Memory / Writeback stage, then the result should be forwarded.
+
+Since both ALU operands will either be the result forwarded from the memory / writeback stage, or the result fetched from the register file, the multiplexer will have 3 inputs and a 2 bit select line.
+
+| ForwardE | Description |
+| 10 | The operand will be forwarded from the memory stage |
+| 01 | The operand will be forwarded from the writeback stage |
+| 00 | The operand will be the register file output |
 
 
-an instruction tries to read a register that has not yet been written back by a previous instruction. A control hazard occurs when the decision of what instruction to fetch next has not been made by the time the fetch takes place.
 
+A schematic of the hazard unit and forwarding multiplexers was designed in ISSiE.
 
-A top level schematic of the hazard unit was designed in ISSiE.
-
+## Stalls
 
   
 
 (INSERT ISSIE DIAGRAM)
 
-  
+
+## Outputs
 
 | Signal | Description |
 | ----------- | ----------- |
