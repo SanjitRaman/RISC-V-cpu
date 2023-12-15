@@ -1,7 +1,7 @@
 # Individual Statement: Arav
 ## Contributions
 1. **Single Cycle:**
-   - Implementing data_mem, we_decoder and ld_decoder: Worked with Sanjit
+   Implementing data_mem, we_decoder and ld_decoder: Worked with Sanjit
      	- we_decoder - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/30580f67b0f426a6d60ad5d37643752995436fc8)
    	 	- Uses funct3 to choose which data mem write enables to set high which when combined with the address allows a specific byte to be chosen and the number of bytes corresponds to the number of enables which further corresponds to the instruction. \
        	  ![](/images/we_decoder_schematic.png)  
