@@ -16,17 +16,19 @@
    	- Wrote ALU testbench: Worked with Sri - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/a22e41885a22777edf9342813070eaf678358067)
         	- ALU Debugging - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/6d3f41905d0783726a24fecd44d7bb624322946e)
    	- Wrote risc_v_tb and debugged risc_v toplevel: Worked with Sanjit - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/6aa9bf33563dc8a23db23740f8e3b7725d6e2843)
+	- **Debugging Comments**: There were a wide variety of errors mainly to do with connections on the top level and changes that hadn't been integrated properly for example the control unit did not take into account that JALR and JAL had separate opcodes so the JALR case would never run or there were some muxes connected the wrong way round which were causing unexpected errors. THe picture below shows the signals that we were looking at to diagnose the issues that we were having.
+   	  ![](/images/pdfDebug.png) 
    	- Wrote F1 light code - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/253b0befefa0293b3ab837c1599b318cc26dc482)
    	- Wrote b-type, j-type and u-type single instruction tests - Debugged these with Sanjit and Dhyey - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/991bcd032fbab5b5c8cdf697092155b1145bfd39)
-   	  ![](/images/pdfDebug.png) 
- 
+   	  
 2. **Pipelinined:**
-   - Tested and debugged pipeline top level: Top level made by Sri with help from me - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/958d043b2ce32c2cf5880e0456c0ce58bbd49636)#
+   - Tested and debugged pipeline top level: Top level made by Sri with help from me - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/958d043b2ce32c2cf5880e0456c0ce58bbd49636)
      ![](/images/pipelined_schematic.png) 
-   - Errors
-   	- BNE flush didn't work - Issue due to CLR in registers not being asynchronous so flush was not clearing registers - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/c7d31306cd6da32eb7b4c5b3ca99df231a00150c)
+   - **Errors:**
+   	- BNE flush didn't work - Issue due to CLR in registers not being asynchronous so flush was not clearing registers - [Commit Link](https://github.com/San:jitRaman/Team-10-RISC-V/commit/c7d31306cd6da32eb7b4c5b3ca99df231a00150c)
    	- LW didn't work - Issue due to top-level not being connected correctly
    	- JAL didn't work - Issue due to sign_extend being wrong for jumps and ResultSrcE causing a Forward
+   ![](/images/pipelinedebug.png)
 
 3. **Cached:**
    - Helped to write directly mapped cache
