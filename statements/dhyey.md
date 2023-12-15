@@ -95,7 +95,8 @@ The following image shows the tests passing for directly mapped write-through ca
  - Many issues stemmed from reading/writing from the data memory using Big Endian Byte Addressing. For little endian byte addressing, the least significant byte is stored at the **lowest address**.
  - For Store Byte, Store Half and Store Word, the write enable signals (WE3, WE2, WE1, WE0) were not asserted correctly.
  - The memory addresses did not initially correspond to the memory map.
-
+ - We encountered issues updating cache after a cache miss, when the current instruction in the memory stage is a read instruction. For write instructions, we implemented a **write around** approach, so if there is a cache miss, **only main memory is updated**.
+ - Reading from cache is **asynchronous** and writing to cache is **synchronous**, we encountered issues with asserting the hit signal correctly.
 
 
 
