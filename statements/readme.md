@@ -77,4 +77,11 @@ We learnt a lot about debugging large systems throughout this process.
 
 
 ## Pipelining 
+#### Authors: Arav, Sanjit
+Pipelining isn't that much of a step up from single-cycle when it comes to implementation but when it comes to debugging it is a totally different challenge. The loss in synchronisation is difficult to get used to but once we did it was quite enjoyable to debug but until that point, progress was excruciatingly slow. There were many mistakes in the top level due to a lax naming convention so the first challenge was cleaning up the top level so that all signals had appropriate and unique names. 
 
+#### Pipelining Registers
+The next set of problems came in the pipelining registers as the sensitivity lists were only updated on CLK edges so there were cases when stalls and flushes were not occurring when they should have been which led to problems in branches and jumps. Initially we believed this to be a flaw in the flags block which we added to compute whether the branch conditions had been met so the error took longer to debug than it should have. There was an error in the hazard block where reg_file_e should have been flushed when a stall was meant to happen as no computation or forwarding should be done in the execute stage during a stall.
+
+#### Top Level Issues
+Due to the multitude of signals the top level was difficult to debug but after the cleanup it turned out only one instruction was failing and that was JAL. This was extremely difficult to debug because our implementation worked in single-cycle and we did not think about the fact that it would break in pipelining. We were using the Result MUX to write PC+4 back to the register which was interfering with our forwarding and flush logic. It was a very simple fix where we just had to change the control unit and the Result MUX but it took a long time to diagnose.
