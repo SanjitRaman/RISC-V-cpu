@@ -97,5 +97,7 @@ The logic for S is: `(~N & ~V) | Z | (N & V)`, effectively checking for a zero, 
 | B-Type           | BGEU        | Branch if greater than or equal (unsigned) | B & ~C |
 | -                | -           | Default/Other case                         | 0      |
 
+The PCSrc logic was moved to the [flags module](/rtl/flags/) to the execute stage of pipelining. 
+
 ## Constraints and Assumptions
 The control unit is designed for a RISC-V 32I processor and assumes that instructions are 32 bits wide. It also assumes that the processor uses a little-endian memory system.
