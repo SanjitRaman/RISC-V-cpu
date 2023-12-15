@@ -18,6 +18,7 @@
    	- Wrote risc_v_tb and debugged risc_v toplevel: Worked with Sanjit - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/6aa9bf33563dc8a23db23740f8e3b7725d6e2843)
    	- Wrote F1 light code - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/253b0befefa0293b3ab837c1599b318cc26dc482)
    	- Wrote b-type, j-type and u-type single instruction tests - Debugged these with Sanjit and Dhyey - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/991bcd032fbab5b5c8cdf697092155b1145bfd39)
+   	  ![](/images/pdfDebug.png) 
  
 2. **Pipelinined:**
    - Tested and debugged pipeline top level: Top level made by Sri with help from me - [Commit Link](https://github.com/SanjitRaman/Team-10-RISC-V/commit/958d043b2ce32c2cf5880e0456c0ce58bbd49636)#
@@ -29,7 +30,8 @@
 
 3. **Cached:**
    - Helped to write directly mapped cache
-   - Debugged and Tested cache - Program almost worked but cache was sometimes outputting incorrect values   
+   - Debugged and Tested cache - Program almost worked but cache was sometimes outputting incorrect values - problem was to do with hit timing being wrong but didn't have enough time to fix
+    ![](/images/DebuggingCache.png)  
    
 ## Testing Methodology
 - Each person wrote a google test testbench for either an entire module or part of a module that they hadn't worked on previously. This meant that when doing top level testing I could treat the 		various blocks kind of like black boxes and so was quicker to debug.
@@ -84,6 +86,7 @@ This code implements the finite state machine that controls the NEOPIXEL bar on 
 
 ## Reflection
 I think that we did well as a team and everyone did their jobs to a high standard. For completeness, we implemented the entire RISC-V 32-bit base instruction set which wasn't entirely necessary but it meant that we understood what we were doing better and learnt a lot more. The drawback of this was that everything took a lot longer which meant that we were short on time at the end of the project. We tested our designs very rigorously including using the UVM methodology and code coverage analysers. We even wrote a testbench that tested whether each intruction was executing correctly. Given more time we would have modified this to work for the pipelined processor as well. If this was a real project then we would have had to make compromises about where we spent our time and efforts and would probably have to cut down on the testing and split up the work better but as this project is about learning we made the decision that rather than splitting the work we would work together more on individual parts so that everyone knew what was going on. I have a much better understanding of computer architecture now and not only understand what each component does and how they are linked together but also the choices between complexity and functionality that have to be made to build a general purpose processor compared with an ASIC that would have been highly optimised for 1 task.
+![](/images/control_unit_line_coverage.png) 
 
 
 
