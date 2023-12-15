@@ -43,7 +43,7 @@ Since both ALU operands will either be the result forwarded from the memory / wr
 
 A schematic of the hazard unit and forwarding multiplexers was designed in ISSiE.
 
-## Stalls
+### Stalls
 
 The load word instruction has a 2 cycle latency, so the register value cannot be used until 2 clock cycles later (where the data can be forwarded from the writeback stage). In order to solve this data hazard, the pipeline can be **stalled** when a load word is in the execute stage, and the load word destination register matches the source register operands in the Decode stage (i.e. a later instruction's source register is the load word destination register).
 
@@ -53,7 +53,7 @@ lwStall = ResultSrcE0 & (Rs1D == RdE
 (INSERT ISSIE DIAGRAM)
 
 
-## Outputs
+### Outputs
 
 | Signal | Description |
 | ----------- | ----------- |
@@ -63,3 +63,30 @@ lwStall = ResultSrcE0 & (Rs1D == RdE
 | FlushE | Clears the execute pipeline register |
 | ForwardAE | The value of SrcAE may be forwarded from the memory or writeback stage to solve a data hazard. |
 | ForwardBE | The value of SrcBE may be forwarded from the memory or writeback stage to solve a data hazard. |
+
+
+
+## Data Mem Wrapper 
+
+I was responsible for creating a Data Mem Wrapper testbench, [Test Methodology Document for Data Memory Wrapper Testbench](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/testbench/data_mem_wrapper/readme.md), to debug load and store instructions for both the single cycle and pipelined implementation. The data mem wrapper was later amended  to test the directly mapped write-through cache. [Data Mem Wrapper](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/rtl/data_mem_wrapper/readme.md) allows for the data memory and cache to be tested before it is integrated into the RISC-V processor, resulting in easier debugging.
+
+### Relevant Commits
+[Store/Load instruction tb]([https://www.example.com](https://github.com/SanjitRaman/Team-10-RISC-V/commit/7560907f9a24d305b654416bff91a21cc6fd8566))
+[Cache tb](https://github.com/SanjitRaman/Team-10-RISC-V/commit/60f67f90e8442673966cab315851d6b4f4a4f32d)
+
+### Using Google Test for testing cache
+
+
+
+
+
+
+### Main issues faced when debugging the data memory and cache
+
+
+
+
+
+
+
+
