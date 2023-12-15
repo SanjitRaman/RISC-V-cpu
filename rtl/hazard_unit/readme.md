@@ -40,11 +40,21 @@ The `hazard_unit` module is a part of a RISC-V processor designed to handle data
 ## Functionality
 The `hazard_unit` module uses an `lwstall` sub-module to detect load-use hazards and a `forward` sub-module to handle data forwarding.
 
-- The `lwstall` sub-module checks ... and sets ...
-- The `forward` sub-module checks ... and sets ...
+- The `lwstall` sub-module checks if there is a load word data hazard and asserts StallF, StallD and FlushE so the pipeline is **stalled** until the load word destination register is in the writeback stage.
 
-#### TODO Check this:
+### Load Word stall logic
+
+![LWStall Logic](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/LWStall.png)
+
+### Forwarding logic
+- The `forward` sub-module controls the select signals for both multiplexers which selects the value of SrcA and SrcB. This depends on if the dependent instruction in the execute stage requires a result from the memory or writeback stage - in this case, data is **forwarded** from the memory or writeback stage.
+
+Forwarding multiplexers are required as below
+
+
+#### Hazard Summary:
 The `hazard_unit` module then uses these signals to control the pipeline:
 
 - If the `lwstall` signal is high, it stalls the fetch and decode stages (`StallF` and `StallD` are set high) and flushes the execute stage (`FlushE` is set high).
 - If the `PCSrcE` signal is high, indicating a taken branch, it flushes the decode and execute stages (`FlushD` and `FlushE` are set high).
+- If ForwardAE / ForwardBE is 10 or 01, then the ALU operand is forwarded from the memory/writeback stage.
