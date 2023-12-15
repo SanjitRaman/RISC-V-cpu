@@ -2,6 +2,10 @@
 ## Overview
 The `sign_extend` module in SystemVerilog is designed to perform sign extension on a given input instruction (`Instr`) based on the immediate source (`ImmSrc`). The sign extension is a process of increasing the number of bits of a binary number while preserving the number's sign (positive/negative) and value.
 
+## Schematic
+
+![sign-extend-schematic](/images/sign-extend-schematic.png)
+
 **Parameters** 
 
 The parameters for the sign extend module are as follows: 
