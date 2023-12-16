@@ -8,7 +8,7 @@
 
 The program counter has the same functionality as from lab 4. The only change made was to the offset according to the memory map so when PC is reset, it is reset to the value of the offset rather than 0. In the pipelined implementation, the program counter register was stalled when StallF was asserted to handle hazards.
 
-![Program Counter Schematic](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/PCRegister.png)
+![Program Counter Schematic](/images/PCRegister.png)
 
 
 ### PC Wrapper
@@ -49,7 +49,7 @@ Since both ALU operands will either be the result forwarded from the memory / wr
 | 00 | The operand will be the register file output. |
 
 
-A schematic of the hazard unit and forwarding multiplexers was designed in ISSiE, and is available in the [design specification](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/rtl/hazard_unit/readme.md). 
+A schematic of the hazard unit and forwarding multiplexers was designed in ISSiE, and is available in the [design specification](/rtl/hazard_unit/readme.md). 
 
 ### Stalls
 
@@ -70,11 +70,11 @@ The hazard unit was well designed, so all of its unit tests passed but the team 
 
 ## Data Mem Wrapper 
 
-I was responsible for creating a Data Mem Wrapper testbench ([Test Methodology Document for Data Memory Wrapper Testbench](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/testbench/data_mem_wrapper/readme.md)) to debug load and store instructions for both the single cycle and pipelined implementation. The data mem wrapper was later amended  to test the directly mapped write-through cache. [Data Mem Wrapper](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/rtl/data_mem_wrapper/readme.md) allows for the data memory and cache to be tested before it is integrated into the RISC-V processor, resulting in easier debugging.
+I was responsible for creating a Data Mem Wrapper testbench ([Test Methodology Document for Data Memory Wrapper Testbench](/testbench/data_mem_wrapper/readme.md)) to debug load and store instructions for both the single cycle and pipelined implementation. The data mem wrapper was later amended  to test the directly mapped write-through cache. [Data Mem Wrapper](/rtl/data_mem_wrapper/readme.md) allows for the data memory and cache to be tested before it is integrated into the RISC-V processor, resulting in easier debugging.
 
 ### Final Wrapper Schematic
 
-![Final Wrapper](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/DataMemWrapperCacheSchematic.png)
+![Final Wrapper](/images/DataMemWrapperCacheSchematic.png)
 
 
 ### Relevant Commits
@@ -86,7 +86,7 @@ I was responsible for creating a Data Mem Wrapper testbench ([Test Methodology D
 
 The following image shows the tests passing for directly mapped write-through cache.
 
-![GoogleTestCache](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/DataMemWrapperCacheTests.png)
+![GoogleTestCache](/images/DataMemWrapperCacheTests.png)
 
 
 
@@ -120,7 +120,7 @@ Increasing the block size of each set (i.e. 2 way set associative cache) will re
 
 The diagram illustrates how data is read from cache.
 
-![ReadCache Schematic](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/ReadingDirectlyMappedCache.png)
+![ReadCache Schematic](/images/ReadingDirectlyMappedCache.png)
 
 
 ### Writing from cache
