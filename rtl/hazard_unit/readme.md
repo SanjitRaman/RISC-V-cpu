@@ -5,7 +5,7 @@ The `hazard_unit` module is a part of a RISC-V processor designed to handle data
 
 ## Schematic
 
-![Hazard Unit Design](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/HazardUnit.png)
+![Hazard Unit Design](/images/HazardUnit.png)
 
 ## Parameters
 
@@ -44,12 +44,12 @@ The `hazard_unit` module uses an `lwstall` sub-module to detect load-use hazards
 
 ### Load Word stall logic
 
-![LWStall Logic](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/LWStall.png)
+![LWStall Logic](/images/LWStall.png)
 
 ### Forwarding logic
 - The `forward` sub-module controls the select signals for both multiplexers which selects the value of SrcA and SrcB. This depends on if the dependent instruction in the execute stage requires a result from the memory or writeback stage - in this case, data is **forwarded** from the memory or writeback stage.
 
-![Forwarding MUX](https://github.com/SanjitRaman/Team-10-RISC-V/blob/vbuddy-pipelining-tests/images/ForwardingMUX.png)
+![Forwarding MUX](/images/ForwardingMUX.png)
 
 
 #### Hazard Summary:
